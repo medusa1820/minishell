@@ -2,7 +2,8 @@ NAME				:=	minishell
 
 CC					:=	gcc
 
-CFLAGS				:=	-Wall -Werror -Wextra -g3
+CFLAGS				:=	-Wall -Werror -Wextra
+CFLAGS				+=	-g3
 CFLAGS				+=	-fsanitize=address
 
 LDFLAGS				:=	-g3
