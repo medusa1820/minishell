@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/01 22:03:05 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/01 22:26:37 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,20 @@
 
 int	main(void)
 {
-	char		*line;
+	// char		*line;
 	t_ast_node	*head;
 
 	head = NULL;
-	line = readline("minishell>");
-	while (line)
-	{
-		add_history(line);
-		printf("You entered: %s\n", line); // use the line
-		rl_replace_line("", 0); // Clear the current input line 
-		rl_redisplay(); // Update the display of the input line
-		free(line); // Free the memory allocated by readline
-		line = readline("minishell>");
-	}
+	// line = readline("minishell>");
+	// while (line)
+	// {
+	// 	add_history(line);
+	// 	printf("You entered: %s\n", line); // use the line
+	// 	rl_replace_line("", 0); // Clear the current input line 
+	// 	rl_redisplay(); // Update the display of the input line
+	// 	free(line); // Free the memory allocated by readline
+	// 	line = readline("minishell>");
+	// }
 	head = create_ast();
 	return (0);
 }
