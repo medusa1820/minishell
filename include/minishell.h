@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/02 20:00:56 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/02 22:45:45 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,10 @@ void				create_node_pipe(t_ast_node **new_node_head, \
 // free_ast.c
 
 void				free_ast(t_ast_node *node);
+
+// execute_ast.c
+
+void				execute_cmds(t_ast_node *head);
+void				print_2d_array(char **cmd);
 
 #endif

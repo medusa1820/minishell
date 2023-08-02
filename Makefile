@@ -12,7 +12,8 @@ LDFLAGS				+=	-fsanitize=address
 MINISHELL_SRCS		=	./main.c \
 						./create_ast.c \
 						./print_ast.c \
-						./free_ast.c
+						./free_ast.c \
+						./execute_ast.c
 
 LEXER_SRCS			=	./01_lexer/lexer0.c \
 
