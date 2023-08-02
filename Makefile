@@ -14,7 +14,7 @@ LEXER_SRCS			=	./01_lexer/lexer0.c \
 
 PARSER_SRCS			=	./02_parser/parser0.c \
 
-ALL_SRCS			:=	$(MINISHELL_SRCS) \
+ALL_SRCS			:=	$(MINISHELL_SRCS) #\
 						$(LEXER_SRCS) \
 						$(PARSER_SRCS) \
 
