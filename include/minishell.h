@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/02 19:40:42 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/02 20:00:56 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void				print_redirect(t_redirect *redirect, int level, char *type);
 void				print_assignments(t_assignment *assignment, int level);
 void				print_command(char **cmd, int level);
 void				print_ast_tree0(t_ast_node *node, int level);
+const char			*getAstNodeTypeName(t_ast_node_type type);
 
 // create_ast.c
 

@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:58:47 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/02 15:51:49 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/02 20:01:30 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ void	print_ast_tree0(t_ast_node *node, int level)
 		printf("Node: (null)\n");
 		return;
 	}
-	printf("Node type: %d\n", (int)node->type);
+	// printf("Node type: %d\n", (int)node->type);
+	printf("Node type: %s\n", getAstNodeTypeName(node->type));
 	for (int i = 0; i < level; i++) printf("    ");
 	if (node->content) {
 		printf("Content:\n");
@@ -88,3 +89,11 @@ void	print_ast_tree0(t_ast_node *node, int level)
 	print_ast_tree0(node->right, level + 1);
 }
 
+const char	*getAstNodeTypeName(t_ast_node_type type)
+{
+	switch (type) {
+		case AST_NODE_CMD: return "AST_NODE_CMD";
+		case AST_NODE_PIPE: return "AST_NODE_PIPE";
+		default: return "Unknown";
+	}
+}
