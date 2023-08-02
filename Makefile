@@ -24,7 +24,7 @@ HEADERS				+=	-I ../LeakSanitizer
 
 LDFLAGS				+=	-L ./lib/ft_printf -lft_ft_printf
 LDFLAGS				+=	-lreadline -L $(shell brew --prefix readline)/lib
-LDFLAGS				+=	-L ../LeakSanitizer -llsan -lc++ -Wno-gnu-include-next
+LDFLAGS				+=	-L ../LeakSanitizer -llsan -lstdc++ -Wno-gnu-include-next
 
 LIBFT_FT_PRINTF		:=	lib/ft_printf/libft_ft_printf.a
 LIBFT_FT_PRINTF_DIR	:=	./lib/ft_printf
