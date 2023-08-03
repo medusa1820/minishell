@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 15:00:49 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/02 20:20:05 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/03 19:42:29 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ t_ast_node	*create_ast(void)
 	create_node_right("wc -l", &new_node_right);
 	old_node_head = new_node_head;
 	create_node_pipe(&new_node_head, old_node_head, new_node_right);
-
 	return (new_node_head);
 }
 

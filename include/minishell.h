@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/03 18:48:15 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/03 19:44:27 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,6 @@ void				free_ast(t_ast_node *node);
 bool				execute_cmds(t_ast_node *head, int *i, t_pipe *data);
 void				print_2d_array(char **cmd);
 bool				forker(t_pipe *data);
+bool				piper(t_pipe *data, int *i);
 
 #endif

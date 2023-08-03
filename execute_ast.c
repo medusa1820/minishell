@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/03 18:49:43 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/03 19:56:07 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,13 @@ bool	execute_cmds(t_ast_node *head, int *i, t_pipe *data)
 		{
 			print_2d_array(head->right->content->cmd);
 			printf("i = %d\n", (*i)++);
-			if (pipe(data->pipe0_fd) == -1)
-				return (false);
-			data->pid = fork();
-			if (data->pid == -1)
-				return (false);
-			return (true);
+			// if (pipe(data->pipe0_fd) == -1)
+			// 	return (false);
+			// data->pid = fork();
+			// if (data->pid == -1)
+			// 	return (false);
+			// return (true);
+			return (piper(data, i) && forker(data));
 		}
 		else
 		{
@@ -120,33 +121,43 @@ void	print_2d_array(char **cmd)
 
 
 
-/*
-
-
 bool	piper(t_pipe *data, int *i)
 {
 	if (*i % 2 == 0)
 	{
 		if (pipe(data->pipe0_fd) == -1)
-			retrun (false);
+			return (false);
 		return (true);
 	}
 	else
 	{
 		if (pipe(data->pipe1_fd) == -1)
-			retrun (false);
+			return (false);
 		return (true);
 	}
 }
 
-*/
+
+
+
+
+
 
 bool	forker(t_pipe *data)
 {
 	data->pid = fork();
 	if (data->pid == -1)
 		return (false);
-	return (true);
+	else
+	{
+		// if (i == data->nr_of_cmds - 1)
+		// 	last_cmd(data, envp, i, argv);
+		// else if (i == 0)
+		// 	first_cmd(data, envp, argv);
+		// else
+		// 	middle_cmd(data, envp, i);
+		return (true);
+	}
 }
 
 
