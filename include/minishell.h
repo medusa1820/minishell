@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/03 19:44:27 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/03 23:21:56 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,15 @@ typedef struct s_pipe
 	int		pipe0_fd[2];
 	int		pipe1_fd[2];
 	pid_t	pid;
+	int		nr_of_cmd_nodes;
+	char	**paths;
+	char	*cmd_path;
+	char	**cmd_split;
 }	t_pipe;
 
 // main.c
 
-int					main(void);
+int					main(int argc, char **argv, char **envp);
 
 // print_ast.c
 
@@ -106,9 +110,16 @@ void				free_ast(t_ast_node *node);
 // execute_ast.c
 
 // void				execute_cmds(t_ast_node *head, int *i, t_pipe *data);
-bool				execute_cmds(t_ast_node *head, int *i, t_pipe *data);
+bool				execute_cmds(t_ast_node *head, int *i, t_pipe *data, char **envp);
 void				print_2d_array(char **cmd);
-bool				forker(t_pipe *data);
+bool				forker(t_pipe *data, int *i, char **envp, t_ast_node *head);
 bool				piper(t_pipe *data, int *i);
+void				first_cmd(t_pipe *data, char **envp);
+void				close_pipe0_fds(t_pipe *data);
+
+void				find_cmd_path(t_pipe *data, char **envp);
+void				prepare_paths(t_pipe *data, char **envp);
+void				prepare_cmd_path(t_pipe *data);
+void				prepare_cmd_path_slash(t_pipe *data);
 
 #endif

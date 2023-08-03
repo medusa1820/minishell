@@ -6,24 +6,27 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/03 18:34:06 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/03 23:23:37 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	t_ast_node	*head;
 	int			i;
 	t_pipe		data;
 
+	(void)argc;
+	(void)argv;
 	head = create_ast();
-	print_ast_tree0(head, 0);
+	// print_ast_tree0(head, 0);
 	printf("\n");
 	i = 0;
 	// execute_cmds(head, &i, &data);
-	if (!execute_cmds(head, &i, &data))
+	data.nr_of_cmd_nodes = 0;
+	if (!execute_cmds(head, &i, &data, envp))
 		free_ast(head);
 	free_ast(head);
 	return (0);
