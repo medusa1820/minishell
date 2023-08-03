@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/07/27 17:40:29 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/03 20:30:09 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,60 @@
 // # include "get_next_line.h"
 
 int		main(void);
+char	**split_string(char *input_string);
+
+typedef struct s_split
+{
+	char	**result;
+	int		index;
+	int		inside_quote;
+	char	quote_char;
+	char	*token_start;
+	char	*p;
+	char	*input_copy;
+}t_split;
+
+typedef enum e_redirect_type
+{
+	REDIRECT_STDIN, //(<)
+	REDIRECT_STDOUT, //(>)
+	REDIRECT_HERE_DOC, //(<<)
+	REDIRECT_STDOUT_APPEND, //(>>)
+}	t_redirect_type;
+
+typedef struct s_assignment
+{
+	char				*word;
+	struct s_assignment	*next;
+}	t_assignment;
+
+typedef struct s_redirect
+{
+	t_redirect_type		type;
+	char				*word;
+	struct s_redirect	*next;
+}	t_redirect;
+
+typedef struct s_ast_node_content
+{
+	t_redirect		*stdin_redirect;
+	t_redirect		*stdout_redirect;
+	t_assignment	*assignments;
+	char			**cmd;
+}	t_ast_node_content;
+
+typedef enum e_ast_node_type
+{
+	AST_NODE_CMD,
+	AST_NODE_PIPE
+}	t_ast_node_type;
+
+typedef struct s_ast_node
+{
+	t_ast_node_type		type;
+	t_ast_node_content	*content;
+	struct s_ast_node	*left;
+	struct s_ast_node	*right;
+}	t_ast_node;
 
 #endif

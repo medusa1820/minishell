@@ -14,9 +14,9 @@ LEXER_SRCS			=	./01_lexer/lexer0.c \
 
 PARSER_SRCS			=	./02_parser/parser0.c \
 
-ALL_SRCS			:=	$(MINISHELL_SRCS) #\
-						$(LEXER_SRCS) \
+ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(PARSER_SRCS) \
+						$(LEXER_SRCS) \
 
 HEADERS				:=	-I ./include
 HEADERS				+=	-I $(shell brew --prefix readline)/include
@@ -34,23 +34,23 @@ OBJS				=	$(ALL_SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(LIBFT_FT_PRINTF) $(OBJS)
-	$(CC) $(OBJS) -o $(NAME) $(LDFLAGS) \
+	@$(CC) $(OBJS) -o $(NAME) $(LDFLAGS) \
 	&& echo "Compilation of $(NAME) successful"
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@ 
 
 $(LIBFT_FT_PRINTF):
-	${MAKE} -C $(LIBFT_FT_PRINTF_DIR) -j
+	@${MAKE} -C $(LIBFT_FT_PRINTF_DIR) -j --silent
 
 re: fclean all
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 clean:
-	${MAKE} -C $(LIBFT_FT_PRINTF_DIR) fclean
-	rm -f $(OBJS)
+	@${MAKE} -C $(LIBFT_FT_PRINTF_DIR) fclean --silent
+	@rm -f $(OBJS)
 
 leaks:
 	@valgrind	--track-fds=yes \
