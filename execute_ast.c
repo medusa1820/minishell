@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/02 22:50:08 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/03 18:49:43 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,84 @@ again the right node and goes this way until it reaches the head node.
 
 */
 
-void	execute_cmds(t_ast_node *head)
+
+
+
+
+/*
+
+void	execute_cmds(t_ast_node *head, int *i, t_pipe *data)
 {
 	if (head == NULL)
 		return ;
 	if (head->type == AST_NODE_PIPE)
 	{
-		execute_cmds(head->left);
+		execute_cmds(head->left, i, data);
 		print_2d_array(head->right->content->cmd);
+		printf("i = %d\n", (*i)++);
 	}
 	else
 	{
 		print_2d_array(head->content->cmd);
+		printf("i = %d\n", (*i)++);
+		if (pipe(data->pipe0_fd) == -1)
+			exit_error(errno, "Pipe failed", data);
+		data->pid = fork();
+		if (data->pid == -1)
+			exit_error(errno, "Fork failed", data);
 	}
 }
+
+*/
+
+
+
+
+
+
+bool	execute_cmds(t_ast_node *head, int *i, t_pipe *data)
+{
+	if (head == NULL)
+		return (false);
+	if (head->type == AST_NODE_PIPE)
+	{
+		if (execute_cmds(head->left, i, data))
+		{
+			print_2d_array(head->right->content->cmd);
+			printf("i = %d\n", (*i)++);
+			if (pipe(data->pipe0_fd) == -1)
+				return (false);
+			data->pid = fork();
+			if (data->pid == -1)
+				return (false);
+			return (true);
+		}
+		else
+		{
+			return (false);
+		}
+	}
+	else
+	{
+		print_2d_array(head->content->cmd);
+		printf("i = %d\n", (*i)++);
+		if (pipe(data->pipe0_fd) == -1)
+			return (false);
+		// data->pid = fork();
+		// if (data->pid == -1)
+		// 	return (false);
+		// return (true);
+		return (forker(data));
+	}
+}
+
+
+
+
+
+
+
+
 
 void	print_2d_array(char **cmd)
 {
@@ -50,3 +114,77 @@ void	print_2d_array(char **cmd)
 	}
 	printf("\n");
 }
+
+
+
+
+
+
+/*
+
+
+bool	piper(t_pipe *data, int *i)
+{
+	if (*i % 2 == 0)
+	{
+		if (pipe(data->pipe0_fd) == -1)
+			retrun (false);
+		return (true);
+	}
+	else
+	{
+		if (pipe(data->pipe1_fd) == -1)
+			retrun (false);
+		return (true);
+	}
+}
+
+*/
+
+bool	forker(t_pipe *data)
+{
+	data->pid = fork();
+	if (data->pid == -1)
+		return (false);
+	return (true);
+}
+
+
+
+
+
+
+
+
+
+
+/*
+
+void	pipex(t_pipex *data, int i, char **envp, char **argv)
+{
+	if (data->here_doc)
+		data->cmd = argv[i + 3];
+	else
+		data->cmd = argv[i + 2];
+	if (i % 2 == 0)
+	{
+		if (pipe(data->pipe0_fd) == -1)
+			exit_error(errno, "Pipe failed", data);
+	}
+	else
+	{
+		if (pipe(data->pipe1_fd) == -1)
+			exit_error(errno, "Pipe failed", data);
+	}
+	data->pid = fork();
+	if (data->pid == -1)
+		exit_error(errno, "Fork failed", data);
+	if (i == data->nr_of_cmds - 1)
+		last_cmd(data, envp, i, argv);
+	else if (i == 0)
+		first_cmd(data, envp, argv);
+	else
+		middle_cmd(data, envp, i);
+}
+
+*/

@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 15:11:00 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/02 20:18:49 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/03 18:29:07 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,3 +68,18 @@ void	free_ast(t_ast_node *node)
 	// Finally, free the node itself
 	free(node);
 }
+
+
+
+
+
+/*
+
+void	exit_error(int exit_code, char *error_msg, t_pipe *data)
+{
+	perror(error_msg);
+	free_ast(head);
+	exit(exit_code);
+}
+
+*/

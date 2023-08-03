@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/02 22:45:45 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/03 18:48:15 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,13 @@ typedef struct s_ast_node
 	struct s_ast_node	*right;
 }	t_ast_node;
 
+typedef struct s_pipe
+{
+	int		pipe0_fd[2];
+	int		pipe1_fd[2];
+	pid_t	pid;
+}	t_pipe;
+
 // main.c
 
 int					main(void);
@@ -98,7 +105,9 @@ void				free_ast(t_ast_node *node);
 
 // execute_ast.c
 
-void				execute_cmds(t_ast_node *head);
+// void				execute_cmds(t_ast_node *head, int *i, t_pipe *data);
+bool				execute_cmds(t_ast_node *head, int *i, t_pipe *data);
 void				print_2d_array(char **cmd);
+bool				forker(t_pipe *data);
 
 #endif
