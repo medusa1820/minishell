@@ -6,11 +6,20 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/03 20:28:35 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/04 11:41:23 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	print_cmd(char **cmd)
+{
+	while (*cmd)
+	{
+		printf("%s\n", *cmd);
+		cmd++;
+	}
+}
 
 void	assign_value(t_split *sp, char *input_string)
 {

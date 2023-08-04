@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/03 20:30:09 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/04 15:03:20 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,21 @@
 
 int		main(void);
 char	**split_string(char *input_string);
+void	print_cmd(char **cmd);
+void 	tokenize(const char *input);
+
+typedef enum e_token_type {
+    TOKEN_WORD,
+    TOKEN_SINGLE_QUOTE,
+    TOKEN_DOUBLE_QUOTE,
+    TOKEN_OPERATOR,
+} t_token_type;
+
+typedef struct s_token {
+    t_token_type type;
+    char	*value;
+	bool	check;
+} t_token;
 
 typedef struct s_split
 {

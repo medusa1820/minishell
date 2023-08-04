@@ -46,7 +46,8 @@ $(LIBFT_FT_PRINTF):
 re: fclean all
 
 fclean: clean
-	@rm -f $(NAME)
+	@rm -f $(NAME) \
+	&& echo "$(NAME) is fully cleaned"
 
 clean:
 	@${MAKE} -C $(LIBFT_FT_PRINTF_DIR) fclean --silent
