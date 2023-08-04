@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/04 18:50:39 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/04 19:28:16 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	execute_cmds(t_ast_node *head, int *i, t_pipe *data)
 
 bool	execute_cmds(t_ast_node *head, int *i, t_pipe *data, char **envp)
 {
-	// printf("nr_of_cmd_nodes = %d\n", data->nr_of_cmd_nodes++);
+	printf("nr_of_cmd_nodes = %d\n", ++(data->nr_of_cmd_nodes));
 	// printf("nr_of_cmd_nodes = %d\n", data->nr_of_cmd_nodes);
 	if (head == NULL)
 		return (false);
@@ -127,13 +127,13 @@ bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *head)
 		// printf("i = %d\n", *i);
 		if (*i == 0)
 			first_cmd(data, envp);
-		else if (*i == data->nr_of_cmd_nodes)
+		else if (*i == data->nr_of_cmd_nodes - 1)
 			last_cmd(data, envp, i);
 		else
 			middle_cmd(data, envp, i);
 		// exit(1);
 		(*i)++;
-		data->nr_of_cmd_nodes++;
+		// data->nr_of_cmd_nodes++;
 		// data->nr_of_cmd_nodes = data->nr_of_cmd_nodes + 1;
 		// printf("nr_of_cmd_nodes = %d\n", data->nr_of_cmd_nodes);
 		return (true);
@@ -184,3 +184,5 @@ bool	forker(t_pipe **data, int *i, char **envp, t_ast_node *head)
 
 
 */
+
+
