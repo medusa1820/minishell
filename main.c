@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/04 18:18:56 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/04 19:45:31 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,9 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	head = create_ast();
-	// print_ast_tree0(head, 0);
+	print_ast_tree0(head, 0);
 	printf("\n");
 	i = 0;
-	// execute_cmds(head, &i, &data);
 	data.nr_of_cmd_nodes = 0;
 	if (!execute_cmds(head, &i, &data, envp))
 		free_ast(head);

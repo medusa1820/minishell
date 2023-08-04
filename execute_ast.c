@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/04 19:28:16 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/04 19:44:33 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,36 +25,9 @@ again the right node and goes this way until it reaches the head node.
 
 */
 
-/*
-
-void	execute_cmds(t_ast_node *head, int *i, t_pipe *data)
-{
-	if (head == NULL)
-		return ;
-	if (head->type == AST_NODE_PIPE)
-	{
-		execute_cmds(head->left, i, data);
-		print_2d_array(head->right->content->cmd);
-		printf("i = %d\n", (*i)++);
-	}
-	else
-	{
-		print_2d_array(head->content->cmd);
-		printf("i = %d\n", (*i)++);
-		if (pipe(data->pipe0_fd) == -1)
-			exit_error(errno, "Pipe failed", data);
-		data->pid = fork();
-		if (data->pid == -1)
-			exit_error(errno, "Fork failed", data);
-	}
-}
-
-*/
-
 bool	execute_cmds(t_ast_node *head, int *i, t_pipe *data, char **envp)
 {
 	printf("nr_of_cmd_nodes = %d\n", ++(data->nr_of_cmd_nodes));
-	// printf("nr_of_cmd_nodes = %d\n", data->nr_of_cmd_nodes);
 	if (head == NULL)
 		return (false);
 	if (head->type == AST_NODE_PIPE)
@@ -105,17 +78,8 @@ bool	piper(t_pipe *data, int *i)
 	}
 }
 
-
-
-
-
-
-
 bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *head)
 {
-	// (void)i;
-	// (void)envp;
-	// (void)head;
 	printf("nr_of_cmd_nodes = %d\n", data->nr_of_cmd_nodes);
 	data->pid = fork();
 	if (data->pid == -1)
@@ -123,66 +87,13 @@ bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *head)
 	else
 	{
 		data->cmd_split = head->content->cmd;
-		// printf("nr_of_cmd_nodes = %d\n", data->nr_of_cmd_nodes);
-		// printf("i = %d\n", *i);
 		if (*i == 0)
 			first_cmd(data, envp);
 		else if (*i == data->nr_of_cmd_nodes - 1)
 			last_cmd(data, envp, i);
 		else
 			middle_cmd(data, envp, i);
-		// exit(1);
 		(*i)++;
-		// data->nr_of_cmd_nodes++;
-		// data->nr_of_cmd_nodes = data->nr_of_cmd_nodes + 1;
-		// printf("nr_of_cmd_nodes = %d\n", data->nr_of_cmd_nodes);
 		return (true);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-bool	forker(t_pipe **data, int *i, char **envp, t_ast_node *head)
-{
-	// (void)i;
-	// (void)envp;
-	// (void)head;
-	(*data)->pid = fork();
-	if ((*data)->pid == -1)
-		return (false);
-	else
-	{
-		(*data)->cmd_split = head->content->cmd;
-		// printf("nr_of_cmd_nodes = %d\n", data->nr_of_cmd_nodes);
-		// printf("i = %d\n", *i);
-		if (*i == 0)
-			first_cmd(*data, envp);
-		else if (*i == (*data)->nr_of_cmd_nodes)
-			last_cmd(*data, envp, i);
-		else
-			middle_cmd(*data, envp, i);
-		// exit(1);
-		(*i)++;
-		(*data)->nr_of_cmd_nodes = (*data)->nr_of_cmd_nodes + 1;
-		printf("nr_of_cmd_nodes = %d\n", (*data)->nr_of_cmd_nodes);
-		return (true);
-	}
-}
-
-
-
-*/
-
-
