@@ -62,12 +62,13 @@ clean:
 
 leaks:
 	@valgrind	--track-fds=yes \
-				--track-origins=yes \
 				--tool=memcheck \
 				--trace-children=yes \
-				--leak-check=full \
-				--show-leak-kinds=all \
 				-s \
-				./minishell < infile cat | grep PATH | grep /usr > outfile
+				./minishell
 
 .PHONY: all clean fclean re leaks
+
+# --show-leak-kinds=all \
+# --leak-check=full \
+# --track-origins=yes \
