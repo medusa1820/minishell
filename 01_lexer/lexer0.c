@@ -134,8 +134,8 @@ void tokenize(t_token **tokens, const char *input, int *token_count)
 			tokenize_word(&current, &token);
         // Process the token or store it for later processing
         (*token_count)++;
-        // tokens[token_count] = ft_realloc(tokens, token_count - 1, token_count);
-        *tokens = realloc(*tokens, *token_count * sizeof(t_token));
+        *tokens = ft_realloc(*tokens, *token_count - 1 * sizeof(t_token), *token_count * sizeof(t_token));
+        // *tokens = realloc(*tokens, *token_count * sizeof(t_token));
         (*tokens)[*token_count - 1] = token;
 		// free(token.value);
 		token.value = NULL;
