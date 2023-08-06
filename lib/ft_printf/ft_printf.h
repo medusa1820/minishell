@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 20:27:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/02 12:59:08 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/06 14:02:45 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,7 @@
 # define FT_PRINTF_H
 
 # include <stdio.h>
-
 # include <stdarg.h>
-// # include <limits.h>
-
 # include "libft/libft.h"
 
 int		ft_printf(const char *s, ...);
