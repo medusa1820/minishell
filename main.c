@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/04 13:15:56 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/06 18:15:33 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,33 @@
 //     return new_node;
 // }
 
+const char *token_names[] = {
+    "WORD",
+    "SIN_QUOTE",
+    "DUB_QUOTE",
+    "OPERATOR"
+    // Add more names for additional token types if needed
+};
+
+void	print_tokens(t_token *tokens, int token_count)
+{
+	    for(int i = 0; i <= token_count; i++)
+		{
+	        printf("\033[38;5;04mToken Type\033[0m : \033[38;5;214m%s\033[0m", token_names[tokens[i].type]);
+			printf("	\033[38;5;196mValue\033[0m : \033[38;5;214m%s\033[0m\n", tokens[i].value);
+		}
+
+}
 
 int	main(void)
 {
 	char	*line;
 	// char	**cmd;
+	int		token_count;
+	t_token	*tokens;
 
+	tokens = NULL;
+	token_count = 0;
 	line = readline("minishell>");
 	while (line)
 	{
@@ -45,7 +66,8 @@ int	main(void)
 		// }
 		// cmd = split_string(line);
 		// print_cmd(cmd);
-		tokenize(line);
+		tokenize(&tokens, line, &token_count);
+		print_tokens(tokens, token_count);
 		printf("You entered: %s\n", line); // use the line
 		rl_replace_line("", 0); // Clear the current input line 
 		rl_redisplay(); // Update the display of the input line

@@ -1,12 +1,6 @@
 #include "../include/minishell.h"
 
-const char *token_names[] = {
-    "WORD",
-    "SIN_QUOTE",
-    "DUB_QUOTE",
-    "OPERATOR"
-    // Add more names for additional token types if needed
-};
+
 
 void *ft_realloc(void *ptr, size_t old_size, size_t new_size)
 {
@@ -31,7 +25,7 @@ void *ft_realloc(void *ptr, size_t old_size, size_t new_size)
     free(ptr);
     return (new_ptr);
 }
-void	single_quote(const char **current, t_token *token)
+void	single_quote_handling(const char **current, t_token *token)
 {
     if ((*current)[1] == '\0')
 	{
@@ -53,7 +47,7 @@ void	single_quote(const char **current, t_token *token)
     if (**current == '\'')
         (*current)++;
 }
-void	double_quote(const char **current, t_token *token)
+void	double_quote_handling(const char **current, t_token *token)
 {
     if ((*current)[1] == '\0')
 	{
@@ -75,7 +69,7 @@ void	double_quote(const char **current, t_token *token)
     if (**current == '"')
         (*current)++;
 }
-void	pipe_and_redirector(const char **current, t_token *token)
+void	tokenize_pipe_and_redirector(const char **current, t_token *token)
 {
     if ((*current)[1] == '\0')
 	{
@@ -100,7 +94,7 @@ void	pipe_and_redirector(const char **current, t_token *token)
     (*current)++;
 }
 // Word token
-void	word(const char **current, t_token *token)
+void	tokenize_word(const char **current, t_token *token)
 {
     token->type = TOKEN_WORD;
     int value_length = 0;
@@ -116,34 +110,34 @@ void	word(const char **current, t_token *token)
     }
 }
 
-void tokenize(const char *input)
+void tokenize(t_token **tokens, const char *input, int *token_count)
 {
-    const char *current = input;
-    t_token 	token;
-    
+    const char  *current;
+    t_token     token;
+
+    current = input;
+    // *tokens = malloc(sizeof(t_token));
     while (*current != '\0')
 	{
-	    if (*current == '\'')
-			single_quote(&current, &token);
+        if (*current == '\'')
+			single_quote_handling(&current, &token);
         else if (*current == '"')
-			double_quote(&current, &token);
+			double_quote_handling(&current, &token);
         else if (*current == '|' || *current == '<' || *current == '>')
-			pipe_and_redirector(&current, &token);
+			tokenize_pipe_and_redirector(&current, &token);
         else if (*current == ' ')
 		{
             current++;
             continue;
         }
         else
-			word(&current, &token);
+			tokenize_word(&current, &token);
         // Process the token or store it for later processing
-        
-        if (token.value){
-	        printf("\033[38;5;04mToken Type\033[0m : \033[38;5;214m%s\033[0m", token_names[token.type]);
-			printf("	\033[38;5;196mValue\033[0m : \033[38;5;214m%s\033[0m\n", token.value);
-
-			free(token.value);
-			token.value = NULL;
-		}
+        (*token_count)++;
+        // tokens[token_count] = ft_realloc(tokens, token_count - 1, token_count);
+        *tokens = realloc(*tokens, *token_count * sizeof(t_token));
+        (*tokens)[*token_count - 1] = token;
+		// free(token.value);
+		token.value = NULL;
     }
 }

@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/04 15:03:20 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/06 18:14:48 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@
 # include <readline/history.h>
 // # include "get_next_line.h"
 
-int		main(void);
-char	**split_string(char *input_string);
-void	print_cmd(char **cmd);
-void 	tokenize(const char *input);
+
 
 typedef enum e_token_type {
     TOKEN_WORD,
@@ -97,4 +94,8 @@ typedef struct s_ast_node
 	struct s_ast_node	*right;
 }	t_ast_node;
 
+int		main(void);
+char	**split_string(char *input_string);
+void	print_cmd(char **cmd);
+void tokenize(t_token **tokens, const char *input, int *token_count);
 #endif
