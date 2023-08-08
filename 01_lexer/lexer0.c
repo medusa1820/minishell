@@ -93,7 +93,7 @@ void	tokenize_pipe_and_redirector(const char **current, t_token *token)
 	// 	(*current)++;
 	// 	return ;
 	// }
-	token->type = TOKEN_OPERATOR;
+	token->type = TOKEN_REDIRECT;
 	if ((**current == '<' || **current == '>') 
 		&& (*(*current + 1) == '<' || *(*current + 1) == '>'))
 	{
@@ -105,6 +105,8 @@ void	tokenize_pipe_and_redirector(const char **current, t_token *token)
 	}
 	else
 	{
+		if (**current == '|')
+			token->type = TOKEN_PIPE;
 		token->value = malloc(2);
 		token->value[0] = **current;
 		token->value[1] = '\0';
@@ -151,7 +153,8 @@ void tokenize(t_token **tokens, const char *input, int *token_count)
 			tokenize_word(&current, &token);
 		// Process the token or store it for later processing
 		(*token_count)++;
-		*tokens = ft_realloc(*tokens, *token_count - 1 * sizeof(t_token), *token_count * sizeof(t_token));
+		*tokens = realloc(*tokens, *token_count * sizeof(t_token));
+		// *tokens = ft_realloc(*tokens, *token_count - 1 * sizeof(t_token), *token_count * sizeof(t_token));
 		(*tokens)[*token_count - 1] = token;
 		// free(token.value);
 		// token.value = NULL;

@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/08 12:23:33 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/08 15:24:40 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,18 @@
 // }
 
 const char *token_names[] = {
-    "WORD",
-    "SIN_QUOTE",
-    "DUB_QUOTE",
-    "OPERATOR",
+	"WORD",
+	"SIN_QUOTE",
+	"DUB_QUOTE",
+	"REDIRECT",
+	"PIPE",
 	"EMPTY"
-    // Add more names for additional token types if needed
+	// Add more names for additional token types if needed
 };
 
 void	print_tokens(t_token *tokens, int token_count)
 {
-	    for(int i = 0; i < token_count; i++)
+		for(int i = 0; i < token_count; i++)
 		{
 				printf("\033[38;5;04mToken Type\033[0m : \033[38;5;214m%s\033[0m", token_names[tokens[i].type]);
 				printf("	\033[38;5;196mValue\033[0m : \033[38;5;214m%s\033[0m\n", tokens[i].value);
@@ -67,10 +68,10 @@ void	free_tokens(t_token **tokens, int *token_count)
 
 int	main(void)
 {
-	char	*line;
-	// char	**cmd;
-	int		token_count;
-	t_token	*tokens;
+	char		*line;
+	int			token_count;
+	t_ast_node	*ast_root;
+	t_token		*tokens;
 
 	tokens = NULL;
 	token_count = 0;
@@ -82,6 +83,11 @@ int	main(void)
 			add_history(line);
 			tokenize(&tokens, line, &token_count);
 			print_tokens(tokens, token_count);
+			
+			ast_root = parse_pipeline(&tokens, &token_count);
+			print_ast(ast_root);
+			exit(1);
+			free_ast(ast_root);
 			free_tokens(&tokens, &token_count);
 			printf("You entered: %s\n", line); // use the line
 		}

@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/08 09:59:06 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/08 15:24:18 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ typedef enum e_token_type
     TOKEN_WORD,
     TOKEN_SINGLE_QUOTE,
     TOKEN_DOUBLE_QUOTE,
-    TOKEN_OPERATOR,
+    TOKEN_REDIRECT,
+    TOKEN_PIPE,
 	TOKEN_EMPTY,
 } t_token_type;
 
@@ -97,8 +98,11 @@ typedef struct s_ast_node
 	struct s_ast_node	*right;
 }	t_ast_node;
 
-int		main(void);
-char	**split_string(char *input_string);
-void	print_cmd(char **cmd);
-void tokenize(t_token **tokens, const char *input, int *token_count);
+int			main(void);
+char		**split_string(char *input_string);
+void		print_cmd(char **cmd);
+void 		tokenize(t_token **tokens, const char *input, int *token_count);
+void 		free_ast(t_ast_node *node);
+void 		print_ast(t_ast_node *root);
+t_ast_node	*parse_pipeline(t_token **tokens, int *token_count);
 #endif

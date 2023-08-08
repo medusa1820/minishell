@@ -6,180 +6,149 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/06 18:16:40 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/08 15:41:41 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Function to create a new AST node
-t_ast_node *create_ast_node(t_ast_node_type type) {
-    t_ast_node *node = (t_ast_node *)malloc(sizeof(t_ast_node));
-    node->type = type;
-    node->content = (t_ast_node_content *)malloc(sizeof(t_ast_node_content));
-    node->content->stdin_redirect = NULL;
-    node->content->stdout_redirect = NULL;
-    node->content->assignments = NULL;
-    node->content->cmd = NULL;
-    node->left = NULL;
-    node->right = NULL;
-    return node;
+// Define your token and AST structures here
+
+t_ast_node *parse_command(t_token **tokens, int *token_count);
+t_ast_node *parse_pipeline(t_token **tokens, int *token_count);
+
+void free_ast(t_ast_node *node);
+
+t_ast_node *create_command_node(t_ast_node_content *content) {
+	t_ast_node *node = (t_ast_node *)malloc(sizeof(t_ast_node));
+	if (!node) {
+		perror("Memory allocation error");
+		exit(1);
+	}
+	node->type = AST_NODE_CMD;
+	node->content = content;
+	node->left = NULL;
+	node->right = NULL;
+	return node;
 }
 
-// Function to parse assignments
-t_assignment *parse_assignments() {
-    // Implement parsing logic for assignments
-    // Return a linked list of assignments
-    return NULL;
+t_ast_node *create_pipe_node(t_ast_node *left, t_ast_node *right) {
+	t_ast_node *node = (t_ast_node *)malloc(sizeof(t_ast_node));
+	if (!node) {
+		perror("Memory allocation error");
+		exit(1);
+	}
+	node->type = AST_NODE_PIPE;
+	node->content = NULL;
+	node->left = left;
+	node->right = right;
+	return node;
 }
 
-// Function to parse redirects
-t_redirect *parse_redirect() {
-    // Implement parsing logic for redirects
-    // Return a linked list of redirects
-    return NULL;
+t_ast_node_content *parse_command_content(t_token **tokens, int *token_count)
+{
+    t_ast_node_content *content = (t_ast_node_content *)malloc(sizeof(t_ast_node_content));
+    if (!content) {
+        perror("Memory allocation error");
+        exit(1);
+    }
+
+    // Initialize content fields
+    content->stdin_redirect = NULL;
+    content->stdout_redirect = NULL;
+    content->assignments = NULL;
+    content->cmd = NULL;  // To be filled with the command parts
+
+    // Parse command content, redirections, and assignments
+    // Iterate through tokens, identify stdin/stdout redirections, assignments, and command parts
+
+    // Example of parsing a command:
+    content->cmd = (char **)malloc(sizeof(char *) * (*token_count + 1));
+    int cmd_index = 0;
+	--(*token_count);
+		printf("token_count:%d\n", *token_count);
+    while (*token_count >= 0 && (*tokens)[*token_count].type != TOKEN_PIPE) {
+        content->cmd[cmd_index] = ft_strdup((*tokens)[*token_count].value);
+		printf("assign:%s\n", (*tokens)[*token_count].value);
+        (*tokens)++;
+        (*token_count)--;
+		cmd_index++;
+		printf("hi\n");
+    }
+    content->cmd[cmd_index] = NULL;  // Null-terminate the command array
+    return content;
 }
 
-// Function to parse command words
-char **parse_command_words() {
-    // Implement parsing logic for command words
-    // Return an array of strings (command words)
-    return NULL;
+t_ast_node *parse_command(t_token **tokens, int *token_count) {
+	// Parse the command content and create the AST node
+	t_ast_node_content *content = parse_command_content(tokens, token_count);; // Parse command content, redirections, assignments
+	return create_command_node(content);
 }
 
-// Function to parse a single command
-t_ast_node *parse_command() {
-    t_ast_node *node = create_ast_node(AST_NODE_CMD);
+t_ast_node *parse_pipeline(t_token **tokens, int *token_count) {
+	t_ast_node *left;
 
-    // Parse redirects, assignments, and command
-    node->content->stdin_redirect = parse_redirect();
-    node->content->stdout_redirect = parse_redirect();
-    node->content->assignments = parse_assignments();
-    node->content->cmd = parse_command_words();
-
-    return node;
+	left = parse_command(tokens, token_count);
+	
+	// Check if there's a pipe operator
+	if (*token_count > 0 && (*tokens)[0].type == TOKEN_PIPE && strcmp((*tokens)[0].value, "|") == 0) {
+		(*tokens)++; // Consume the pipe operator
+		(*token_count)--;
+		t_ast_node *right = parse_pipeline(tokens, token_count);
+		return create_pipe_node(left, right);
+	}
+	
+	return left;
 }
 
-// Function to parse a single pipe
-t_ast_node *parse_pipe() {
-    t_ast_node *node = create_ast_node(AST_NODE_PIPE);
-
-    // Parse left and right sub-trees
-    node->left = parse_command();
-    node->right = parse_command();
-
-    return node;
-}
-
-// Function to start parsing
-t_ast_node *parse() {
-    // You might start with the highest-level grammar rule
-    return parse_pipe();
-}
-
-// Function to free memory used by AST nodes
 void free_ast(t_ast_node *node) {
-    if (node == NULL) {
+	if (!node) {
+		return;
+	}
+
+	if (node->type == AST_NODE_CMD) {
+		// Free command content
+	} else if (node->type == AST_NODE_PIPE) {
+		free_ast(node->left);
+		free_ast(node->right);
+	}
+
+	free(node);
+}
+
+void print_ast_node(t_ast_node *node, int level) {
+    if (!node) {
         return;
     }
-    free_ast(node->left);
-    free_ast(node->right);
-    free(node->content->cmd);
-    free(node->content);
-    free(node);
+
+    for (int i = 0; i < level; i++) {
+        printf("    "); // Indentation for readability
+    }
+
+    if (node->type == AST_NODE_CMD) {
+        printf("Node type: AST_NODE_CMD\n");
+        if (node->content) {
+            printf("Content:\n");
+            if (node->content->cmd) {
+                printf("    Command:");
+                for (int i = 0; node->content->cmd[i] != NULL; i++) {
+                    printf(" %s", node->content->cmd[i]);
+                }
+                printf("\n");
+            }
+            // Print redirections and assignments if needed
+        }
+    } else if (node->type == AST_NODE_PIPE) {
+        printf("Node type: AST_NODE_PIPE\n");
+    }
+
+    print_ast_node(node->left, level + 1);
+    print_ast_node(node->right, level + 1);
 }
 
-// int main() {
-//     // Tokenize the input string using the lexer
-
-//     // Parse the tokens and create the AST
-//     t_ast_node *root = parse();
-
-//     // ... Further processing and execution
-
-//     // Free the memory used by the AST
-//     free_ast(root);
-
-//     return 0;
-// }
-
-// void	print_cmd(char **cmd)
-// {
-// 	while (*cmd)
-// 	{
-// 		printf("%s\n", *cmd);
-// 		cmd++;
-// 	}
-// }
-
-// void	assign_value(t_split *sp, char *input_string)
-// {
-// 	sp->input_copy = ft_strdup(input_string);
-// 	sp->result = ft_calloc(sizeof(char *), ft_strlen (sp->input_copy));// it should be according to number of pipe sign
-// 	if (!sp->result)
-// 		exit(EXIT_FAILURE);
-// 	sp->token_start = sp->input_copy;
-// 	sp->p = sp->input_copy;
-// 	sp->index = 0;
-// 	sp->inside_quote = 0;
-// 	sp->quote_char = '\0';
-// }
-
-// void	parse_string(t_split *sp)
-// {
-// 	while (*sp->p != '\0')
-// 	{
-// 		if (*sp->p == '"' || *sp->p == '\'')
-// 		{
-// 			if (sp->quote_char == '\0' || sp->quote_char == *sp->p)
-// 			{
-// 				sp->inside_quote = !sp->inside_quote;
-// 				sp->quote_char = *sp->p;
-// 			}
-// 		}
-// 		else if (*sp->p == ' ' && !sp->inside_quote)
-// 		{
-// 			*sp->p = '\0';
-// 			if (sp->token_start[0] != '\0')
-// 			{
-// 				sp->result[sp->index++] = ft_strdup(sp->token_start);
-// 			}
-// 			sp->token_start = sp->p + 1;
-// 		}
-// 		++sp->p;
-// 	}
-// }
-
-// char	**sanitize(char **string, int len)
-// {
-// 	int		i;
-// 	char	*buff;
-
-// 	i = 0;
-// 	while (i < len)
-// 	{
-// 		if (string[i][0] == '\'')
-// 		{
-// 			buff = ft_strdup(string[i]);
-// 			ft_strlcpy(string[i], buff + 1, ft_strlen(string[i]) - 1);
-// 			free(buff);
-// 		}
-// 		i++;
-// 	}
-// 	return (string);
-// }
-
-// char	**split_string(char *input_string)
-// {
-// 	t_split	sp;
-
-// 	assign_value(&sp, input_string);
-// 	parse_string(&sp);
-// 	if (*sp.token_start != '\0')
-// 	{
-// 		sp.result[sp.index++] = ft_strdup(sp.token_start);
-// 	}
-// 	sp.result[sp.index] = 0;
-// 	sanitize(sp.result, sp.index);
-// 	return (sp.result);
-// }
+void print_ast(t_ast_node *root) {
+    printf("Left child:\n");
+    print_ast_node(root->left, 1);
+    printf("Right child:\n");
+    print_ast_node(root->right, 1);
+}
