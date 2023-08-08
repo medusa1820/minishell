@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/08 12:23:33 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/08 15:44:31 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ const char *token_names[] = {
     "WORD",
     "SIN_QUOTE",
     "DUB_QUOTE",
-    "OPERATOR",
+    "REDIRECT",
+	"PIPE",
 	"EMPTY"
     // Add more names for additional token types if needed
 };

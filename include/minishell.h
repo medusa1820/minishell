@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/08 09:59:06 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/08 15:44:10 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ typedef enum e_token_type
     TOKEN_WORD,
     TOKEN_SINGLE_QUOTE,
     TOKEN_DOUBLE_QUOTE,
-    TOKEN_OPERATOR,
+    TOKEN_REDIRECT,
+	TOKEN_PIPE,
 	TOKEN_EMPTY,
 } t_token_type;
 
