@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/06 18:14:48 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/08 09:59:06 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,20 @@
 
 
 
-typedef enum e_token_type {
+typedef enum e_token_type
+{
     TOKEN_WORD,
     TOKEN_SINGLE_QUOTE,
     TOKEN_DOUBLE_QUOTE,
     TOKEN_OPERATOR,
+	TOKEN_EMPTY,
 } t_token_type;
 
-typedef struct s_token {
+typedef struct s_token
+{
     t_token_type type;
     char	*value;
-	bool	check;
+	bool	check; //check if I didn't use, delete it!
 } t_token;
 
 typedef struct s_split
