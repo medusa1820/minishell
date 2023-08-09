@@ -138,6 +138,49 @@ void	tokenize_word(const char **current, t_token *token)
 	}
 }
 
+int	strchr_count(const char *str, char c)
+{
+	int	i;
+	int	counter;
+
+	i = 0;
+	counter = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			counter++;
+		i++;
+	}
+	return (counter);
+}
+void	check_assignment(t_token **tokens, int token_count)
+{
+	int			i;
+	int			j;
+	const char	*word;
+
+	i = -1;
+	while (++i < token_count)
+	{
+		if ((*tokens)[i].type == TOKEN_WORD || (*tokens)[i].type == TOKEN_SINGLE_QUOTE
+			|| (*tokens)[i].type == TOKEN_DOUBLE_QUOTE)
+		{
+			word = (*tokens)[i].value;
+			if (!ft_isalpha(*word) && *word != '_' &&
+                ft_strchr(word, '=') && ft_strchr(word, '=') != word)
+				continue;
+			j = -1;
+			while (word[++j] != '=')
+			{
+				if (!ft_isalnum(word[j]) && word[j] != '_')
+					break;
+			}
+			if (word[j] == '=')
+				(*tokens)[i].type = TOKEN_ASSIGNMENT;
+		}
+	}
+}
+
 void tokenize(t_token **tokens, const char *input, int *token_count)
 {
 	const char  *current;
@@ -164,7 +207,6 @@ void tokenize(t_token **tokens, const char *input, int *token_count)
 		(*token_count)++;
 		*tokens = ft_realloc(*tokens, *token_count - 1 * sizeof(t_token), *token_count * sizeof(t_token));
 		(*tokens)[*token_count - 1] = token;
-		// free(token.value);
-		// token.value = NULL;
 	}
+	check_assignment(tokens, *token_count);
 }
