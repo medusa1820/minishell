@@ -33,7 +33,7 @@ void	single_quote_handling(const char **current, t_token *token)
 	value_length = 0;
 	if ((*current)[1] == '\0')
 	{
-		token->type = TOKEN_EMPTY;
+		token->type = TOKEN_UNCLOSED_Q;
 		token->value = malloc(1); // Allocate memory for null-terminator
 		token->value[0] = '\0';
 		(*current)++;        
@@ -54,33 +54,41 @@ void	single_quote_handling(const char **current, t_token *token)
 	}
 	if (**current == '\'')
 		(*current)++;
+	else
+		token->type = TOKEN_UNCLOSED_Q;
+	if (!token->value)
+		token->type = TOKEN_EMPTY;
 }
 void double_quote_handling(const char **current, t_token *token)
 {
-    int value_length;
+	int value_length;
 
 	value_length = 0;
-    if ((*current)[1] == '\0')
-    {
-        token->type = TOKEN_EMPTY;
-        token->value = malloc(1); // Allocate memory for null-terminator only
-        token->value[0] = '\0';
-        (*current)++;
-        return;
-    }
-    token->type = TOKEN_DOUBLE_QUOTE;
-    token->value = NULL; // Initialize the value to NULL before reallocating
-    (*current)++; // Move past the opening double quote
-    while (**current != '"' && **current != '\0')
-    {
-        value_length++;
-        token->value = ft_realloc(token->value, value_length - 1, value_length + 1);
-        token->value[value_length - 1] = **current;
-        token->value[value_length] = '\0';
-        (*current)++;
-    }
-    if (**current == '"')
-        (*current)++;
+	if ((*current)[1] == '\0')
+	{
+		token->type = TOKEN_UNCLOSED_Q;
+		token->value = malloc(1); // Allocate memory for null-terminator only
+		token->value[0] = '\0';
+		(*current)++;
+		return ;
+	}
+	token->type = TOKEN_DOUBLE_QUOTE;
+	token->value = NULL; // Initialize the value to NULL before reallocating
+	(*current)++; // Move past the opening double quote
+	while (**current != '"' && **current != '\0')
+	{
+		value_length++;
+		token->value = ft_realloc(token->value, value_length - 1, value_length + 1);
+		token->value[value_length - 1] = **current;
+		token->value[value_length] = '\0';
+		(*current)++;
+	}
+	if (**current == '"')
+		(*current)++;
+	else
+		token->type = TOKEN_UNCLOSED_Q;
+	if (!token->value)
+		token->type = TOKEN_EMPTY;
 }
 void	tokenize_pipe_and_redirector(const char **current, t_token *token)
 {
@@ -120,8 +128,7 @@ void	tokenize_word(const char **current, t_token *token)
 	int value_length = 0;
 	token->value = malloc(1);
 	
-	while (**current != ' ' && **current != '\0'
-	 && **current != '>' && **current != '<' && **current != '|')
+	while (!(ft_strchr(WHITESPACE, **current)) && !(ft_strchr(OPERAND, **current) && **current != '\0'))
 	{
 		value_length++;
 		token->value = ft_realloc(token->value, ft_strlen(token->value), value_length + 1);
@@ -143,9 +150,10 @@ void tokenize(t_token **tokens, const char *input, int *token_count)
 			single_quote_handling(&current, &token);
 		else if (*current == '"')
 			double_quote_handling(&current, &token);
-		else if (*current == '|' || *current == '<' || *current == '>')
+		// else if (*current == '|' || *current == '<' || *current == '>')
+		else if (ft_strchr(OPERAND, *current))
 			tokenize_pipe_and_redirector(&current, &token);
-		else if (*current == ' ')
+		else if (ft_strchr(WHITESPACE, *current))
 		{
 			current++;
 			continue;
