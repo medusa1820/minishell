@@ -94,8 +94,8 @@ void	tokenize_pipe_and_redirector(const char **current, t_token *token)
 	// 	return ;
 	// }
 	token->type = TOKEN_REDIRECT;
-	if ((**current == '<' || **current == '>') 
-		&& (*(*current + 1) == '<' || *(*current + 1) == '>'))
+	if ((**current == '<' && *(*current + 1) == '<')
+	|| (**current == '>' && *(*current + 1) == '>'))
 	{
 		token->value = malloc(3);
 		token->value[0] = **current;
@@ -120,7 +120,8 @@ void	tokenize_word(const char **current, t_token *token)
 	int value_length = 0;
 	token->value = malloc(1);
 	
-	while (**current != ' ' && **current != '\0')
+	while (**current != ' ' && **current != '\0'
+	 && **current != '>' && **current != '<' && **current != '|')
 	{
 		value_length++;
 		token->value = ft_realloc(token->value, ft_strlen(token->value), value_length + 1);
