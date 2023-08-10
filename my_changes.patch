@@ -1,0 +1,771 @@
+diff --git a/01_lexer/lexer0.c b/01_lexer/lexer0.c
+index 64efe5d..10e6008 100644
+--- a/01_lexer/lexer0.c
++++ b/01_lexer/lexer0.c
+@@ -33,7 +33,7 @@ void	single_quote_handling(const char **current, t_token *token)
+ 	value_length = 0;
+ 	if ((*current)[1] == '\0')
+ 	{
+-		token->type = TOKEN_EMPTY;
++		token->type = TOKEN_UNCLOSED_Q;
+ 		token->value = malloc(1); // Allocate memory for null-terminator
+ 		token->value[0] = '\0';
+ 		(*current)++;        
+@@ -54,33 +54,41 @@ void	single_quote_handling(const char **current, t_token *token)
+ 	}
+ 	if (**current == '\'')
+ 		(*current)++;
++	else
++		token->type = TOKEN_UNCLOSED_Q;
++	if (!token->value)
++		token->type = TOKEN_EMPTY;
+ }
+ void double_quote_handling(const char **current, t_token *token)
+ {
+-    int value_length;
++	int value_length;
+ 
+ 	value_length = 0;
+-    if ((*current)[1] == '\0')
+-    {
+-        token->type = TOKEN_EMPTY;
+-        token->value = malloc(1); // Allocate memory for null-terminator only
+-        token->value[0] = '\0';
+-        (*current)++;
+-        return;
+-    }
+-    token->type = TOKEN_DOUBLE_QUOTE;
+-    token->value = NULL; // Initialize the value to NULL before reallocating
+-    (*current)++; // Move past the opening double quote
+-    while (**current != '"' && **current != '\0')
+-    {
+-        value_length++;
+-        token->value = ft_realloc(token->value, value_length - 1, value_length + 1);
+-        token->value[value_length - 1] = **current;
+-        token->value[value_length] = '\0';
+-        (*current)++;
+-    }
+-    if (**current == '"')
+-        (*current)++;
++	if ((*current)[1] == '\0')
++	{
++		token->type = TOKEN_UNCLOSED_Q;
++		token->value = malloc(1); // Allocate memory for null-terminator only
++		token->value[0] = '\0';
++		(*current)++;
++		return ;
++	}
++	token->type = TOKEN_DOUBLE_QUOTE;
++	token->value = NULL; // Initialize the value to NULL before reallocating
++	(*current)++; // Move past the opening double quote
++	while (**current != '"' && **current != '\0')
++	{
++		value_length++;
++		token->value = ft_realloc(token->value, value_length - 1, value_length + 1);
++		token->value[value_length - 1] = **current;
++		token->value[value_length] = '\0';
++		(*current)++;
++	}
++	if (**current == '"')
++		(*current)++;
++	else
++		token->type = TOKEN_UNCLOSED_Q;
++	if (!token->value)
++		token->type = TOKEN_EMPTY;
+ }
+ void	tokenize_pipe_and_redirector(const char **current, t_token *token)
+ {
+@@ -120,8 +128,7 @@ void	tokenize_word(const char **current, t_token *token)
+ 	int value_length = 0;
+ 	token->value = malloc(1);
+ 	
+-	while (**current != ' ' && **current != '\0'
+-	 && **current != '>' && **current != '<' && **current != '|')
++	while (!(ft_strchr(WHITESPACE, **current)) && !(ft_strchr(OPERAND, **current) && **current != '\0'))
+ 	{
+ 		value_length++;
+ 		token->value = ft_realloc(token->value, ft_strlen(token->value), value_length + 1);
+@@ -131,6 +138,49 @@ void	tokenize_word(const char **current, t_token *token)
+ 	}
+ }
+ 
++int	strchr_count(const char *str, char c)
++{
++	int	i;
++	int	counter;
++
++	i = 0;
++	counter = 0;
++	while (str[i])
++	{
++		if (str[i] == c)
++			counter++;
++		i++;
++	}
++	return (counter);
++}
++void	check_assignment(t_token **tokens, int token_count)
++{
++	int			i;
++	int			j;
++	const char	*word;
++
++	i = -1;
++	while (++i < token_count)
++	{
++		if ((*tokens)[i].type == TOKEN_WORD || (*tokens)[i].type == TOKEN_SINGLE_QUOTE
++			|| (*tokens)[i].type == TOKEN_DOUBLE_QUOTE)
++		{
++			word = (*tokens)[i].value;
++			if (!ft_isalpha(*word) && *word != '_' &&
++                ft_strchr(word, '=') && ft_strchr(word, '=') != word)
++				continue;
++			j = -1;
++			while (word[++j] != '=')
++			{
++				if (!ft_isalnum(word[j]) && word[j] != '_')
++					break;
++			}
++			if (word[j] == '=')
++				(*tokens)[i].type = TOKEN_ASSIGNMENT;
++		}
++	}
++}
++
+ void tokenize(t_token **tokens, const char *input, int *token_count)
+ {
+ 	const char  *current;
+@@ -143,9 +193,10 @@ void tokenize(t_token **tokens, const char *input, int *token_count)
+ 			single_quote_handling(&current, &token);
+ 		else if (*current == '"')
+ 			double_quote_handling(&current, &token);
+-		else if (*current == '|' || *current == '<' || *current == '>')
++		// else if (*current == '|' || *current == '<' || *current == '>')
++		else if (ft_strchr(OPERAND, *current))
+ 			tokenize_pipe_and_redirector(&current, &token);
+-		else if (*current == ' ')
++		else if (ft_strchr(WHITESPACE, *current))
+ 		{
+ 			current++;
+ 			continue;
+@@ -154,10 +205,8 @@ void tokenize(t_token **tokens, const char *input, int *token_count)
+ 			tokenize_word(&current, &token);
+ 		// Process the token or store it for later processing
+ 		(*token_count)++;
+-		*tokens = realloc(*tokens, *token_count * sizeof(t_token));
+-		// *tokens = ft_realloc(*tokens, *token_count - 1 * sizeof(t_token), *token_count * sizeof(t_token));
++		*tokens = ft_realloc(*tokens, *token_count - 1 * sizeof(t_token), *token_count * sizeof(t_token));
+ 		(*tokens)[*token_count - 1] = token;
+-		// free(token.value);
+-		// token.value = NULL;
+ 	}
++	check_assignment(tokens, *token_count);
+ }
+diff --git a/02_parser/parser0.c b/02_parser/parser0.c
+index e41c1a8..46a80c6 100644
+--- a/02_parser/parser0.c
++++ b/02_parser/parser0.c
+@@ -6,149 +6,180 @@
+ /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+ /*                                                +#+#+#+#+#+   +#+           */
+ /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
+-/*   Updated: 2023/08/08 15:41:41 by nnavidd          ###   ########.fr       */
++/*   Updated: 2023/08/06 18:16:40 by nnavidd          ###   ########.fr       */
+ /*                                                                            */
+ /* ************************************************************************** */
+ 
+ #include "minishell.h"
+ 
+-// Define your token and AST structures here
+-
+-t_ast_node *parse_command(t_token **tokens, int *token_count);
+-t_ast_node *parse_pipeline(t_token **tokens, int *token_count);
++// Function to create a new AST node
++t_ast_node *create_ast_node(t_ast_node_type type) {
++    t_ast_node *node = (t_ast_node *)malloc(sizeof(t_ast_node));
++    node->type = type;
++    node->content = (t_ast_node_content *)malloc(sizeof(t_ast_node_content));
++    node->content->stdin_redirect = NULL;
++    node->content->stdout_redirect = NULL;
++    node->content->assignments = NULL;
++    node->content->cmd = NULL;
++    node->left = NULL;
++    node->right = NULL;
++    return node;
++}
+ 
+-void free_ast(t_ast_node *node);
++// Function to parse assignments
++t_assignment *parse_assignments() {
++    // Implement parsing logic for assignments
++    // Return a linked list of assignments
++    return NULL;
++}
+ 
+-t_ast_node *create_command_node(t_ast_node_content *content) {
+-	t_ast_node *node = (t_ast_node *)malloc(sizeof(t_ast_node));
+-	if (!node) {
+-		perror("Memory allocation error");
+-		exit(1);
+-	}
+-	node->type = AST_NODE_CMD;
+-	node->content = content;
+-	node->left = NULL;
+-	node->right = NULL;
+-	return node;
++// Function to parse redirects
++t_redirect *parse_redirect() {
++    // Implement parsing logic for redirects
++    // Return a linked list of redirects
++    return NULL;
+ }
+ 
+-t_ast_node *create_pipe_node(t_ast_node *left, t_ast_node *right) {
+-	t_ast_node *node = (t_ast_node *)malloc(sizeof(t_ast_node));
+-	if (!node) {
+-		perror("Memory allocation error");
+-		exit(1);
+-	}
+-	node->type = AST_NODE_PIPE;
+-	node->content = NULL;
+-	node->left = left;
+-	node->right = right;
+-	return node;
++// Function to parse command words
++char **parse_command_words() {
++    // Implement parsing logic for command words
++    // Return an array of strings (command words)
++    return NULL;
+ }
+ 
+-t_ast_node_content *parse_command_content(t_token **tokens, int *token_count)
+-{
+-    t_ast_node_content *content = (t_ast_node_content *)malloc(sizeof(t_ast_node_content));
+-    if (!content) {
+-        perror("Memory allocation error");
+-        exit(1);
+-    }
++// Function to parse a single command
++t_ast_node *parse_command() {
++    t_ast_node *node = create_ast_node(AST_NODE_CMD);
+ 
+-    // Initialize content fields
+-    content->stdin_redirect = NULL;
+-    content->stdout_redirect = NULL;
+-    content->assignments = NULL;
+-    content->cmd = NULL;  // To be filled with the command parts
+-
+-    // Parse command content, redirections, and assignments
+-    // Iterate through tokens, identify stdin/stdout redirections, assignments, and command parts
+-
+-    // Example of parsing a command:
+-    content->cmd = (char **)malloc(sizeof(char *) * (*token_count + 1));
+-    int cmd_index = 0;
+-	--(*token_count);
+-		printf("token_count:%d\n", *token_count);
+-    while (*token_count >= 0 && (*tokens)[*token_count].type != TOKEN_PIPE) {
+-        content->cmd[cmd_index] = ft_strdup((*tokens)[*token_count].value);
+-		printf("assign:%s\n", (*tokens)[*token_count].value);
+-        (*tokens)++;
+-        (*token_count)--;
+-		cmd_index++;
+-		printf("hi\n");
+-    }
+-    content->cmd[cmd_index] = NULL;  // Null-terminate the command array
+-    return content;
+-}
++    // Parse redirects, assignments, and command
++    node->content->stdin_redirect = parse_redirect();
++    node->content->stdout_redirect = parse_redirect();
++    node->content->assignments = parse_assignments();
++    node->content->cmd = parse_command_words();
+ 
+-t_ast_node *parse_command(t_token **tokens, int *token_count) {
+-	// Parse the command content and create the AST node
+-	t_ast_node_content *content = parse_command_content(tokens, token_count);; // Parse command content, redirections, assignments
+-	return create_command_node(content);
++    return node;
+ }
+ 
+-t_ast_node *parse_pipeline(t_token **tokens, int *token_count) {
+-	t_ast_node *left;
+-
+-	left = parse_command(tokens, token_count);
+-	
+-	// Check if there's a pipe operator
+-	if (*token_count > 0 && (*tokens)[0].type == TOKEN_PIPE && strcmp((*tokens)[0].value, "|") == 0) {
+-		(*tokens)++; // Consume the pipe operator
+-		(*token_count)--;
+-		t_ast_node *right = parse_pipeline(tokens, token_count);
+-		return create_pipe_node(left, right);
+-	}
+-	
+-	return left;
++// Function to parse a single pipe
++t_ast_node *parse_pipe() {
++    t_ast_node *node = create_ast_node(AST_NODE_PIPE);
++
++    // Parse left and right sub-trees
++    node->left = parse_command();
++    node->right = parse_command();
++
++    return node;
+ }
+ 
+-void free_ast(t_ast_node *node) {
+-	if (!node) {
+-		return;
+-	}
+-
+-	if (node->type == AST_NODE_CMD) {
+-		// Free command content
+-	} else if (node->type == AST_NODE_PIPE) {
+-		free_ast(node->left);
+-		free_ast(node->right);
+-	}
+-
+-	free(node);
++// Function to start parsing
++t_ast_node *parse() {
++    // You might start with the highest-level grammar rule
++    return parse_pipe();
+ }
+ 
+-void print_ast_node(t_ast_node *node, int level) {
+-    if (!node) {
++// Function to free memory used by AST nodes
++void free_ast(t_ast_node *node) {
++    if (node == NULL) {
+         return;
+     }
+-
+-    for (int i = 0; i < level; i++) {
+-        printf("    "); // Indentation for readability
+-    }
+-
+-    if (node->type == AST_NODE_CMD) {
+-        printf("Node type: AST_NODE_CMD\n");
+-        if (node->content) {
+-            printf("Content:\n");
+-            if (node->content->cmd) {
+-                printf("    Command:");
+-                for (int i = 0; node->content->cmd[i] != NULL; i++) {
+-                    printf(" %s", node->content->cmd[i]);
+-                }
+-                printf("\n");
+-            }
+-            // Print redirections and assignments if needed
+-        }
+-    } else if (node->type == AST_NODE_PIPE) {
+-        printf("Node type: AST_NODE_PIPE\n");
+-    }
+-
+-    print_ast_node(node->left, level + 1);
+-    print_ast_node(node->right, level + 1);
++    free_ast(node->left);
++    free_ast(node->right);
++    free(node->content->cmd);
++    free(node->content);
++    free(node);
+ }
+ 
+-void print_ast(t_ast_node *root) {
+-    printf("Left child:\n");
+-    print_ast_node(root->left, 1);
+-    printf("Right child:\n");
+-    print_ast_node(root->right, 1);
+-}
+\ No newline at end of file
++// int main() {
++//     // Tokenize the input string using the lexer
++
++//     // Parse the tokens and create the AST
++//     t_ast_node *root = parse();
++
++//     // ... Further processing and execution
++
++//     // Free the memory used by the AST
++//     free_ast(root);
++
++//     return 0;
++// }
++
++// void	print_cmd(char **cmd)
++// {
++// 	while (*cmd)
++// 	{
++// 		printf("%s\n", *cmd);
++// 		cmd++;
++// 	}
++// }
++
++// void	assign_value(t_split *sp, char *input_string)
++// {
++// 	sp->input_copy = ft_strdup(input_string);
++// 	sp->result = ft_calloc(sizeof(char *), ft_strlen (sp->input_copy));// it should be according to number of pipe sign
++// 	if (!sp->result)
++// 		exit(EXIT_FAILURE);
++// 	sp->token_start = sp->input_copy;
++// 	sp->p = sp->input_copy;
++// 	sp->index = 0;
++// 	sp->inside_quote = 0;
++// 	sp->quote_char = '\0';
++// }
++
++// void	parse_string(t_split *sp)
++// {
++// 	while (*sp->p != '\0')
++// 	{
++// 		if (*sp->p == '"' || *sp->p == '\'')
++// 		{
++// 			if (sp->quote_char == '\0' || sp->quote_char == *sp->p)
++// 			{
++// 				sp->inside_quote = !sp->inside_quote;
++// 				sp->quote_char = *sp->p;
++// 			}
++// 		}
++// 		else if (*sp->p == ' ' && !sp->inside_quote)
++// 		{
++// 			*sp->p = '\0';
++// 			if (sp->token_start[0] != '\0')
++// 			{
++// 				sp->result[sp->index++] = ft_strdup(sp->token_start);
++// 			}
++// 			sp->token_start = sp->p + 1;
++// 		}
++// 		++sp->p;
++// 	}
++// }
++
++// char	**sanitize(char **string, int len)
++// {
++// 	int		i;
++// 	char	*buff;
++
++// 	i = 0;
++// 	while (i < len)
++// 	{
++// 		if (string[i][0] == '\'')
++// 		{
++// 			buff = ft_strdup(string[i]);
++// 			ft_strlcpy(string[i], buff + 1, ft_strlen(string[i]) - 1);
++// 			free(buff);
++// 		}
++// 		i++;
++// 	}
++// 	return (string);
++// }
++
++// char	**split_string(char *input_string)
++// {
++// 	t_split	sp;
++
++// 	assign_value(&sp, input_string);
++// 	parse_string(&sp);
++// 	if (*sp.token_start != '\0')
++// 	{
++// 		sp.result[sp.index++] = ft_strdup(sp.token_start);
++// 	}
++// 	sp.result[sp.index] = 0;
++// 	sanitize(sp.result, sp.index);
++// 	return (sp.result);
++// }
+diff --git a/02_parser/test_00.c b/02_parser/test_00.c
+deleted file mode 100644
+index 028a79f..0000000
+--- a/02_parser/test_00.c
++++ /dev/null
+@@ -1,174 +0,0 @@
+-
+-#include "minishell.h"
+-
+-// Function to create a new AST node
+-t_ast_node *create_ast_node(t_ast_node_type type) {
+-    t_ast_node *node = (t_ast_node *)malloc(sizeof(t_ast_node));
+-    node->type = type;
+-    node->content = (t_ast_node_content *)malloc(sizeof(t_ast_node_content));
+-    node->content->stdin_redirect = NULL;
+-    node->content->stdout_redirect = NULL;
+-    node->content->assignments = NULL;
+-    node->content->cmd = NULL;
+-    node->left = NULL;
+-    node->right = NULL;
+-    return node;
+-}
+-
+-// Function to parse assignments
+-t_assignment *parse_assignments() {
+-    // Implement parsing logic for assignments
+-    // Return a linked list of assignments
+-    return NULL;
+-}
+-
+-// Function to parse redirects
+-t_redirect *parse_redirect() {
+-    // Implement parsing logic for redirects
+-    // Return a linked list of redirects
+-    return NULL;
+-}
+-
+-// Function to parse command words
+-char **parse_command_words() {
+-    // Implement parsing logic for command words
+-    // Return an array of strings (command words)
+-    return NULL;
+-}
+-
+-// Function to parse a single command
+-t_ast_node *parse_command() {
+-    t_ast_node *node = create_ast_node(AST_NODE_CMD);
+-
+-    // Parse redirects, assignments, and command
+-    node->content->stdin_redirect = parse_redirect();
+-    node->content->stdout_redirect = parse_redirect();
+-    node->content->assignments = parse_assignments();
+-    node->content->cmd = parse_command_words();
+-
+-    return node;
+-}
+-
+-// Function to parse a single pipe
+-t_ast_node *parse_pipe() {
+-    t_ast_node *node = create_ast_node(AST_NODE_PIPE);
+-
+-    // Parse left and right sub-trees
+-    node->left = parse_command();
+-    node->right = parse_command();
+-
+-    return node;
+-}
+-
+-// Function to start parsing
+-t_ast_node *parse() {
+-    // You might start with the highest-level grammar rule
+-    return parse_pipe();
+-}
+-
+-// Function to free memory used by AST nodes
+-void free_ast(t_ast_node *node) {
+-    if (node == NULL) {
+-        return;
+-    }
+-    free_ast(node->left);
+-    free_ast(node->right);
+-    free(node->content->cmd);
+-    free(node->content);
+-    free(node);
+-}
+-
+-// int main() {
+-//     // Tokenize the input string using the lexer
+-
+-//     // Parse the tokens and create the AST
+-//     t_ast_node *root = parse();
+-
+-//     // ... Further processing and execution
+-
+-//     // Free the memory used by the AST
+-//     free_ast(root);
+-
+-//     return 0;
+-// }
+-
+-// void	print_cmd(char **cmd)
+-// {
+-// 	while (*cmd)
+-// 	{
+-// 		printf("%s\n", *cmd);
+-// 		cmd++;
+-// 	}
+-// }
+-
+-// void	assign_value(t_split *sp, char *input_string)
+-// {
+-// 	sp->input_copy = ft_strdup(input_string);
+-// 	sp->result = ft_calloc(sizeof(char *), ft_strlen (sp->input_copy));// it should be according to number of pipe sign
+-// 	if (!sp->result)
+-// 		exit(EXIT_FAILURE);
+-// 	sp->token_start = sp->input_copy;
+-// 	sp->p = sp->input_copy;
+-// 	sp->index = 0;
+-// 	sp->inside_quote = 0;
+-// 	sp->quote_char = '\0';
+-// }
+-
+-// void	parse_string(t_split *sp)
+-// {
+-// 	while (*sp->p != '\0')
+-// 	{
+-// 		if (*sp->p == '"' || *sp->p == '\'')
+-// 		{
+-// 			if (sp->quote_char == '\0' || sp->quote_char == *sp->p)
+-// 			{
+-// 				sp->inside_quote = !sp->inside_quote;
+-// 				sp->quote_char = *sp->p;
+-// 			}
+-// 		}
+-// 		else if (*sp->p == ' ' && !sp->inside_quote)
+-// 		{
+-// 			*sp->p = '\0';
+-// 			if (sp->token_start[0] != '\0')
+-// 			{
+-// 				sp->result[sp->index++] = ft_strdup(sp->token_start);
+-// 			}
+-// 			sp->token_start = sp->p + 1;
+-// 		}
+-// 		++sp->p;
+-// 	}
+-// }
+-
+-// char	**sanitize(char **string, int len)
+-// {
+-// 	int		i;
+-// 	char	*buff;
+-
+-// 	i = 0;
+-// 	while (i < len)
+-// 	{
+-// 		if (string[i][0] == '\'')
+-// 		{
+-// 			buff = ft_strdup(string[i]);
+-// 			ft_strlcpy(string[i], buff + 1, ft_strlen(string[i]) - 1);
+-// 			free(buff);
+-// 		}
+-// 		i++;
+-// 	}
+-// 	return (string);
+-// }
+-
+-// char	**split_string(char *input_string)
+-// {
+-// 	t_split	sp;
+-
+-// 	assign_value(&sp, input_string);
+-// 	parse_string(&sp);
+-// 	if (*sp.token_start != '\0')
+-// 	{
+-// 		sp.result[sp.index++] = ft_strdup(sp.token_start);
+-// 	}
+-// 	sp.result[sp.index] = 0;
+-// 	sanitize(sp.result, sp.index);
+-// 	return (sp.result);
+-// }
+diff --git a/include/minishell.h b/include/minishell.h
+index 86c78eb..9221bca 100644
+--- a/include/minishell.h
++++ b/include/minishell.h
+@@ -6,7 +6,7 @@
+ /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+ /*                                                +#+#+#+#+#+   +#+           */
+ /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
+-/*   Updated: 2023/08/08 15:24:18 by nnavidd          ###   ########.fr       */
++/*   Updated: 2023/08/09 17:33:35 by nnavidd          ###   ########.fr       */
+ /*                                                                            */
+ /* ************************************************************************** */
+ 
+@@ -26,15 +26,18 @@
+ // # include "get_next_line.h"
+ 
+ 
+-
++# define WHITESPACE " \t\v\f\r"
++# define OPERAND "<>|"
+ typedef enum e_token_type
+ {
+     TOKEN_WORD,
+     TOKEN_SINGLE_QUOTE,
+     TOKEN_DOUBLE_QUOTE,
+     TOKEN_REDIRECT,
+-    TOKEN_PIPE,
++	TOKEN_PIPE,
+ 	TOKEN_EMPTY,
++	TOKEN_UNCLOSED_Q,
++	TOKEN_ASSIGNMENT
+ } t_token_type;
+ 
+ typedef struct s_token
+@@ -98,11 +101,8 @@ typedef struct s_ast_node
+ 	struct s_ast_node	*right;
+ }	t_ast_node;
+ 
+-int			main(void);
+-char		**split_string(char *input_string);
+-void		print_cmd(char **cmd);
+-void 		tokenize(t_token **tokens, const char *input, int *token_count);
+-void 		free_ast(t_ast_node *node);
+-void 		print_ast(t_ast_node *root);
+-t_ast_node	*parse_pipeline(t_token **tokens, int *token_count);
++int		main(void);
++char	**split_string(char *input_string);
++void	print_cmd(char **cmd);
++void tokenize(t_token **tokens, const char *input, int *token_count);
+ #endif
+\ No newline at end of file
+diff --git a/main.c b/main.c
+index dd61d42..0c05e95 100644
+--- a/main.c
++++ b/main.c
+@@ -6,7 +6,7 @@
+ /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+ /*                                                +#+#+#+#+#+   +#+           */
+ /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
+-/*   Updated: 2023/08/08 16:39:37 by nnavidd          ###   ########.fr       */
++/*   Updated: 2023/08/09 17:29:20 by nnavidd          ###   ########.fr       */
+ /*                                                                            */
+ /* ************************************************************************** */
+ 
+@@ -29,18 +29,20 @@
+ // }
+ 
+ const char *token_names[] = {
+-	"WORD",
+-	"SIN_QUOTE",
+-	"DUB_QUOTE",
+-	"REDIRECT",
++    "WORD",
++    "SIN_QUOTE",
++    "DUB_QUOTE",
++    "REDIRECT",
+ 	"PIPE",
+-	"EMPTY"
+-	// Add more names for additional token types if needed
++	"EMPTY",
++	"UNCL_QUO",
++	"ASSIGNMNT"
++    // Add more names for additional token types if needed
+ };
+ 
+ void	print_tokens(t_token *tokens, int token_count)
+ {
+-		for(int i = 0; i < token_count; i++)
++	    for(int i = 0; i < token_count; i++)
+ 		{
+ 				printf("\033[38;5;04mToken Type\033[0m : \033[38;5;214m%s\033[0m", token_names[tokens[i].type]);
+ 				printf("	\033[38;5;196mValue\033[0m : \033[38;5;214m%s\033[0m\n", tokens[i].value);
+@@ -68,10 +70,10 @@ void	free_tokens(t_token **tokens, int *token_count)
+ 
+ int	main(void)
+ {
+-	char		*line;
+-	int			token_count;
+-	t_ast_node	*ast_root;
+-	t_token		*tokens;
++	char	*line;
++	// char	**cmd;
++	int		token_count;
++	t_token	*tokens;
+ 
+ 	tokens = NULL;
+ 	token_count = 0;
+@@ -83,11 +85,6 @@ int	main(void)
+ 			add_history(line);
+ 			tokenize(&tokens, line, &token_count);
+ 			print_tokens(tokens, token_count);
+-			
+-			ast_root = parse_pipeline(&tokens, &token_count);
+-			print_ast(ast_root);
+-			exit(1);
+-			free_ast(ast_root);
+ 			free_tokens(&tokens, &token_count);
+ 			printf("You entered: %s\n", line); // use the line
+ 		}
