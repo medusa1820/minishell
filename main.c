@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/08 16:39:37 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/11 14:11:28 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ const char *token_names[] = {
 	"DUB_QUOTE",
 	"REDIRECT",
 	"PIPE",
-	"EMPTY"
+	"EMPTY",
+	"UNCL_QUO",
+	"ASSIGNMNT"
 	// Add more names for additional token types if needed
 };
 
@@ -74,6 +76,7 @@ int	main(void)
 	t_token		*tokens;
 
 	tokens = NULL;
+	ast_root = NULL;
 	token_count = 0;
 	line = readline("minishell>");
 	while (line)
@@ -85,9 +88,11 @@ int	main(void)
 			print_tokens(tokens, token_count);
 			
 			ast_root = parse_pipeline(&tokens, &token_count);
+			
 			print_ast(ast_root);
-			exit(1);
-			free_ast(ast_root);
+			// exit(1);
+			if (ast_root)
+				free_ast(ast_root);
 			free_tokens(&tokens, &token_count);
 			printf("You entered: %s\n", line); // use the line
 		}

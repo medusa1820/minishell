@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/08 15:24:18 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/11 11:44:30 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # include <readline/history.h>
 // # include "get_next_line.h"
 
-
-
+# define WHITESPACE " \t\v\f\r"
+# define OPERAND "<>||"
 typedef enum e_token_type
 {
     TOKEN_WORD,
@@ -35,6 +35,8 @@ typedef enum e_token_type
     TOKEN_REDIRECT,
     TOKEN_PIPE,
 	TOKEN_EMPTY,
+	TOKEN_UNCLOSED_Q,
+	TOKEN_ASSIGNMENT,
 } t_token_type;
 
 typedef struct s_token
