@@ -80,15 +80,11 @@ void free_ast(t_ast_node *node) {
 
 // int main() {
 //     // Tokenize the input string using the lexer
-
 //     // Parse the tokens and create the AST
 //     t_ast_node *root = parse();
-
 //     // ... Further processing and execution
-
 //     // Free the memory used by the AST
 //     free_ast(root);
-
 //     return 0;
 // }
 
@@ -143,7 +139,6 @@ void free_ast(t_ast_node *node) {
 // {
 // 	int		i;
 // 	char	*buff;
-
 // 	i = 0;
 // 	while (i < len)
 // 	{
@@ -161,7 +156,6 @@ void free_ast(t_ast_node *node) {
 // char	**split_string(char *input_string)
 // {
 // 	t_split	sp;
-
 // 	assign_value(&sp, input_string);
 // 	parse_string(&sp);
 // 	if (*sp.token_start != '\0')
