@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/14 19:53:19 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/14 22:19:18 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,31 @@ t_ast_node *create_pipe_node(t_ast_node *left, t_ast_node *right)
 	return node;
 }
 
-t_ast_node_content *parse_command_content(t_token **tokens, int *token_count)
+t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token **tokens, int *token_count)
+{
+	int	current;
+	int cmd_index;
+
+	current = *token_count;
+	cmd_index = 0;
+	if (*token_count >= 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
+	{
+		free(content);
+		return NULL;
+	}
+	while (current-- > 0 && (*tokens)[current].type != TOKEN_PIPE) //since token_count is one more than itrator
+		cmd_index++;
+	(*content)->cmd = (char **)ft_calloc((cmd_index + 1), sizeof(char *));
+	(*content)->cmd[cmd_index] = NULL;
+	while (cmd_index-- > 0)
+	{
+ 		(*content)->cmd[cmd_index] = ft_strdup((*tokens)[*token_count - 1].value);
+		(*token_count)--;
+	}
+	return (*content);
+}
+
+t_ast_node *parse_command(t_token **tokens, int *token_count)
 {
 	t_ast_node_content *content;
 
@@ -77,28 +101,7 @@ t_ast_node_content *parse_command_content(t_token **tokens, int *token_count)
 	content->stdout_redirect = NULL;
 	content->assignments = NULL;
 	content->cmd = NULL;
-	if (*token_count >= 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
-	{
-		free(content);
-		return NULL;
-	}
-	content->cmd = (char **)ft_calloc((*token_count + 1), sizeof(char *));
-	int cmd_index = 0;
-	while (*token_count > 0 && (*tokens)[*token_count - 1].type != TOKEN_PIPE)
-	{
-		content->cmd[cmd_index] = ft_strdup((*tokens)[*token_count - 1].value);
-		(*token_count)--;
-		cmd_index++;
-	}
-	content->cmd[cmd_index] = NULL;
-	return content;
-}
-
-t_ast_node *parse_command(t_token **tokens, int *token_count)
-{
-	t_ast_node_content *content;
-
-	content = parse_command_content(tokens, token_count);
+	parse_command_content(&content, tokens, token_count);
 	if (content == NULL) {
 		return NULL;  // Return NULL if command content is empty (due to PIPE)
 	}
