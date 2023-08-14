@@ -6,23 +6,37 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/11 17:39:51 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/14 19:53:19 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Define your token and AST structures here
+// t_ast_node *create_command_node(char **cmd) {
+//     t_ast_node *node = (t_ast_node *)ft_calloc(1, sizeof(t_ast_node));
+//     if (!node) {
+//         perror("Memory allocation error");
+//         exit(1);
+//     }
+//     node->type = AST_NODE_CMD;
+//     node->content = (t_ast_node_content *)ft_calloc(1, sizeof(t_ast_node_content));
+//     if (!node->content) {
+//         perror("Memory allocation error");
+//         exit(1);
+//     }
+//     node->content->cmd = cmd;
+//     node->left = NULL;
+//     node->right = NULL;
+//     return node;
+// }
 
-t_ast_node *parse_command(t_token **tokens, int *token_count);
-t_ast_node *parse_pipeline(t_token **tokens, int *token_count);
+t_ast_node *create_command_node(t_ast_node_content *content)
+{
+	t_ast_node *node;
 
-void free_ast(t_ast_node *node);
-
-t_ast_node *create_command_node(t_ast_node_content *content) {
-	t_ast_node *node = (t_ast_node *)ft_calloc(sizeof(t_ast_node));
+	node = (t_ast_node *)ft_calloc(1, sizeof(t_ast_node));
 	if (!node) {
-		perror("Memory allocation error");
+		perror("Memory allocation error"); //error handeling
 		exit(1);
 	}
 	node->type = AST_NODE_CMD;
@@ -32,10 +46,14 @@ t_ast_node *create_command_node(t_ast_node_content *content) {
 	return node;
 }
 
-t_ast_node *create_pipe_node(t_ast_node *left, t_ast_node *right) {
-	t_ast_node *node = (t_ast_node *)malloc(sizeof(t_ast_node));
-	if (!node) {
-		perror("Memory allocation error");
+t_ast_node *create_pipe_node(t_ast_node *left, t_ast_node *right)
+{
+	t_ast_node *node;
+
+	node = (t_ast_node *)malloc(sizeof(t_ast_node));
+	if (!node)
+	{
+		perror("Memory allocation error"); //error handling
 		exit(1);
 	}
 	node->type = AST_NODE_PIPE;
@@ -47,112 +65,122 @@ t_ast_node *create_pipe_node(t_ast_node *left, t_ast_node *right) {
 
 t_ast_node_content *parse_command_content(t_token **tokens, int *token_count)
 {
-	t_ast_node_content *content = (t_ast_node_content *)malloc(sizeof(t_ast_node_content));
-	// if (!content) {
-	// 	perror("Memory allocation error");
-	// 	exit(1);
-	// }
-	// Initialize content fields
+	t_ast_node_content *content;
+
+	content = (t_ast_node_content *)malloc(sizeof(t_ast_node_content));
+	if (!content)
+	{
+		perror("Memory allocation error"); //error handling
+		exit(1);
+	}
 	content->stdin_redirect = NULL;
 	content->stdout_redirect = NULL;
 	content->assignments = NULL;
-	content->cmd = NULL;  // To be filled with the command parts
+	content->cmd = NULL;
 	if (*token_count >= 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
+	{
+		free(content);
 		return NULL;
-	// Parse command content, redirections, and assignments
-	// Iterate through tokens, identify stdin/stdout redirections, assignments, and command parts
-
-	// Example of parsing a command:
-	content->cmd = (char **)malloc(sizeof(char *) * (*token_count + 1)); //later work on passing the amount of word instead of token_count to optimize memory allocation
+	}
+	content->cmd = (char **)ft_calloc((*token_count + 1), sizeof(char *));
 	int cmd_index = 0;
-	--(*token_count);
-		printf("token_count:%d\n", *token_count);
-	while (*token_count >= 0 && (*tokens)[*token_count].type != TOKEN_PIPE) {
-		content->cmd[cmd_index] = ft_strdup((*tokens)[*token_count].value);
-		// (*tokens)++;
+	while (*token_count > 0 && (*tokens)[*token_count - 1].type != TOKEN_PIPE)
+	{
+		content->cmd[cmd_index] = ft_strdup((*tokens)[*token_count - 1].value);
 		(*token_count)--;
 		cmd_index++;
 	}
-	content->cmd[cmd_index] = NULL;  // Null-terminate the command array
+	content->cmd[cmd_index] = NULL;
 	return content;
 }
 
-t_ast_node *parse_command(t_token **tokens, int *token_count) {
-	// Parse the command content and create the AST node
-	t_ast_node_content *content = parse_command_content(tokens, token_count);; // Parse command content, redirections, assignments
+t_ast_node *parse_command(t_token **tokens, int *token_count)
+{
+	t_ast_node_content *content;
+
+	content = parse_command_content(tokens, token_count);
+	if (content == NULL) {
+		return NULL;  // Return NULL if command content is empty (due to PIPE)
+	}
 	return create_command_node(content);
 }
 
-t_ast_node *parse_pipeline(t_token **tokens, int *token_count) {
+t_ast_node *parse_pipeline(t_token **tokens, int *token_count)
+{
 	t_ast_node *left;
+	t_ast_node *right;
 
-	if (*token_count > 0 && (*tokens)[*token_count - 1].type != TOKEN_PIPE)
-		left = parse_command(tokens, token_count);
+	left = parse_command(tokens, token_count);
 
-	// Check if there's a pipe operator
-	if (*token_count > 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE && strcmp((*tokens)[*token_count - 1].value, "|") == 0) {
-		// (*tokens)++; // Consume the pipe operator
-		(*token_count)--;
-		t_ast_node *right = parse_pipeline(tokens, token_count);
+	if (*token_count > 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE) {
+		(*token_count)--;  // Consume the pipe operator
+		right = parse_pipeline(tokens, token_count);
 		return create_pipe_node(left, right);
 	}
-	
+
 	return left;
 }
 
-void free_ast(t_ast_node *node) {
-	if (!node) {
-		return;
-	}
+void free_ast(t_ast_node *node)
+{
+	int	i;
 
-	if (node->type == AST_NODE_CMD) {
-		// Free command content
-	} else if (node->type == AST_NODE_PIPE) {
+	if (!node)
+		return;
+	if (node->type == AST_NODE_CMD)
+	{
+		if (node->content)
+		{
+			if (node->content->cmd)
+			{
+				i = -1;
+				while (node->content->cmd[++i] != NULL)
+					free(node->content->cmd[i]);
+				free(node->content->cmd);
+			}
+			free(node->content);
+		}
+	}
+	else if (node->type == AST_NODE_PIPE)
+	{
 		free_ast(node->left);
 		free_ast(node->right);
 	}
-
 	free(node);
 }
 
-void print_ast_node(t_ast_node *node, int level) {
-	if (!node->content)
-	{
-		printf("hi\n");
+void print_ast_node(t_ast_node *node, int level, char x) {
+	if (node == NULL) {
 		return;
-
 	}
-
-	for (int i = 0; i < level; i++) {
-		printf("    "); // Indentation for readability
-	}
-
-
+	if (x == 'l')
+		printf(BLUE "Left child:\n");
+	if (x == 'r')
+		printf(BLUE "Right child:\n" RESET);
+	for (int i = 0; i < level; i++)
+		printf("    ");
 	if (node->type == AST_NODE_CMD) {
-		printf("Node type: AST_NODE_CMD\n");
-		if (node->content) {
-			printf("Content:\n");
-			if (node->content->cmd) {
-				printf("    Command:");
+		printf(RED "Node type:" RESET ORG" AST_NODE_CMD\n" RESET);
+		if (node->content)
+		{
+			for (int i = 0; i < level; i++)
+				printf("    ");
+			printf(RED "Content:\n"RESET);
+			if (node->content->cmd)
+			{
+				for (int i = 0; i < level; i++)
+					printf("    ");
+				printf("Command:");
 				for (int i = 0; node->content->cmd[i] != NULL; i++) {
-					printf(" %s", node->content->cmd[i]);
+					printf(ORG " %s" RESET, node->content->cmd[i]);
 				}
 				printf("\n");
 			}
-			// Print redirections and assignments if needed
 		}
 	} else if (node->type == AST_NODE_PIPE) {
-		printf("Node type: AST_NODE_PIPE\n");
+		printf(RED "Node type:"RESET ORG" AST_NODE_PIPE\n" RESET);
 	}
 
-	print_ast_node(node->left, level + 1);
-	print_ast_node(node->right, level + 1);
-}
-
-void print_ast(t_ast_node *root) {
-	printf("Left child:\n");
-
-	print_ast_node(root->left, 1);
-	printf("Right child:\n");
-	print_ast_node(root->right, 1);
+	print_ast_node(node->left, level + 1, 'l');
+	print_ast_node(node->right, level + 1, 'r');
 }

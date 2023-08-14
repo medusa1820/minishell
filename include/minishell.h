@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/11 11:44:30 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/14 19:03:29 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 // # include "get_next_line.h"
+
+#define BLUE  "\033[38;5;4m"
+#define ORG   "\033[38;5;214m"
+#define RED   "\033[38;5;196m"
+#define RESET "\033[0m"
 
 # define WHITESPACE " \t\v\f\r"
 # define OPERAND "<>||"
@@ -45,17 +50,6 @@ typedef struct s_token
     char	*value;
 	bool	check; //check if I didn't use, delete it!
 } t_token;
-
-typedef struct s_split
-{
-	char	**result;
-	int		index;
-	int		inside_quote;
-	char	quote_char;
-	char	*token_start;
-	char	*p;
-	char	*input_copy;
-}t_split;
 
 typedef enum e_redirect_type
 {
@@ -107,4 +101,5 @@ void 		tokenize(t_token **tokens, const char *input, int *token_count);
 void 		free_ast(t_ast_node *node);
 void 		print_ast(t_ast_node *root);
 t_ast_node	*parse_pipeline(t_token **tokens, int *token_count);
+void 	print_ast_node(t_ast_node *node, int level, char x);
 #endif

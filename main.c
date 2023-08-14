@@ -6,27 +6,11 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/11 14:11:28 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/14 19:05:40 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// t_ast_node create_ast_node(t_ast_node node, char *line)
-// {
-// 	t_ast_node new_node;
-
-// 	new_node = (t_ast_node) malloc(sizeof(t_ast_node));
-//     if (new_node != NULL)
-// 	{
-//         if ()
-// 		new_node.type = SOME_TYPE; // Replace SOME_TYPE with your actual type assignment
-//         new_node.content = NULL; // Replace NULL with the appropriate content initialization
-//         new_node.left = NULL;
-//         new_node.right = NULL;
-//     }
-//     return new_node;
-// }
 
 const char *token_names[] = {
 	"WORD",
@@ -44,8 +28,8 @@ void	print_tokens(t_token *tokens, int token_count)
 {
 		for(int i = 0; i < token_count; i++)
 		{
-				printf("\033[38;5;04mToken Type\033[0m : \033[38;5;214m%s\033[0m", token_names[tokens[i].type]);
-				printf("	\033[38;5;196mValue\033[0m : \033[38;5;214m%s\033[0m\n", tokens[i].value);
+				printf(BLUE "Token Type" RESET " : " ORG "%s" RESET, token_names[tokens[i].type]);
+				printf(RED "	Value" RESET " : " ORG "%s\n" RESET, tokens[i].value);
 		}
 
 }
@@ -89,8 +73,8 @@ int	main(void)
 			
 			ast_root = parse_pipeline(&tokens, &token_count);
 			
-			print_ast(ast_root);
-			// exit(1);
+			// print_ast(ast_root);
+			print_ast_node(ast_root, 1, 'x');
 			if (ast_root)
 				free_ast(ast_root);
 			free_tokens(&tokens, &token_count);
