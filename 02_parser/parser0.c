@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/14 22:19:18 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/15 13:28:54 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token 
 	(*content)->cmd[cmd_index] = NULL;
 	while (cmd_index-- > 0)
 	{
- 		(*content)->cmd[cmd_index] = ft_strdup((*tokens)[*token_count - 1].value);
+ 		
+		(*content)->cmd[cmd_index] = ft_strdup((*tokens)[*token_count - 1].value);
 		(*token_count)--;
 	}
 	return (*content);

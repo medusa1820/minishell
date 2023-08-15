@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/14 19:05:40 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/15 13:33:13 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int	main(void)
 			
 			ast_root = parse_pipeline(&tokens, &token_count);
 			
-			// print_ast(ast_root);
 			print_ast_node(ast_root, 1, 'x');
 			if (ast_root)
 				free_ast(ast_root);
