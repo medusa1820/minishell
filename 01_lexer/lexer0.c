@@ -10,11 +10,12 @@ void *ft_realloc(void *ptr, size_t old_size, size_t new_size)
  	if (new_size == 0)
 	{
 		free(ptr);
+		ptr = NULL;
 		return NULL;
 	}
 	if (ptr == NULL)
-		return (malloc(new_size)) ;
-	new_ptr = malloc(new_size);
+		return (ft_calloc(1, new_size)) ;
+	new_ptr = ft_calloc(1, new_size);
 	if (new_ptr == NULL)
 		return (ptr);
 	if (old_size < new_size)
@@ -24,6 +25,7 @@ void *ft_realloc(void *ptr, size_t old_size, size_t new_size)
 	// ft_memmove(new_ptr, ptr, copy_size);
 	ft_memcpy(new_ptr, ptr, copy_size);
 	free(ptr);
+	ptr = NULL;
 	return (new_ptr);
 }
 void	single_quote_handling(const char **current, t_token *token)
@@ -34,13 +36,12 @@ void	single_quote_handling(const char **current, t_token *token)
 	if ((*current)[1] == '\0')
 	{
 		token->type = TOKEN_UNCLOSED_Q;
-		token->value = malloc(1); // Allocate memory for null-terminator
+		token->value = ft_calloc(1, sizeof(char)); // Allocate memory for null-terminator
 		token->value[0] = '\0';
 		(*current)++;        
 		return ;
 	}
 	token->type = TOKEN_SINGLE_QUOTE;
-	// token->value = malloc(1);
 	token->value = NULL;
 	(*current)++; 
 	while (**current != '\'' && **current != '\0')
@@ -105,7 +106,7 @@ void	tokenize_pipe_and_redirector(const char **current, t_token *token)
 	if ((**current == '<' && *(*current + 1) == '<')
 	|| (**current == '>' && *(*current + 1) == '>'))
 	{
-		token->value = malloc(3);
+		token->value = ft_calloc(3, 1);
 		token->value[0] = **current;
 		(*current)++;
 		token->value[1] = **current;
@@ -115,7 +116,7 @@ void	tokenize_pipe_and_redirector(const char **current, t_token *token)
 	{
 		if (**current == '|')
 			token->type = TOKEN_PIPE;
-		token->value = malloc(2);
+		token->value = ft_calloc(2, sizeof(char));
 		token->value[0] = **current;
 		token->value[1] = '\0';
 	}
@@ -126,7 +127,7 @@ void	tokenize_word(const char **current, t_token *token)
 {
 	token->type = TOKEN_WORD;
 	int value_length = 0;
-	token->value = malloc(1);
+	token->value = ft_calloc(1, 1);
 	
 	while (!(ft_strchr(WHITESPACE, **current)) && !(ft_strchr(OPERAND, **current) && **current != '\0'))
 	{

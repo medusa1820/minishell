@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/14 19:03:29 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/15 13:45:54 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ int			main(void);
 char		**split_string(char *input_string);
 void		print_cmd(char **cmd);
 void 		tokenize(t_token **tokens, const char *input, int *token_count);
-void 		free_ast(t_ast_node *node);
+void 		free_ast(t_ast_node **node);
 void 		print_ast(t_ast_node *root);
 t_ast_node	*parse_pipeline(t_token **tokens, int *token_count);
-void 	print_ast_node(t_ast_node *node, int level, char x);
+void	 	print_ast_node(t_ast_node *node, int level, char x);
 #endif

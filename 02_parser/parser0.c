@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/15 13:28:54 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/15 16:44:57 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_ast_node *create_pipe_node(t_ast_node *left, t_ast_node *right)
 {
 	t_ast_node *node;
 
-	node = (t_ast_node *)malloc(sizeof(t_ast_node));
+	node = (t_ast_node *)ft_calloc(1, sizeof(t_ast_node));
 	if (!node)
 	{
 		perror("Memory allocation error"); //error handling
@@ -72,7 +72,8 @@ t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token 
 	cmd_index = 0;
 	if (*token_count >= 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
 	{
-		free(content);
+		free(*content);
+		*content = NULL;
 		return NULL;
 	}
 	while (current-- > 0 && (*tokens)[current].type != TOKEN_PIPE) //since token_count is one more than itrator
@@ -83,6 +84,8 @@ t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token 
 	{
  		
 		(*content)->cmd[cmd_index] = ft_strdup((*tokens)[*token_count - 1].value);
+		free((*tokens)[*token_count - 1].value);
+		(*tokens)[*token_count - 1].value = NULL;
 		(*token_count)--;
 	}
 	return (*content);
@@ -92,7 +95,7 @@ t_ast_node *parse_command(t_token **tokens, int *token_count)
 {
 	t_ast_node_content *content;
 
-	content = (t_ast_node_content *)malloc(sizeof(t_ast_node_content));
+	content = (t_ast_node_content *)ft_calloc(1, sizeof(t_ast_node_content));
 	if (!content)
 	{
 		perror("Memory allocation error"); //error handling
@@ -125,38 +128,44 @@ t_ast_node *parse_pipeline(t_token **tokens, int *token_count)
 	return left;
 }
 
-void free_ast(t_ast_node *node)
-{
-	int	i;
+void free_ast(t_ast_node **node_ptr) {
+    if (!(*node_ptr))
+        return;
 
-	if (!node)
-		return;
-	if (node->type == AST_NODE_CMD)
-	{
-		if (node->content)
-		{
-			if (node->content->cmd)
-			{
-				i = -1;
-				while (node->content->cmd[++i] != NULL)
-					free(node->content->cmd[i]);
-				free(node->content->cmd);
-			}
-			free(node->content);
-		}
-	}
-	else if (node->type == AST_NODE_PIPE)
-	{
-		free_ast(node->left);
-		free_ast(node->right);
-	}
-	free(node);
+    if ((*node_ptr)->type == AST_NODE_CMD) {
+        if ((*node_ptr)->content) {
+            if ((*node_ptr)->content->cmd) {
+                int i = 0;
+                while ((*node_ptr)->content->cmd[i] != NULL) {
+                    free((*node_ptr)->content->cmd[i]);
+                    (*node_ptr)->content->cmd[i] = NULL;
+                    i++;
+                }
+                free((*node_ptr)->content->cmd);
+                (*node_ptr)->content->cmd = NULL;
+            }
+            free((*node_ptr)->content);
+            (*node_ptr)->content = NULL;
+        }
+    } else if ((*node_ptr)->type == AST_NODE_PIPE) {
+        free_ast(&((*node_ptr)->left));
+        free_ast(&((*node_ptr)->right));
+        (*node_ptr)->left = NULL;
+        (*node_ptr)->right = NULL;
+    }
+
+    free(*node_ptr);
+    *node_ptr = NULL;
 }
 
 void print_ast_node(t_ast_node *node, int level, char x) {
+	if (x == 'x')
+		printf("\n***************** AST ****************\n");
 	if (node == NULL) {
 		return;
 	}
+	for (int i = 0; i < level; i++)
+		printf("  ");
 	if (x == 'l')
 		printf(BLUE "Left child:\n");
 	if (x == 'r')

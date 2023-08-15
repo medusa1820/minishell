@@ -1,12 +1,7 @@
 {
     "folders": [
         {
-            "name": "minishell",
-            "path": "/home/nnavidd/test/minishell"
-        },
-        {
-            "name": "tmp_minishell",
-            "path": "/home/nnavidd/test/tmp_minishell"
+            "path": "."
         }
     ]
 }

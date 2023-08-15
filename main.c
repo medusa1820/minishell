@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/15 13:33:13 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/15 15:06:10 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,10 @@ int	main(void)
 			print_tokens(tokens, token_count);
 			
 			ast_root = parse_pipeline(&tokens, &token_count);
-			
-			print_ast_node(ast_root, 1, 'x');
-			if (ast_root)
-				free_ast(ast_root);
 			free_tokens(&tokens, &token_count);
+		
+			print_ast_node(ast_root, 1, 'x');
+			free_ast(&ast_root);
 			printf("You entered: %s\n", line); // use the line
 		}
 		rl_replace_line("", 0); // Clear the current input line 
