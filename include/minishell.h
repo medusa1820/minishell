@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/16 11:09:08 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/16 16:03:55 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,4 +102,5 @@ void 		free_ast(t_ast_node **node);
 void 		print_ast(t_ast_node *root);
 t_ast_node	*parse_pipeline(t_token **tokens, int *token_count);
 void	 	print_ast_node(t_ast_node *node, int level, char x);
+void	print_ast_tree0(t_ast_node *node, int level);
 #endif
