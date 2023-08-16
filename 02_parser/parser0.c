@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/16 10:35:12 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/16 10:41:52 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ t_ast_node *create_command_node(t_ast_node_content *content)
 	t_ast_node *node;
 
 	node = (t_ast_node *)ft_calloc(1, sizeof(t_ast_node));
-	if (!node) {
+	if (!node)
+	{
 		perror("Memory allocation error"); //error handeling
 		exit(1);
 	}
@@ -82,7 +83,6 @@ t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token 
 	(*content)->cmd[cmd_index] = NULL;
 	while (cmd_index-- > 0)
 	{
- 		
 		(*content)->cmd[cmd_index] = ft_strdup((*tokens)[*token_count - 1].value);
 		free((*tokens)[*token_count - 1].value);
 		(*tokens)[*token_count - 1].value = NULL;
@@ -106,9 +106,8 @@ t_ast_node *parse_command(t_token **tokens, int *token_count)
 	content->assignments = NULL;
 	content->cmd = NULL;
 	parse_command_content(&content, tokens, token_count);
-	if (content == NULL) {
+	if (content == NULL)
 		return NULL;  // Return NULL if command content is empty (due to PIPE)
-	}
 	return create_command_node(content);
 }
 
@@ -119,14 +118,14 @@ t_ast_node *parse_pipeline(t_token **tokens, int *token_count)
 
 	left = parse_command(tokens, token_count);
 
-	if (*token_count > 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE) {
+	if (*token_count > 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
+	{
 		free((*tokens)[*token_count - 1].value);
 		(*tokens)[*token_count - 1].value = NULL;
 		(*token_count)--;  // Consume the pipe operator
 		right = parse_pipeline(tokens, token_count);
 		return create_pipe_node(left, right);
 	}
-
 	return left;
 }
 
