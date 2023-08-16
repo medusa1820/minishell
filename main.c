@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/15 15:06:10 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/16 15:15:32 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	main(void)
 			free_tokens(&tokens, &token_count);
 		
 			print_ast_node(ast_root, 1, 'x');
+			print_ast_tree0(ast_root, 0);
 			free_ast(&ast_root);
 			printf("You entered: %s\n", line); // use the line
 		}

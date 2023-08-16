@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/15 13:45:54 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/16 15:12:01 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,14 @@ void 		tokenize(t_token **tokens, const char *input, int *token_count);
 void 		free_ast(t_ast_node **node);
 void 		print_ast(t_ast_node *root);
 t_ast_node	*parse_pipeline(t_token **tokens, int *token_count);
-void	 	print_ast_node(t_ast_node *node, int level, char x);
+void		print_ast_node(t_ast_node *node, int level, char x);
+
+//print_ast.c
+
+void		print_ast_tree0(t_ast_node *node, int level);
+void		print_redirect(t_redirect *redirect, int level, char *type);
+void		print_assignments(t_assignment *assignment, int level);
+void		print_command(char **cmd, int level);
+const char	*getAstNodeTypeName(t_ast_node_type type);
+
 #endif
