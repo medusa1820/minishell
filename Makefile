@@ -8,8 +8,12 @@ CFLAGS				+=	-fsanitize=address
 LDFLAGS				:=	-g3
 LDFLAGS				+=	-fsanitize=address
 
+<<<<<<< HEAD
 MINISHELL_SRCS		=	./main.c \
 						./print_ast.c \
+=======
+MINISHELL_SRCS		=	./main.c print_ast.c\
+>>>>>>> ddef5363625a95543e04616932eab2660514bd0c
 
 LEXER_SRCS			=	./01_lexer/lexer0.c \
 

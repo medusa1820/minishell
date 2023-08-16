@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:58:47 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/16 16:02:26 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/16 16:24:31 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	print_command(char **cmd, int level)
 		printf("Command: (null)\n");
 	}
 }
-
+const char	*getAstNodeTypeName(t_ast_node_type type);
 
 void	print_ast_tree0(t_ast_node *node, int level)
 {
