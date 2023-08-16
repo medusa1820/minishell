@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/15 16:44:57 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/16 10:35:12 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ t_ast_node *parse_pipeline(t_token **tokens, int *token_count)
 	left = parse_command(tokens, token_count);
 
 	if (*token_count > 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE) {
+		free((*tokens)[*token_count - 1].value);
+		(*tokens)[*token_count - 1].value = NULL;
 		(*token_count)--;  // Consume the pipe operator
 		right = parse_pipeline(tokens, token_count);
 		return create_pipe_node(left, right);
