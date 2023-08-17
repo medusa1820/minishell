@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/17 20:10:24 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/17 20:37:52 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,26 +105,19 @@ void	parse_redirection(t_ast_node_content **content, t_token **tokens, int *inde
 
 }
 
-void	parse_assignment(t_ast_node_content **content, t_token **tokens, int *index)
+void parse_assignment(t_ast_node_content *content, t_token **tokens, int *index)
 {
-	t_assignment	*head;
+    t_assignment *new_assignment;
 
-	head = (*content)->assignments;
-	(*content)->assignments->word = (char *)ft_calloc(ft_strlen((*tokens)[*index].value), sizeof(char));
-	if (!(*content)->assignments)
+	new_assignment = (t_assignment *)malloc(sizeof(t_assignment));
+    if (!new_assignment)
 	{
-		(*content)->assignments->word = ft_strdup((*tokens)[*index].value);
-		(*content)->assignments->next = NULL;
-	}
-	else
-	{
-		while ((*content)->assignments != NULL)
-			(*content)->assignments = (*content)->assignments->next;
-		(*content)->assignments->word = (*tokens)[*index].value;
-		(*content)->assignments->next = NULL;
-	}
-	(*content)->assignments = head;
-
+        perror("Memory allocation error");
+        exit(1); //error handling
+    }
+    new_assignment->word = ft_strdup((*tokens)[*index].value);
+    new_assignment->next = content->assignments;
+    content->assignments = new_assignment;
 }
 
 void	prefix_cmd(t_ast_node_content **content, t_token **tokens, int *token_count, int *token_head)
