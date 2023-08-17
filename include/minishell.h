@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/16 11:09:08 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/17 18:27:34 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,15 @@
 
 # define WHITESPACE " \t\v\f\r"
 # define OPERAND "<>|"
+
+typedef enum e_parser_state
+{
+	PARSER_SUCCESS,
+	PARSER_FAILURE,
+	PARSER_SYNTAX_ERROR,
+	PARSER_MALLOC_ERROR
+}	t_parser_state;
+
 typedef enum e_token_type
 {
     TOKEN_WORD,
@@ -74,8 +83,9 @@ typedef struct s_redirect
 
 typedef struct s_ast_node_content
 {
-	t_redirect		*stdin_redirect;
-	t_redirect		*stdout_redirect;
+	// t_redirect		*stdin_redirect;
+	// t_redirect		*stdout_redirect;
+	t_redirect		*redirection;
 	t_assignment	*assignments;
 	char			**cmd;
 }	t_ast_node_content;
