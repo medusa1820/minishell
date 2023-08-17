@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/16 15:31:20 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/17 22:22:33 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,6 @@ void print_ast_node(t_ast_node *node, int level, char x) {
 	} else if (node->type == AST_NODE_PIPE) {
 		printf(RED "Node type:"RESET ORG" AST_NODE_PIPE\n" RESET);
 	}
-
 	print_ast_node(node->left, level + 1, 'l');
 	print_ast_node(node->right, level + 1, 'r');
 }
