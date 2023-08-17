@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/04 18:32:15 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/18 01:13:49 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,24 @@
 # include <fcntl.h>
 # include <stdbool.h>
 # include <string.h>
-// # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
+
+
+
+/*
+==============================================================================
+==============================================================================
+==============================================================================
+========================== MEDER FILES and OTHER DATA STRUCTURES ============= 
+==============================================================================
+==============================================================================
+==============================================================================
+*/
+
+
+
 
 typedef enum e_ast_node_type
 {
@@ -94,18 +109,21 @@ const char			*getAstNodeTypeName(t_ast_node_type type);
 
 t_ast_node			*create_ast(void);
 t_ast_node			*create_node(void);
-void				init_node(t_ast_node *new_node, t_ast_node_type node_type, char **cmd, \
-					t_ast_node *new_node_left, t_ast_node *new_node_right);
+void				init_node(t_ast_node *new_node, \
+								t_ast_node_type node_type, char **cmd, \
+								t_ast_node *new_node_left, \
+								t_ast_node *new_node_right);
 t_ast_node_content	*create_node_content(void);
 void				init_node_content(char **cmd, t_ast_node *new_node);
 void				create_node_left(char *cmd_str, t_ast_node **new_node_left);
-void				create_node_right(char *cmd_str, t_ast_node **new_node_right);
+void				create_node_right(char *cmd_str, \
+									t_ast_node **new_node_right);
 void				create_node_pipe(t_ast_node **new_node_head, \
 						t_ast_node *new_node_left, t_ast_node *new_node_right);
 
 // free_ast.c
 
-void				free_ast(t_ast_node *node);
+void				free_ast_meder(t_ast_node *node);
 
 // execute_ast.c
 
@@ -113,7 +131,6 @@ bool				execute_cmds(t_ast_node *head, int *i, t_pipe *data, \
 								char **envp);
 void				print_2d_array(char **cmd);
 bool				forker(t_pipe *data, int *i, char **envp, t_ast_node *head);
-// bool				forker(t_pipe **data, int *i, char **envp, t_ast_node *head);
 bool				piper(t_pipe *data, int *i);
 
 // child_process.c
@@ -133,5 +150,77 @@ void				prepare_cmd_path_slash(t_pipe *data);
 
 void				close_pipe0_fds(t_pipe *data);
 void				close_pipe1_fds(t_pipe *data);
+
+
+
+
+
+
+
+
+
+/*
+==============================================================================
+==============================================================================
+==============================================================================
+========================== NAVID FILES and DATA STRUCTURES =================== 
+==============================================================================
+==============================================================================
+==============================================================================
+*/
+
+
+
+
+
+
+
+# define BLUE  "\033[38;5;4m"
+# define ORG   "\033[38;5;214m"
+# define RED   "\033[38;5;196m"
+# define RESET "\033[0m"
+
+# define WHITESPACE " \t\v\f\r"
+# define OPERAND "<>|"
+
+typedef enum e_token_type
+{
+	TOKEN_WORD,
+	TOKEN_SINGLE_QUOTE,
+	TOKEN_DOUBLE_QUOTE,
+	TOKEN_REDIRECT,
+	TOKEN_PIPE,
+	TOKEN_EMPTY,
+	TOKEN_UNCLOSED_Q,
+	TOKEN_ASSIGNMENT
+}	t_token_type;
+
+typedef struct s_token
+{
+	t_token_type	type;
+	char			*value;
+	bool			check; //check if I didn't use, delete it!
+}	t_token;
+
+void				free_ast(t_ast_node **node);
+void				print_ast_node(t_ast_node *node, int level, char x);
+
+// lexer0.c
+
+void				tokenize(t_token **tokens, const char *input, \
+								int *token_count);
+void				print_tokens(t_token *tokens, int token_count);
+void				free_tokens(t_token **tokens, int *token_count);
+
+// parser0.c
+
+t_ast_node			*parse_pipeline(t_token **tokens, int *token_count);
+
+
+
+
+
+
+
 
 #endif

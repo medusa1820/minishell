@@ -6,13 +6,13 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 15:11:00 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/03 18:29:07 by musenov          ###   ########.fr       */
+/*   Updated: 2023/08/18 00:22:12 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_ast(t_ast_node *node)
+void	free_ast_meder(t_ast_node *node)
 {
 	t_assignment	*current_assignment;
 	t_redirect		*current_redirect;
@@ -23,8 +23,8 @@ void	free_ast(t_ast_node *node)
 	if (node == NULL)
 		return ;
 	// Free left and right subtrees
-	free_ast(node->left);
-	free_ast(node->right);
+	free_ast_meder(node->left);
+	free_ast_meder(node->right);
 	// Free the content of the node
 	if (node->content)
 	{

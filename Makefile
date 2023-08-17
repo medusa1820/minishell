@@ -9,24 +9,29 @@ CFLAGS				+=	-fsanitize=address
 LDFLAGS				:=	-g3
 LDFLAGS				+=	-fsanitize=address
 
-MINISHELL_SRCS		=	./main.c \
-						./create_ast.c \
-						./print_ast.c \
-						./free_ast.c \
-						./execute_ast.c \
-						./child_process.c \
-						./child_process_utils0.c \
-						./child_process_utils1.c
+MINISHELL_SRCS		=	./main.c
 
-LEXER_SRCS			=	./01_lexer/lexer0.c \
+LEXER_SRCS			=	./01_lexer/lexer0.c
 
-PARSER_SRCS			=	./02_parser/parser0.c \
+PARSER_SRCS			=	./02_parser/parser0.c
+
+EXECUTOR_SRCS		=	./04_executor/execute_ast.c \
+						./04_executor/child_process.c \
+						./04_executor/child_process_utils0.c \
+						./04_executor/child_process_utils1.c
+
+UTILS_SRCS			=	./05_utils/create_ast.c \
+						./05_utils/print_ast.c \
+						./05_utils/free_ast.c
 
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(LEXER_SRCS) \
 						$(PARSER_SRCS) \
+						$(EXECUTOR_SRCS) \
+						$(UTILS_SRCS)
 
 HEADERS				:=	-I ./include
+HEADERS				+=	-I ./05_utils
 HEADERS				+=	-I $(shell brew --prefix readline)/include
 HEADERS				+=	-I ../LeakSanitizer
 
