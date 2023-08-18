@@ -6,29 +6,11 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/18 17:52:37 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/18 21:01:24 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// t_ast_node *create_command_node(char **cmd) {
-//     t_ast_node *node = (t_ast_node *)ft_calloc(1, sizeof(t_ast_node));
-//     if (!node) {
-//         perror("Memory allocation error");
-//         exit(1);
-//     }
-//     node->type = AST_NODE_CMD;
-//     node->content = (t_ast_node_content *)ft_calloc(1, sizeof(t_ast_node_content));
-//     if (!node->content) {
-//         perror("Memory allocation error");
-//         exit(1);
-//     }
-//     node->content->cmd = cmd;
-//     node->left = NULL;
-//     node->right = NULL;
-//     return node;
-// }
 
 t_ast_node *create_command_node(t_ast_node_content *content)
 {
@@ -103,6 +85,7 @@ t_parser_state parse_redirection(t_ast_node_content **content, t_token **tokens,
 			last_redirection = last_redirection->next;
 		last_redirection->next = new_redirection;
 	}
+	printf("redirect:%s\n", (*content)->redirection->word);
 	(*index)++;
 	return PARSER_SUCCESS;
 }
@@ -145,7 +128,10 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_token **tokens, in
 	// 	cmd_index++;
 	(*content)->cmd = (char **)ft_calloc((token_count - token_head + 1), sizeof(char *));
 	printf("cmd1 head:%d count:%d\n", *token_head, *token_count);
-	while (++cmd_index < *token_count && (*tokens)[*token_head].type != TOKEN_REDIRECT)
+	while (++cmd_index < (*token_count) && \
+	(*tokens)[*token_head].type != TOKEN_REDIRECT && \
+	(*tokens)[*token_head].type != TOKEN_PIPE)
+	// while (++cmd_index < token_count - token_head + 1)
 	{
 		printf("i1:%d\n", *token_head);
 		if ((*tokens)[*token_head].value != NULL)
@@ -171,7 +157,7 @@ t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_token **tokens, i
 	// while (current-- < *token_count && (*tokens)[current].type != TOKEN_WORD) //since token_count is one more than itrator
 	// 	last++;
 	ret = PARSER_FAILURE;
-	if (*token_head == *token_count)
+	if (*token_head == *token_count) //check
 		return (PARSER_SUCCESS);
 	while(true)
 	{
@@ -181,6 +167,8 @@ t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_token **tokens, i
 		(*tokens)[*token_head].type == TOKEN_DOUBLE_QUOTE || \
 		(*tokens)[*token_head].type == TOKEN_ASSIGNMENT))
 		{
+			exit(1);
+		
 			ret = parse_redirection(content, tokens, token_head);
 			continue;
 		}
@@ -204,9 +192,10 @@ t_parser_state	parse_prefix_cmd(t_ast_node_content **content, t_token **tokens, 
 	t_parser_state	ret;
 
 	printf("pr1 head:%d count:%d\n", *token_head, *token_count);
+	ret = PARSER_SUCCESS;
 	// while (current-- < *token_count && (*tokens)[current].type != TOKEN_WORD) //since token_count is one more than itrator
 	// 	last++;
-	while(true && *token_head < *token_count)
+	while(*token_head < *token_count)
 	{
 		if ((*tokens)[*token_head].type == TOKEN_REDIRECT && \
 		((*tokens)[*token_head].type == TOKEN_WORD || \
@@ -224,6 +213,8 @@ t_parser_state	parse_prefix_cmd(t_ast_node_content **content, t_token **tokens, 
 		}
 		else
 			break;
+		if (ret == PARSER_FAILURE)
+            return ret; // Return immediately on failure
 	}
 	printf("pr2 head:%d count:%d\n", *token_head, *token_count);
 	return (ret);
@@ -241,32 +232,41 @@ t_parser_state parse_command_content(t_ast_node_content **content, t_token **tok
 	{
 		free(*content);
 		*content = NULL;
-		return (ret);
+		return (PARSER_FAILURE);
 	}
-	current = *token_count;
+	current = *token_count - 1;
 	// cmd_index = 0;
-	while (current-- > 0 && (*tokens)[current].type != TOKEN_PIPE) //since token_count is one more than itrator
+	while (current > 0 && (*tokens)[current].type != TOKEN_PIPE) //since token_count is one more than itrator
+		current--;
 		// cmd_index++;
 	token_head = current;
 	printf("c1 head:%d count:%d\n", token_head, *token_count);
-	while (token_head < *token_count)
-	{
-		ret = parse_prefix_cmd(content, tokens, token_count, &token_head);
-		if (ret == PARSER_FAILURE)
-		{
-			ret = parse_cmd_word(content, tokens, token_count, &token_head);
-			if (ret == PARSER_FAILURE)
-				return (ret);
-		}
-		else
-		{
-			if (parse_cmd_word(content, tokens, token_count, &token_head) == PARSER_FAILURE)
-				return (ret);
-		}
+	// while (token_head < *token_count)// &&  (*tokens)[token_head].type != TOKEN_PIPE)
+	// {
+		// ret = parse_prefix_cmd(content, tokens, token_count, &token_head);
+		// if (ret == PARSER_FAILURE)
+		// {
+		// 	ret = parse_cmd_word(content, tokens, token_count, &token_head);
+		// 	if (ret == PARSER_FAILURE)
+		// 		return (ret);
+		// }
+		// else
+		// {
+		// 	if (parse_cmd_word(content, tokens, token_count, &token_head) == PARSER_FAILURE)
+		// 		return (ret);
+		// }
+	// }
+	ret = parse_prefix_cmd(content, tokens, token_count, &token_head);
+    if (ret == PARSER_SUCCESS)
+        ret = parse_cmd_word(content, tokens, token_count, &token_head);
+    else
+    {
+        if (parse_cmd_word(content, tokens, token_count, &token_head) == PARSER_FAILURE)
+            return ret; // Return the earlier error state
+    }
 		parse_sufix_cmd(content, tokens, token_count, &token_head);
-	}
 	printf("c2 head:%d count:%d\n", token_head, *token_count);
-	(*token_count) = current;
+	(*token_count) -= current;
 	return (ret);
 }
 
@@ -339,53 +339,120 @@ void free_ast(t_ast_node **node_ptr) {
 	*node_ptr = NULL;
 }
 
-void print_ast_node(t_ast_node *node, int level, char x) {
-	if (x == 'x')
-		printf("\n***************** AST ****************\n");
-	if (node == NULL) {
-		return;
-	}
-	for (int i = 0; i < level; i++)
-		printf("  ");
-	if (x == 'l')
-		printf(BLUE "Left child:\n");
-	if (x == 'r')
-		printf(BLUE "Right child:\n" RESET);
-	for (int i = 0; i < level; i++)
-		printf("    ");
-	if (node->type == AST_NODE_CMD) {
-		printf(RED "Node type:" RESET ORG" AST_NODE_CMD\n" RESET);
-		if (node->content)
-		{
-			for (int i = 0; i < level; i++)
-				printf("    ");
-			printf(RED "Content:\n"RESET);
-			if (node->content->cmd)
-			{
-				for (int i = 0; i < level; i++)
-					printf("    ");
-				printf("Command:");
-				for (int i = 0; node->content->cmd[i] != NULL; i++) {
-					printf(ORG " %s" RESET, node->content->cmd[i]);
-				}
-				printf("\n");
-			}
-			if (node->content->assignments)
-			{
-				for (int i = 0; i < level; i++)
-					printf("    ");
-				printf("assignment:");
-				for(t_assignment *tmp = node->content->assignments; tmp; tmp = tmp->next)
-				{
-					printf(ORG " %s" RESET, node->content->assignments->word);
-				}
-				printf("\n");
-			}
-		}
-	} else if (node->type == AST_NODE_PIPE) {
-		printf(RED "Node type:"RESET ORG" AST_NODE_PIPE\n" RESET);
-	}
+// void print_ast_node(t_ast_node *node, int level, char x)
+// {
+// 	if (x == 'x')
+// 		printf("\n***************** AST ****************\n");
+// 	if (node == NULL) {
+// 		return;
+// 	}
+// 	for (int i = 0; i < level; i++)
+// 		printf("  ");
+// 	if (x == 'l')
+// 		printf(BLUE "Left child:\n");
+// 	if (x == 'r')
+// 		printf(BLUE "Right child:\n" RESET);
+// 	for (int i = 0; i < level; i++)
+// 		printf("    ");
+// 	if (node->type == AST_NODE_CMD) {
+// 		printf(RED "Node type:" RESET ORG" AST_NODE_CMD\n" RESET);
+// 		if (node->content)
+// 		{
+// 			for (int i = 0; i < level; i++)
+// 				printf("    ");
+// 			printf(RED "Content:\n"RESET);
+// 			if (node->content->cmd)
+// 			{
+// 				for (int i = 0; i < level; i++)
+// 					printf("    ");
+// 				printf("Command:");
+// 				for (int i = 0; node->content->cmd[i] != NULL; i++) {
+// 					printf(ORG " %s" RESET, node->content->cmd[i]);
+// 				}
+// 				printf("\n");
+// 			}
+// 			if (node->content->assignments)
+// 			{
+// 				for (int i = 0; i < level; i++)
+// 					printf("    ");
+// 				printf("assignment:");
+// 				for(t_assignment *tmp = node->content->assignments; tmp; tmp = tmp->next)
+// 				{
+// 					printf(ORG " %s" RESET, node->content->assignments->word);
+// 				}
+// 				printf("\n");
+// 			}
+// 		}
+// 	} else if (node->type == AST_NODE_PIPE) {
+// 		printf(RED "Node type:"RESET ORG" AST_NODE_PIPE\n" RESET);
+// 	}
 
-	print_ast_node(node->left, level + 1, 'l');
-	print_ast_node(node->right, level + 1, 'r');
+// 	print_ast_node(node->left, level + 1, 'l');
+// 	print_ast_node(node->right, level + 1, 'r');
+// }
+
+void print_ast_node(t_ast_node *node, int level, char x)
+{
+    if (x == 'x')
+        printf("\n***************** AST ****************\n");
+    
+    if (node == NULL) {
+        return;
+    }
+    
+    for (int i = 0; i < level; i++)
+        printf("  ");
+
+    if (x == 'l')
+        printf(BLUE "Left child:\n");
+    if (x == 'r')
+        printf(BLUE "Right child:\n" RESET);
+
+    for (int i = 0; i < level; i++)
+        printf("    ");
+
+    if (node->type == AST_NODE_CMD) {
+        printf(RED "Node type:" RESET ORG " AST_NODE_CMD\n" RESET);
+
+        if (node->content) {
+            for (int i = 0; i < level; i++)
+                printf("    ");
+            printf(RED "Content:\n" RESET);
+
+            if (node->content->cmd) {
+                for (int i = 0; i < level; i++)
+                    printf("    ");
+                printf("Command:");
+                for (int i = 0; node->content->cmd[i] != NULL; i++) {
+                    printf(ORG " %s" RESET, node->content->cmd[i]);
+                }
+                printf("\n");
+            }
+
+            if (node->content->assignments) {
+                for (int i = 0; i < level; i++)
+                    printf("    ");
+                printf("Assignments:");
+                for (t_assignment *tmp = node->content->assignments; tmp; tmp = tmp->next) {
+                    printf(ORG " %s" RESET, tmp->word);
+                }
+                printf("\n");
+            }
+            
+            if (node->content->redirection) {
+                for (int i = 0; i < level; i++)
+                    printf("    ");
+                printf("Redirections:");
+                for (t_redirect *tmp = node->content->redirection; tmp; tmp = tmp->next) {
+                    printf(ORG " %s" RESET, tmp->word);
+                }
+                printf("\n");
+            }
+        }
+    } else if (node->type == AST_NODE_PIPE) {
+        printf(RED "Node type:" RESET ORG " AST_NODE_PIPE\n" RESET);
+    }
+
+    print_ast_node(node->left, level + 1, 'l');
+    print_ast_node(node->right, level + 1, 'r');
 }
