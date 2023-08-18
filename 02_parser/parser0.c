@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/17 20:37:52 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/18 17:52:37 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,134 +64,210 @@ t_ast_node *create_pipe_node(t_ast_node *left, t_ast_node *right)
 	return node;
 }
 
-t_token_type	redirect_type(char *tpye)
+t_redirect_type	redirect_type(char *tpye)
 {
+	t_redirect_type	type;
+
 	if(ft_strncmp(tpye, "</0", 2))
-		return 1;
+		type = REDIRECT_STDIN;
 	else if(ft_strncmp(tpye, ">/0", 2))
-		return 2;
+		type = REDIRECT_STDOUT;
 	else if(ft_strncmp(tpye, "<</0", 3))
-		return 3;
+		type = REDIRECT_HERE_DOC;
 	else if(ft_strncmp(tpye, ">>/0", 3))
-		return 4;
-	return 0;
+		type = REDIRECT_STDOUT_APPEND;
+	return (type);
 }
 
-
-void	parse_redirection(t_ast_node_content **content, t_token **tokens, int *index)
+t_parser_state parse_redirection(t_ast_node_content **content, t_token **tokens, int *index)
 {
-	t_redirect	*head;
-	t_redirect	*tmp;
+	t_redirect *new_redirection = (t_redirect *)malloc(sizeof(t_redirect));
+	t_redirect *last_redirection;
 
-	head = (*content)->redirection;
-	tmp = (*content)->redirection;
-	tmp->word = (char *)ft_calloc(ft_strlen((*tokens)[*index].value), sizeof(char));
-	if (!(*content)->redirection)
+	if (!new_redirection)
 	{
-		tmp->type = redirect_type((*tokens)[*index].value);
-		tmp->word = ft_strdup((*tokens)[*index].value);
-		tmp->next = NULL;
-		(*content)->redirection = tmp;
+		perror("Memory allocation error");
+		return PARSER_FAILURE;
 	}
+	new_redirection->type = redirect_type((*tokens)[*index].value); // Set the type of redirection
+	new_redirection->word = ft_strdup((*tokens)[*index].value);
+	free((*tokens)[*index].value);
+	(*tokens)[*index].value = NULL;
+	new_redirection->next = NULL;
+	if ((*content)->redirection == NULL)
+		(*content)->redirection = new_redirection;
 	else
 	{
-		while ((*content)->redirection != NULL)
-			(*content)->redirection = (*content)->redirection->next;
-		(*content)->redirection->type = redirect_type((*tokens)[*index].value);
-		(*content)->redirection->word = (*tokens)[*index].value;
-		(*content)->redirection->next = NULL;
+		last_redirection = (*content)->redirection;
+		while (last_redirection->next != NULL)
+			last_redirection = last_redirection->next;
+		last_redirection->next = new_redirection;
 	}
-	(*content)->redirection = head;
-
+	(*index)++;
+	return PARSER_SUCCESS;
 }
 
-void parse_assignment(t_ast_node_content *content, t_token **tokens, int *index)
+t_parser_state parse_assignment(t_ast_node_content **content, t_token **tokens, int *index)
 {
-    t_assignment *new_assignment;
+	t_assignment *new_assignment = (t_assignment *)malloc(sizeof(t_assignment));
+	t_assignment *last_assignment;
 
-	new_assignment = (t_assignment *)malloc(sizeof(t_assignment));
-    if (!new_assignment)
+	if (!new_assignment)
 	{
-        perror("Memory allocation error");
-        exit(1); //error handling
-    }
-    new_assignment->word = ft_strdup((*tokens)[*index].value);
-    new_assignment->next = content->assignments;
-    content->assignments = new_assignment;
-}
-
-void	prefix_cmd(t_ast_node_content **content, t_token **tokens, int *token_count, int *token_head)
-{
-	int	current;
-
-
-	current = *token_head;
-	printf("i ps1:%d\n", *token_head);
-	// while (current-- < *token_count && (*tokens)[current].type != TOKEN_WORD) //since token_count is one more than itrator
-	// 	last++;
-	while(current < *token_count && (*tokens)[current].type != TOKEN_WORD)
-	{
-		if ((*tokens)[current].type == TOKEN_ASSIGNMENT)
-		{
-			parse_assignment(content, tokens, &current);
-		}
-		if ((*tokens)[current].type == TOKEN_REDIRECT)
-		{
-			parse_redirection(content, tokens, &current);
-		}
-		current++;
+		perror("Memory allocation error");
+		return PARSER_FAILURE;
 	}
-	(*token_head) = current;
-	printf("i ps2:%d\n", *token_head);
+	new_assignment->word = ft_strdup((*tokens)[*index].value);
+	free((*tokens)[*index].value);
+	(*tokens)[*index].value = NULL;
+	new_assignment->next = NULL;
+	if ((*content)->assignments == NULL)
+		(*content)->assignments = new_assignment;
+	else
+	{
+		last_assignment = (*content)->assignments;
+		while (last_assignment->next != NULL)
+			last_assignment = last_assignment->next;
+		last_assignment->next = new_assignment;
+	}
+	(*index)++;
+	return PARSER_SUCCESS;
 }
 
-
-void	cmd(t_ast_node_content **content, t_token **tokens, int *token_count, int *token_head)
+t_parser_state	parse_cmd_word(t_ast_node_content **content, t_token **tokens, int *token_count, int *token_head)
 {
-	int	tmp;
+	// int	tmp;
 	int	cmd_index;
 
-	tmp = *token_count;
-	cmd_index = 0;
-	while (tmp-- > *token_head && (*tokens)[tmp].type != TOKEN_PIPE) //since token_count is one more than itrator
-		cmd_index++;
-	(*content)->cmd = (char **)ft_calloc((cmd_index + 1), sizeof(char *));
-	(*content)->cmd[cmd_index] = NULL;
-	printf("i c1:%d\n", *token_head);
-	while (cmd_index-- > *token_head)
+	// tmp = *token_count;
+	cmd_index = -1;
+	// while (tmp-- > *token_head && (*tokens)[tmp].type == TOKEN_WORD) //since token_count is one more than itrator
+	// 	cmd_index++;
+	(*content)->cmd = (char **)ft_calloc((token_count - token_head + 1), sizeof(char *));
+	printf("cmd1 head:%d count:%d\n", *token_head, *token_count);
+	while (++cmd_index < *token_count && (*tokens)[*token_head].type != TOKEN_REDIRECT)
 	{
 		printf("i1:%d\n", *token_head);
-		if ((*tokens)[*token_count - 1].value != NULL)
+		if ((*tokens)[*token_head].value != NULL)
 		{
-			(*content)->cmd[cmd_index] = ft_strdup((*tokens)[*token_count - 1].value);
-			free((*tokens)[*token_count - 1].value);
-			(*tokens)[*token_count - 1].value = NULL;
+			(*content)->cmd[cmd_index] = ft_strdup((*tokens)[*token_head].value);
+			free((*tokens)[*token_head].value);
+			(*tokens)[*token_head].value = NULL;
 		}
 		else
 			(*content)->cmd[cmd_index] = NULL;
-		(*token_count)--;
+		(*token_head)++;
 	}
-	printf("i c2:%d\n", *token_head);
+	(*content)->cmd[cmd_index] = NULL;
+	printf("cmd2 head:%d count:%d\n", *token_head, *token_count);
+	return (PARSER_SUCCESS);
 }
 
-t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token **tokens, int *token_count)
+t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_token **tokens, int *token_count, int *token_head)
 {
+	t_parser_state	ret;
+
+	printf("s1 head:%d count:%d\n", *token_head, *token_count);
+	// while (current-- < *token_count && (*tokens)[current].type != TOKEN_WORD) //since token_count is one more than itrator
+	// 	last++;
+	ret = PARSER_FAILURE;
+	if (*token_head == *token_count)
+		return (PARSER_SUCCESS);
+	while(true)
+	{
+		if ((*tokens)[*token_head].type == TOKEN_REDIRECT && \
+		((*tokens)[*token_head].type == TOKEN_WORD || \
+		(*tokens)[*token_head].type == TOKEN_SINGLE_QUOTE || \
+		(*tokens)[*token_head].type == TOKEN_DOUBLE_QUOTE || \
+		(*tokens)[*token_head].type == TOKEN_ASSIGNMENT))
+		{
+			ret = parse_redirection(content, tokens, token_head);
+			continue;
+		}
+		else if ((*tokens)[*token_head].type == TOKEN_ASSIGNMENT || \
+		(*tokens)[*token_head].type == TOKEN_WORD || \
+		(*tokens)[*token_head].type == TOKEN_DOUBLE_QUOTE || \
+		(*tokens)[*token_head].type == TOKEN_SINGLE_QUOTE)
+		{
+			ret = parse_cmd_word(content, tokens, token_count, token_head); //check later about exitance of assignment here
+			continue;
+		}
+		else
+			break;
+	}
+	printf("s2 head:%d count:%d\n", *token_head, *token_count);
+	return (ret);
+}
+
+t_parser_state	parse_prefix_cmd(t_ast_node_content **content, t_token **tokens, int *token_count, int *token_head)
+{
+	t_parser_state	ret;
+
+	printf("pr1 head:%d count:%d\n", *token_head, *token_count);
+	// while (current-- < *token_count && (*tokens)[current].type != TOKEN_WORD) //since token_count is one more than itrator
+	// 	last++;
+	while(true && *token_head < *token_count)
+	{
+		if ((*tokens)[*token_head].type == TOKEN_REDIRECT && \
+		((*tokens)[*token_head].type == TOKEN_WORD || \
+		(*tokens)[*token_head].type == TOKEN_SINGLE_QUOTE || \
+		(*tokens)[*token_head].type == TOKEN_DOUBLE_QUOTE || \
+		(*tokens)[*token_head].type == TOKEN_ASSIGNMENT))
+		{
+			ret = parse_redirection(content, tokens, token_head);
+			continue;
+		}
+		else if ((*tokens)[*token_head].type == TOKEN_ASSIGNMENT)
+		{
+			ret = parse_assignment(content, tokens, token_head);
+			continue;
+		}
+		else
+			break;
+	}
+	printf("pr2 head:%d count:%d\n", *token_head, *token_count);
+	return (ret);
+}
+
+t_parser_state parse_command_content(t_ast_node_content **content, t_token **tokens, int *token_count)
+{
+	t_parser_state	ret;
 	int token_head;
+	int	current;
 
 	token_head = 0;
+	ret = PARSER_FAILURE;
 	if (*token_count >= 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
 	{
 		free(*content);
 		*content = NULL;
-		return NULL;
+		return (ret);
 	}
-	printf("i0:%d\n", token_head);
-	prefix_cmd(content, tokens, token_count, &token_head);
-	cmd(content, tokens, token_count, &token_head);
-	// sufix_cmd(content, tokens, token_count, &cmd_index);
-	// 	(*content)->cmd = (char **)ft_calloc((cmd_index + 1), sizeof(char *));
-	// (*content)->cmd[cmd_index] = NULL;
-	return (*content);
+	current = *token_count;
+	// cmd_index = 0;
+	while (current-- > 0 && (*tokens)[current].type != TOKEN_PIPE) //since token_count is one more than itrator
+		// cmd_index++;
+	token_head = current;
+	printf("c1 head:%d count:%d\n", token_head, *token_count);
+	while (token_head < *token_count)
+	{
+		ret = parse_prefix_cmd(content, tokens, token_count, &token_head);
+		if (ret == PARSER_FAILURE)
+		{
+			ret = parse_cmd_word(content, tokens, token_count, &token_head);
+			if (ret == PARSER_FAILURE)
+				return (ret);
+		}
+		else
+		{
+			if (parse_cmd_word(content, tokens, token_count, &token_head) == PARSER_FAILURE)
+				return (ret);
+		}
+		parse_sufix_cmd(content, tokens, token_count, &token_head);
+	}
+	printf("c2 head:%d count:%d\n", token_head, *token_count);
+	(*token_count) = current;
+	return (ret);
 }
 
 t_ast_node *parse_command(t_token **tokens, int *token_count)
@@ -234,33 +310,33 @@ t_ast_node *parse_pipeline(t_token **tokens, int *token_count)
 }
 
 void free_ast(t_ast_node **node_ptr) {
-    if (!(*node_ptr))
-        return;
+	if (!(*node_ptr))
+		return;
 
-    if ((*node_ptr)->type == AST_NODE_CMD) {
-        if ((*node_ptr)->content) {
-            if ((*node_ptr)->content->cmd) {
-                int i = 0;
-                while ((*node_ptr)->content->cmd[i] != NULL) {
-                    free((*node_ptr)->content->cmd[i]);
-                    (*node_ptr)->content->cmd[i] = NULL;
-                    i++;
-                }
-                free((*node_ptr)->content->cmd);
-                (*node_ptr)->content->cmd = NULL;
-            }
-            free((*node_ptr)->content);
-            (*node_ptr)->content = NULL;
-        }
-    } else if ((*node_ptr)->type == AST_NODE_PIPE) {
-        free_ast(&((*node_ptr)->left));
-        free_ast(&((*node_ptr)->right));
-        (*node_ptr)->left = NULL;
-        (*node_ptr)->right = NULL;
-    }
+	if ((*node_ptr)->type == AST_NODE_CMD) {
+		if ((*node_ptr)->content) {
+			if ((*node_ptr)->content->cmd) {
+				int i = 0;
+				while ((*node_ptr)->content->cmd[i] != NULL) {
+					free((*node_ptr)->content->cmd[i]);
+					(*node_ptr)->content->cmd[i] = NULL;
+					i++;
+				}
+				free((*node_ptr)->content->cmd);
+				(*node_ptr)->content->cmd = NULL;
+			}
+			free((*node_ptr)->content);
+			(*node_ptr)->content = NULL;
+		}
+	} else if ((*node_ptr)->type == AST_NODE_PIPE) {
+		free_ast(&((*node_ptr)->left));
+		free_ast(&((*node_ptr)->right));
+		(*node_ptr)->left = NULL;
+		(*node_ptr)->right = NULL;
+	}
 
-    free(*node_ptr);
-    *node_ptr = NULL;
+	free(*node_ptr);
+	*node_ptr = NULL;
 }
 
 void print_ast_node(t_ast_node *node, int level, char x) {
