@@ -6,7 +6,11 @@
     ],
     "settings": {
         "files.associations": {
-            "type_traits": "c"
+            "type_traits": "c",
+            "minishell.h": "c",
+            "libft.h": "c",
+            "lexer.h": "c",
+            "parser.h": "c"
         }
     }
 }

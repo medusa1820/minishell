@@ -6,11 +6,13 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/18 21:01:24 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/19 16:28:51 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "parser.h"
+#include "lexer.h"
 
 t_ast_node *create_command_node(t_ast_node_content *content)
 {
