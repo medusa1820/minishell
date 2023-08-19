@@ -1,6 +1,58 @@
-#include "../include/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer0.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
+/*   Updated: 2023/08/19 17:17:29 by nnavidd          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+// #include "parser.h"
+// #include "lexer.h"
+#include "minishell.h"
 
+const char *token_names[] = {
+	"WORD",
+	"SIN_QUOTE",
+	"DUB_QUOTE",
+	"REDIRECT",
+	"PIPE",
+	"EMPTY",
+	"UNCL_QUO",
+	"ASSIGNMNT"
+	// Add more names for additional token types if needed
+};
+
+void	print_tokens(t_token *tokens, int token_count)
+{
+		for(int i = 0; i < token_count; i++)
+		{
+				printf(BLUE "Token Type" RESET " : " ORG "%s" RESET, token_names[tokens[i].type]);
+				printf(RED "	Value" RESET " : " ORG "%s\n" RESET, tokens[i].value);
+		}
+
+}
+
+void	free_tokens(t_token **tokens, int *token_count)
+{
+	int	i;
+
+	i = -1;
+	while (++i < *token_count)
+	{
+		if((*tokens)[i].value)
+		{
+			free((*tokens)[i].value);
+			(*tokens)[i].value = NULL;
+		}
+	}
+	free(*tokens);
+	*tokens = NULL;
+	*token_count = 0;
+}
 
 void *ft_realloc(void *ptr, size_t old_size, size_t new_size)
 {

@@ -6,11 +6,13 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/17 22:22:33 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/19 17:09:57 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+// // #include "lexer.h"
+// #include "parser.h"
 
 // t_ast_node *create_command_node(char **cmd) {
 //     t_ast_node *node = (t_ast_node *)ft_calloc(1, sizeof(t_ast_node));
