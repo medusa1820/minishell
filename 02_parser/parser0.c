@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/19 16:28:51 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/21 13:21:14 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,12 +125,12 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_token **tokens, in
 	int	cmd_index;
 
 	// tmp = *token_count;
-	cmd_index = -1;
+	cmd_index = 0;
 	// while (tmp-- > *token_head && (*tokens)[tmp].type == TOKEN_WORD) //since token_count is one more than itrator
 	// 	cmd_index++;
 	(*content)->cmd = (char **)ft_calloc((token_count - token_head + 1), sizeof(char *));
 	printf("cmd1 head:%d count:%d\n", *token_head, *token_count);
-	while (++cmd_index < (*token_count) && \
+	while (cmd_index < (*token_count) && \
 	(*tokens)[*token_head].type != TOKEN_REDIRECT && \
 	(*tokens)[*token_head].type != TOKEN_PIPE)
 	// while (++cmd_index < token_count - token_head + 1)
@@ -145,6 +145,7 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_token **tokens, in
 		else
 			(*content)->cmd[cmd_index] = NULL;
 		(*token_head)++;
+		cmd_index++;
 	}
 	(*content)->cmd[cmd_index] = NULL;
 	printf("cmd2 head:%d count:%d\n", *token_head, *token_count);
@@ -159,17 +160,17 @@ t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_token **tokens, i
 	// while (current-- < *token_count && (*tokens)[current].type != TOKEN_WORD) //since token_count is one more than itrator
 	// 	last++;
 	ret = PARSER_FAILURE;
-	if (*token_head == *token_count) //check
+	if (*token_head == *token_count - 1) //check
 		return (PARSER_SUCCESS);
-	while(true)
+	while(true && *token_head < *token_count)
 	{
 		if ((*tokens)[*token_head].type == TOKEN_REDIRECT && \
-		((*tokens)[*token_head].type == TOKEN_WORD || \
-		(*tokens)[*token_head].type == TOKEN_SINGLE_QUOTE || \
-		(*tokens)[*token_head].type == TOKEN_DOUBLE_QUOTE || \
-		(*tokens)[*token_head].type == TOKEN_ASSIGNMENT))
+		((*tokens)[*token_head + 1].type == TOKEN_WORD || \
+		(*tokens)[*token_head + 1].type == TOKEN_SINGLE_QUOTE || \
+		(*tokens)[*token_head + 1].type == TOKEN_DOUBLE_QUOTE || \
+		(*tokens)[*token_head + 1].type == TOKEN_ASSIGNMENT))
 		{
-			exit(1);
+			// exit(1);
 		
 			ret = parse_redirection(content, tokens, token_head);
 			continue;
@@ -194,16 +195,17 @@ t_parser_state	parse_prefix_cmd(t_ast_node_content **content, t_token **tokens, 
 	t_parser_state	ret;
 
 	printf("pr1 head:%d count:%d\n", *token_head, *token_count);
-	ret = PARSER_SUCCESS;
+	ret = PARSER_FAILURE;
 	// while (current-- < *token_count && (*tokens)[current].type != TOKEN_WORD) //since token_count is one more than itrator
 	// 	last++;
 	while(*token_head < *token_count)
 	{
-		if ((*tokens)[*token_head].type == TOKEN_REDIRECT && \
-		((*tokens)[*token_head].type == TOKEN_WORD || \
-		(*tokens)[*token_head].type == TOKEN_SINGLE_QUOTE || \
-		(*tokens)[*token_head].type == TOKEN_DOUBLE_QUOTE || \
-		(*tokens)[*token_head].type == TOKEN_ASSIGNMENT))
+		if (((*tokens)[*token_head].type == TOKEN_REDIRECT && \
+		(*tokens)[*token_head + 1].type) && \
+		((*tokens)[*token_head + 1].type == TOKEN_WORD || \
+		(*tokens)[*token_head + 1].type == TOKEN_SINGLE_QUOTE || \
+		(*tokens)[*token_head + 1].type == TOKEN_DOUBLE_QUOTE || \
+		(*tokens)[*token_head + 1].type == TOKEN_ASSIGNMENT)) //later check variable of token,would better assign to the EOF and PIP
 		{
 			ret = parse_redirection(content, tokens, token_head);
 			continue;
@@ -233,16 +235,19 @@ t_parser_state parse_command_content(t_ast_node_content **content, t_token **tok
 	if (*token_count >= 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
 	{
 		free(*content);
+		printf("ok\n");
 		*content = NULL;
-		return (PARSER_FAILURE);
+		return (PARSER_SUCCESS);
 	}
+    printf("id:%d str:%s\n",(*token_count), (*tokens)[*token_count - 1].value);
+    
 	current = *token_count - 1;
 	// cmd_index = 0;
-	while (current > 0 && (*tokens)[current].type != TOKEN_PIPE) //since token_count is one more than itrator
-		current--;
+	while (current > 0 && (*tokens)[current--].type != TOKEN_PIPE) //since token_count is one more than itrator
+		// current--;
 		// cmd_index++;
 	token_head = current;
-	printf("c1 head:%d count:%d\n", token_head, *token_count);
+	printf("c1 head:%d current:%d value:%s count:%d\n", token_head, current, (*tokens)[token_head].value, *token_count);
 	// while (token_head < *token_count)// &&  (*tokens)[token_head].type != TOKEN_PIPE)
 	// {
 		// ret = parse_prefix_cmd(content, tokens, token_count, &token_head);
@@ -267,8 +272,8 @@ t_parser_state parse_command_content(t_ast_node_content **content, t_token **tok
             return ret; // Return the earlier error state
     }
 		parse_sufix_cmd(content, tokens, token_count, &token_head);
-	printf("c2 head:%d count:%d\n", token_head, *token_count);
-	(*token_count) -= current;
+	printf("c2 head:%d current:%d count:%d\n", token_head, current, *token_count);
+	// (*token_count) = token_head;
 	return (ret);
 }
 
@@ -287,6 +292,7 @@ t_ast_node *parse_command(t_token **tokens, int *token_count)
 	content->redirection = NULL;
 	content->assignments = NULL;
 	content->cmd = NULL;
+
 	parse_command_content(&content, tokens, token_count);
 	if (content == NULL)
 		return NULL;  // Return NULL if command content is empty (due to PIPE)
@@ -299,7 +305,6 @@ t_ast_node *parse_pipeline(t_token **tokens, int *token_count)
 	t_ast_node *right;
 
 	right = parse_command(tokens, token_count);
-
 	if (*token_count > 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
 	{
 		free((*tokens)[*token_count - 1].value);
