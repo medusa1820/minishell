@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/19 17:09:57 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/22 21:44:31 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ t_ast_node *create_command_node(t_ast_node_content *content)
 	}
 	node->type = AST_NODE_CMD;
 	node->content = content;
+	for (int i = 0; node->content->cmd[i]; i++)
+		printf("\nnode:cmd content type:%d valu:%s\n",i, node->content->cmd[i]);	
 	node->left = NULL;
 	node->right = NULL;
 	return node;
@@ -66,10 +68,157 @@ t_ast_node *create_pipe_node(t_ast_node *left, t_ast_node *right)
 	return node;
 }
 
+t_redirect_type	redirect_type(char *tpye)
+{
+	t_redirect_type	type;
+
+	if(ft_strncmp(tpye, "</0", 2))
+		type = REDIRECT_STDIN;
+	else if(ft_strncmp(tpye, ">/0", 2))
+		type = REDIRECT_STDOUT;
+	else if(ft_strncmp(tpye, "<</0", 3))
+		type = REDIRECT_HERE_DOC;
+	else if(ft_strncmp(tpye, ">>/0", 3))
+		type = REDIRECT_STDOUT_APPEND;
+	return (type);
+}
+
+t_parser_state parse_redirection(t_ast_node_content **content, t_token **tokens, int *index)
+{
+	t_redirect *new_redirection = (t_redirect *)ft_calloc(1, sizeof(t_redirect));
+	t_redirect *last_redirection;
+	printf("ok2\n");
+	// (*index)--;
+	if (!new_redirection)
+	{
+		perror("Memory allocation error");
+		return PARSER_FAILURE;
+	}
+	new_redirection->type = redirect_type((*tokens)[*index].value); // Set the type of redirection
+	new_redirection->word = ft_strdup((*tokens)[*index].value);
+	free((*tokens)[*index].value);
+	(*tokens)[*index].value = NULL;
+	new_redirection->next = NULL;
+	if ((*content)->redirection == NULL)
+		(*content)->redirection = new_redirection;
+	else
+	{
+		last_redirection = (*content)->redirection;
+		while (last_redirection->next != NULL)
+			last_redirection = last_redirection->next;
+		last_redirection->next = new_redirection;
+	}
+	// printf("redirect:%s\n", (*content)->redirection->word);
+	(*index)++;
+	// (*index)--;
+	return PARSER_SUCCESS;
+}
+
+t_parser_state parse_assignment(t_ast_node_content **content, t_token **tokens, int *index)
+{
+	t_assignment *new_assignment = (t_assignment *)malloc(sizeof(t_assignment));
+	t_assignment *last_assignment;
+
+	// (*index)++;
+	if (!new_assignment)
+	{
+		perror("Memory allocation error");
+		return PARSER_FAILURE;
+	}
+	new_assignment->word = ft_strdup((*tokens)[*index].value);
+	free((*tokens)[*index].value);
+	(*tokens)[*index].value = NULL;
+	new_assignment->next = NULL;
+	if ((*content)->assignments == NULL)
+		(*content)->assignments = new_assignment;
+	else
+	{
+		last_assignment = (*content)->assignments;
+		while (last_assignment->next != NULL)
+			last_assignment = last_assignment->next;
+		last_assignment->next = new_assignment;
+	}
+	(*index)++;
+	return PARSER_SUCCESS;
+}
+
 t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token **tokens, int *token_count)
+{
+	int	head;
+	int cmd_index;
+	int	index;
+	t_parser_state ret;
+
+	head = *token_count - 1;
+	cmd_index = 0;
+	if (*token_count >= 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
+	{
+		free(*content);
+		*content = NULL;
+		return NULL;
+	}
+	while (head > 0 && (*tokens)[head--].type != TOKEN_PIPE) //check if --head or head--
+		cmd_index++;
+	for (int i = head; i < *token_count; i++)
+		printf("i:%d toekn:%s\n", i, (*tokens)[i].value);
+	printf("head:%d token_count:%d\n", head, *token_count);
+	// exit(1);
+	(*content)->cmd = (char **)ft_calloc((cmd_index + 1), sizeof(char *));
+	(*content)->cmd[cmd_index] = NULL;
+	index = 0;
+	printf("start type:%d value:%s\n",(*tokens)[head].type, (*tokens)[head].value);
+	while ((*tokens)[head].type != TOKEN_END && (*tokens)[head].type != TOKEN_PIPE)
+	{
+				printf("ok1\n");
+		if ((*tokens)[head].value != NULL)
+		{
+			printf("start type:%d value:%s\n",(*tokens)[head].type, (*tokens)[head].value);
+			if (*token_count >= 2 && (*tokens)[head].type && (*tokens)[head].type == TOKEN_REDIRECT && \
+				((*tokens)[head + 1].type == TOKEN_ASSIGNMENT ||\
+				(*tokens)[head + 1].type == TOKEN_WORD ))
+			{
+				ret = parse_redirection(content, tokens, &head);
+				printf("after redir type:%d valu:%s\n",(*tokens)[head].type, (*tokens)[head].value);
+				if(ret == PARSER_SUCCESS && (*tokens)[head].type == TOKEN_ASSIGNMENT)
+				{
+					ret = parse_assignment(content, tokens, &head);
+					printf("after assign type:%d valu:%s\n",(*tokens)[head].type, (*tokens)[head].value);
+					// printf("ok2\n"); //probably continue
+				}
+				else if (ret == PARSER_SUCCESS && (*tokens)[head].type == TOKEN_ASSIGNMENT)
+				{
+					printf("after redir inside cmd type:%d valu:%s\n",(*tokens)[head].type, (*tokens)[head].value);
+					(*content)->cmd[index] = ft_strdup((*tokens)[head].value);
+					free((*tokens)[head].value);
+					(*tokens)[head].value = NULL;
+				}
+				// if ((*tokens)[*token_count].type == TOKEN_PIPE)
+				// 	return (*content);
+				head++;
+				continue;
+			}
+			else
+			{
+				printf("cmd index:%d type:%d valu:%s\n", index, (*tokens)[head].type, (*tokens)[head].value);
+				(*content)->cmd[index++] = ft_strdup((*tokens)[head].value);
+				free((*tokens)[*token_count - 1].value);
+				(*tokens)[*token_count - 1].value = NULL;
+			}	
+		}
+		else
+			(*content)->cmd[index] = NULL;
+		(head)++;
+		// cmd_index--;
+	}
+	return (*content);
+}
+
+
+t_ast_node_content *paarse_command_content(t_ast_node_content **content, t_token **tokens, int *token_count)
 {
 	int	current;
 	int cmd_index;
+	t_parser_state ret;
 
 	current = *token_count;
 	cmd_index = 0;
@@ -79,21 +228,62 @@ t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token 
 		*content = NULL;
 		return NULL;
 	}
-	while (current-- > 0 && (*tokens)[current].type != TOKEN_PIPE) //since token_count is one more than itrator
+	while (current > 0 && (*tokens)[--current].type != TOKEN_PIPE) //since token_count is one more than itrator
 		cmd_index++;
+	for (int i = current; i < *token_count; i++)
+		printf("i:%d toekn:%s\n", i, (*tokens)[i].value);
+	printf("currrent:%d token_count:%d\n", current, *token_count);
 	(*content)->cmd = (char **)ft_calloc((cmd_index + 1), sizeof(char *));
 	(*content)->cmd[cmd_index] = NULL;
-	while (cmd_index-- > 0)
+	while (--cmd_index >= 0 && (*tokens)[*token_count - 1].type != TOKEN_PIPE)
 	{
 		if ((*tokens)[*token_count - 1].value != NULL)
 		{
-			(*content)->cmd[cmd_index] = ft_strdup((*tokens)[*token_count - 1].value);
-			free((*tokens)[*token_count - 1].value);
-			(*tokens)[*token_count - 1].value = NULL;
+			printf("start type:%d value:%s\n",(*tokens)[*token_count - 1].type, (*tokens)[*token_count - 1].value);
+			if (*token_count >= 2 && (*tokens)[*token_count - 2].type && (*tokens)[*token_count - 2].type == TOKEN_REDIRECT && \
+				((*tokens)[*token_count - 1].type == TOKEN_ASSIGNMENT ||\
+				(*tokens)[*token_count - 1].type == TOKEN_WORD ))
+			{
+				// printf("ok1\n");
+				if ((*tokens)[*token_count - 1].type == TOKEN_ASSIGNMENT)
+				{
+					ret = parse_assignment(content, tokens, token_count);
+					printf("after assign type:%d valu:%s\n",(*tokens)[*token_count -1].type, (*tokens)[*token_count - 1].value);
+					if(ret == PARSER_SUCCESS && (*tokens)[*token_count - 1].type == TOKEN_REDIRECT)
+					{
+						// printf("ok2\n");
+						ret = parse_redirection(content, tokens, token_count);
+					printf("after redir type:%d valu:%s\n",(*tokens)[*token_count - 1].type, (*tokens)[*token_count - 1].value);
+
+					}
+					// continue;
+				}
+				if ((*tokens)[*token_count].type == TOKEN_PIPE)
+					return (*content);
+				if ((*tokens)[*token_count - 1].type == TOKEN_WORD)
+				{
+					current = *token_count;
+					while (current > 0 && (*tokens)[--current].type != TOKEN_PIPE) //since token_count is one more than itrator
+						cmd_index++;
+					printf("after redir inside cmd type:%d valu:%s\n",(*tokens)[*token_count - 1].type, (*tokens)[*token_count - 1].value);
+					(*content)->cmd[cmd_index] = ft_strdup((*tokens)[*token_count - 1].value);
+					free((*tokens)[*token_count - 1].value);
+					(*tokens)[*token_count - 1].value = NULL;
+				}
+				(*token_count)--;
+				continue;
+			}
+			else
+			{
+				(*content)->cmd[cmd_index] = ft_strdup((*tokens)[*token_count - 1].value);
+				free((*tokens)[*token_count - 1].value);
+				(*tokens)[*token_count - 1].value = NULL;
+			}	
 		}
 		else
 			(*content)->cmd[cmd_index] = NULL;
 		(*token_count)--;
+		// cmd_index--;
 	}
 	return (*content);
 }
@@ -108,8 +298,9 @@ t_ast_node *parse_command(t_token **tokens, int *token_count)
 		perror("Memory allocation error"); //error handling
 		exit(1);
 	}
-	content->stdin_redirect = NULL;
-	content->stdout_redirect = NULL;
+	// content->stdin_redirect = NULL;
+	// content->stdin_redirect = NULL;
+	content->redirection = NULL;
 	content->assignments = NULL;
 	content->cmd = NULL;
 	parse_command_content(&content, tokens, token_count);
@@ -197,6 +388,25 @@ void print_ast_node(t_ast_node *node, int level, char x) {
 				}
 				printf("\n");
 			}
+			if (node->content->assignments)
+			{
+				for (int i = 0; i < level; i++)
+                    printf("    ");
+                printf("Assignments:");
+                for (t_assignment *tmp = node->content->assignments; tmp; tmp = tmp->next) {
+                    printf(ORG " %s" RESET, tmp->word);
+                }
+                printf("\n");
+			}
+			 if (node->content->redirection) {
+                for (int i = 0; i < level; i++)
+                    printf("    ");
+                printf("Redirections:");
+                for (t_redirect *tmp = node->content->redirection; tmp; tmp = tmp->next) {
+                    printf(ORG " %s" RESET, tmp->word);
+                }
+                printf("\n");
+            }
 		}
 	} else if (node->type == AST_NODE_PIPE) {
 		printf(RED "Node type:"RESET ORG" AST_NODE_PIPE\n" RESET);

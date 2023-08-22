@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 15:38:45 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/19 17:17:14 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/22 22:17:18 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ typedef enum e_token_type
 	TOKEN_PIPE,
 	TOKEN_EMPTY,
 	TOKEN_UNCLOSED_Q,
-	TOKEN_ASSIGNMENT
+	TOKEN_ASSIGNMENT,
+    TOKEN_END
 } t_token_type;
 
 typedef struct s_token
@@ -41,6 +42,7 @@ typedef struct s_token
     t_token_type type;
     char	*value;
 	bool	check; //check if I didn't use, delete it!
+    int     len;
 } t_token;
 
 typedef struct s_ast_node_content t_ast_node_content;  // Forward declaration

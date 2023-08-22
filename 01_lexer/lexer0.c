@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/19 17:17:29 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/22 22:17:33 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ const char *token_names[] = {
 	"PIPE",
 	"EMPTY",
 	"UNCL_QUO",
-	"ASSIGNMNT"
+	"ASSIGNMNT",
+	"END"
 	// Add more names for additional token types if needed
 };
 
@@ -259,8 +260,15 @@ void tokenize(t_token **tokens, const char *input, int *token_count)
 			tokenize_word(&current, &token);
 		// Process the token or store it for later processing
 		(*token_count)++;
-		*tokens = ft_realloc(*tokens, *token_count - 1 * sizeof(t_token), *token_count * sizeof(t_token));
+		*tokens = ft_realloc(*tokens, (*token_count - 1) * sizeof(t_token), *token_count * sizeof(t_token));
 		(*tokens)[*token_count - 1] = token;
 	}
+	(*token_count)++;
+	t_token null_token;
+	null_token.type = TOKEN_END;
+	null_token.value = NULL;
+	null_token.len = *token_count;
+	*tokens = ft_realloc(*tokens, (*token_count - 1) * sizeof(t_token), *token_count * sizeof(t_token));
+	(*tokens)[*token_count - 1] = null_token;
 	check_assignment(tokens, *token_count);
 }
