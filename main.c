@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/19 17:11:28 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/23 12:19:00 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	main(void)
 		rl_replace_line("", 0); // Clear the current input line 
 		rl_redisplay(); // Update the display of the input line
 		free(line); // Free the memory allocated by readline
-		line = readline("minishell>");
+		line = readline("minishell> ");
 	}
 	return (0);
 }

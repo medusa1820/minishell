@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/22 21:44:31 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/23 14:30:02 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,12 @@ t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token 
 
 	head = *token_count - 1;
 	cmd_index = 0;
+	printf(ORG"\ntoken_count:%d -> %d\n\n"RESET, *token_count -1, *token_count);
+	if ((*tokens)[*token_count - 1].type)
+		printf(ORG"item:%d len:%d value:%s\n"RESET, (*token_count), (*tokens)->len, (*tokens)[*token_count -1].value);
 	if (*token_count >= 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
 	{
+		printf(ORG"\ntoken_count:%d -> %d\n\n"RESET, *token_count -1, *token_count);
 		free(*content);
 		*content = NULL;
 		return NULL;
@@ -222,6 +226,7 @@ t_ast_node_content *paarse_command_content(t_ast_node_content **content, t_token
 
 	current = *token_count;
 	cmd_index = 0;
+
 	if (*token_count >= 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
 	{
 		free(*content);
