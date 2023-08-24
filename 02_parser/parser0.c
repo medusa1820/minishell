@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/24 15:29:01 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/24 16:08:51 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 //     return node;
 // }
 
-t_ast_node *create_command_node(t_ast_node_content *content)
+t_ast_node	*create_command_node(t_ast_node_content *content)
 {
 	t_ast_node	*node;
 
@@ -83,12 +83,13 @@ t_redirect_type	redirect_type(char *tpye)
 	return (type);
 }
 
-t_parser_state parse_redirection(t_ast_node_content **content, t_token **tokens, int *index)
+t_parser_state	parse_redirection(t_ast_node_content **content, t_token **tokens, int *index)
 {
-	t_redirect	*new_redirection = (t_redirect *)ft_calloc(1, sizeof(t_redirect));
+	t_redirect	*new_redirection;
 	t_redirect	*last_redirection;
 	printf("ok2\n");
 	// (*index)--;
+	new_redirection = (t_redirect *)ft_calloc(1, sizeof(t_redirect));
 	if (!new_redirection)
 	{
 		perror("Memory allocation error");
