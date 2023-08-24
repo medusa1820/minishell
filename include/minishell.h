@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/21 13:51:50 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/24 12:42:56 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,34 +25,6 @@
 # include <readline/history.h>
 # include "parser.h"
 # include "lexer.h"
-
-// // # include "get_next_line.h"
-
-// #define BLUE  "\033[38;5;4m"
-// #define ORG   "\033[38;5;214m"
-// #define RED   "\033[38;5;196m"
-// #define RESET "\033[0m"
-
-// # define WHITESPACE " \t\v\f\r"
-// # define OPERAND "<>|"
-// typedef enum e_token_type
-// {
-//     TOKEN_WORD,
-//     TOKEN_SINGLE_QUOTE,
-//     TOKEN_DOUBLE_QUOTE,
-//     TOKEN_REDIRECT,
-// 	TOKEN_PIPE,
-// 	TOKEN_EMPTY,
-// 	TOKEN_UNCLOSED_Q,
-// 	TOKEN_ASSIGNMENT
-// } t_token_type;
-
-// typedef struct s_token
-// {
-//     t_token_type type;
-//     char	*value;
-// 	bool	check; //check if I didn't use, delete it!
-// } t_token;
 
 typedef enum e_redirect_type
 {
@@ -99,11 +71,5 @@ typedef struct s_ast_node
 }	t_ast_node;
 
 int			main(void);
-// char		**split_string(char *input_string);
-// void		print_cmd(char **cmd);
-// void 		tokenize(t_token **tokens, const char *input, int *token_count);
-// void 		free_ast(t_ast_node **node);
-// void 		print_ast(t_ast_node *root);
-// t_ast_node	*parse_pipeline(t_token **tokens, int *token_count);
-// void	 	print_ast_node(t_ast_node *node, int level, char x);
+
 #endif

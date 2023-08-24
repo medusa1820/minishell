@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/23 14:30:02 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/24 15:29:01 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@
 
 t_ast_node *create_command_node(t_ast_node_content *content)
 {
-	t_ast_node *node;
+	t_ast_node	*node;
 
 	node = (t_ast_node *)ft_calloc(1, sizeof(t_ast_node));
 	if (!node)
 	{
-		perror("Memory allocation error"); //error handeling
+		perror ("Memory allocation error"); //error handeling
 		exit(1);
 	}
 	node->type = AST_NODE_CMD;
@@ -48,12 +48,12 @@ t_ast_node *create_command_node(t_ast_node_content *content)
 		printf("\nnode:cmd content type:%d valu:%s\n",i, node->content->cmd[i]);	
 	node->left = NULL;
 	node->right = NULL;
-	return node;
+	return (node);
 }
 
-t_ast_node *create_pipe_node(t_ast_node *left, t_ast_node *right)
+t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
 {
-	t_ast_node *node;
+	t_ast_node	*node;
 
 	node = (t_ast_node *)ft_calloc(1, sizeof(t_ast_node));
 	if (!node)
@@ -65,28 +65,28 @@ t_ast_node *create_pipe_node(t_ast_node *left, t_ast_node *right)
 	node->content = NULL;
 	node->left = left;
 	node->right = right;
-	return node;
+	return (node);
 }
 
 t_redirect_type	redirect_type(char *tpye)
 {
 	t_redirect_type	type;
 
-	if(ft_strncmp(tpye, "</0", 2))
+	if (ft_strncmp(tpye, "</0", 2))
 		type = REDIRECT_STDIN;
-	else if(ft_strncmp(tpye, ">/0", 2))
+	else if (ft_strncmp(tpye, ">/0", 2))
 		type = REDIRECT_STDOUT;
-	else if(ft_strncmp(tpye, "<</0", 3))
+	else if (ft_strncmp(tpye, "<</0", 3))
 		type = REDIRECT_HERE_DOC;
-	else if(ft_strncmp(tpye, ">>/0", 3))
+	else if (ft_strncmp(tpye, ">>/0", 3))
 		type = REDIRECT_STDOUT_APPEND;
 	return (type);
 }
 
 t_parser_state parse_redirection(t_ast_node_content **content, t_token **tokens, int *index)
 {
-	t_redirect *new_redirection = (t_redirect *)ft_calloc(1, sizeof(t_redirect));
-	t_redirect *last_redirection;
+	t_redirect	*new_redirection = (t_redirect *)ft_calloc(1, sizeof(t_redirect));
+	t_redirect	*last_redirection;
 	printf("ok2\n");
 	// (*index)--;
 	if (!new_redirection)
@@ -332,34 +332,40 @@ t_ast_node *parse_pipeline(t_token **tokens, int *token_count)
 	return right;
 }
 
-void free_ast(t_ast_node **node_ptr) {
-    if (!(*node_ptr))
-        return;
+void free_ast(t_ast_node **node_ptr)
+{
+	if (!(*node_ptr))
+		return;
 
-    if ((*node_ptr)->type == AST_NODE_CMD) {
-        if ((*node_ptr)->content) {
-            if ((*node_ptr)->content->cmd) {
-                int i = 0;
-                while ((*node_ptr)->content->cmd[i] != NULL) {
-                    free((*node_ptr)->content->cmd[i]);
-                    (*node_ptr)->content->cmd[i] = NULL;
-                    i++;
-                }
-                free((*node_ptr)->content->cmd);
-                (*node_ptr)->content->cmd = NULL;
-            }
-            free((*node_ptr)->content);
-            (*node_ptr)->content = NULL;
-        }
-    } else if ((*node_ptr)->type == AST_NODE_PIPE) {
-        free_ast(&((*node_ptr)->left));
-        free_ast(&((*node_ptr)->right));
-        (*node_ptr)->left = NULL;
-        (*node_ptr)->right = NULL;
-    }
+	if ((*node_ptr)->type == AST_NODE_CMD)
+	{
+		if ((*node_ptr)->content)
+		{
+			if ((*node_ptr)->content->cmd)
+			{
+				int i = 0;
+				while ((*node_ptr)->content->cmd[i] != NULL)
+				{
+					free((*node_ptr)->content->cmd[i]);
+					(*node_ptr)->content->cmd[i] = NULL;
+					i++;
+				}
+				free((*node_ptr)->content->cmd);
+				(*node_ptr)->content->cmd = NULL;
+			}
+			free((*node_ptr)->content);
+			(*node_ptr)->content = NULL;
+		}
+	} else if ((*node_ptr)->type == AST_NODE_PIPE)
+	{
+		free_ast(&((*node_ptr)->left));
+		free_ast(&((*node_ptr)->right));
+		(*node_ptr)->left = NULL;
+		(*node_ptr)->right = NULL;
+	}
 
-    free(*node_ptr);
-    *node_ptr = NULL;
+	free(*node_ptr);
+	*node_ptr = NULL;
 }
 
 void print_ast_node(t_ast_node *node, int level, char x) {
@@ -396,22 +402,22 @@ void print_ast_node(t_ast_node *node, int level, char x) {
 			if (node->content->assignments)
 			{
 				for (int i = 0; i < level; i++)
-                    printf("    ");
-                printf("Assignments:");
-                for (t_assignment *tmp = node->content->assignments; tmp; tmp = tmp->next) {
-                    printf(ORG " %s" RESET, tmp->word);
-                }
-                printf("\n");
+					printf("    ");
+				printf("Assignments:");
+				for (t_assignment *tmp = node->content->assignments; tmp; tmp = tmp->next) {
+					printf(ORG " %s" RESET, tmp->word);
+				}
+				printf("\n");
 			}
 			 if (node->content->redirection) {
-                for (int i = 0; i < level; i++)
-                    printf("    ");
-                printf("Redirections:");
-                for (t_redirect *tmp = node->content->redirection; tmp; tmp = tmp->next) {
-                    printf(ORG " %s" RESET, tmp->word);
-                }
-                printf("\n");
-            }
+				for (int i = 0; i < level; i++)
+					printf("    ");
+				printf("Redirections:");
+				for (t_redirect *tmp = node->content->redirection; tmp; tmp = tmp->next) {
+					printf(ORG " %s" RESET, tmp->word);
+				}
+				printf("\n");
+			}
 		}
 	} else if (node->type == AST_NODE_PIPE) {
 		printf(RED "Node type:"RESET ORG" AST_NODE_PIPE\n" RESET);

@@ -1,14 +1,16 @@
 {
     "folders": [
         {
-            "path": "."
+            "path": "/home/nnavidd/test/minishell"
         }
     ],
     "settings": {
         "files.associations": {
             "minishell.h": "c",
             "parser.h": "c",
-            "wait.h": "c"
-        }
+            "wait.h": "c",
+            "ft_printf.h": "c"
+        },
+        "codam-norminette-3.displayErrorName": false
     }
 }
