@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/25 16:15:35 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/25 17:28:18 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -405,12 +405,12 @@ void free_ast(t_ast_node **node_ptr)
 	*node_ptr = NULL;
 }
 
-void print_ast_node(t_ast_node *node, int level, char x) {
+void print_ast_node(t_ast_node *node, int level, char x)
+{
 	if (x == 'x')
 		printf("\n***************** AST ****************\n");
-	if (node == NULL) {
+	if (node == NULL)
 		return;
-	}
 	for (int i = 0; i < level; i++)
 		printf("  ");
 	if (x == 'l')
@@ -431,9 +431,8 @@ void print_ast_node(t_ast_node *node, int level, char x) {
 				for (int i = 0; i < level; i++)
 					printf("    ");
 				printf("Command:");
-				for (int i = 0; node->content->cmd[i] != NULL; i++) {
+				for (int i = 0; node->content->cmd[i] != NULL; i++)
 					printf(ORG " %s" RESET, node->content->cmd[i]);
-				}
 				printf("\n");
 			}
 			if (node->content->assignments)
@@ -441,33 +440,32 @@ void print_ast_node(t_ast_node *node, int level, char x) {
 				for (int i = 0; i < level; i++)
 					printf("    ");
 				printf("Assignments:");
-				for (t_assignment *tmp = node->content->assignments; tmp; tmp = tmp->next) {
+				for (t_assignment *tmp = node->content->assignments; tmp; tmp = tmp->next)
 					printf(ORG " %s" RESET, tmp->word);
-				}
 				printf("\n");
 			}
-			 if (node->content->stdin_redirect) {
+			 if (node->content->stdin_redirect)
+			 {
 				for (int i = 0; i < level; i++)
 					printf("    ");
 				printf("stdin_redirect:");
-				for (t_redirect *tmp = node->content->stdin_redirect; tmp; tmp = tmp->next) {
+				for (t_redirect *tmp = node->content->stdin_redirect; tmp; tmp = tmp->next)
 					printf(ORG " %s" RESET, tmp->word);
-				}
 				printf("\n");
 			}
-			if (node->content->stdout_redirect) {
+			if (node->content->stdout_redirect)
+			{
 				for (int i = 0; i < level; i++)
 					printf("    ");
 				printf("stdout_redirect:");
-				for (t_redirect *tmp = node->content->stdout_redirect; tmp; tmp = tmp->next) {
+				for (t_redirect *tmp = node->content->stdout_redirect; tmp; tmp = tmp->next)
 					printf(ORG " %s" RESET, tmp->word);
-				}
 				printf("\n");
 			}
 		}
-	} else if (node->type == AST_NODE_PIPE) {
-		printf(RED "Node type:"RESET ORG" AST_NODE_PIPE\n" RESET);
 	}
+	else if (node->type == AST_NODE_PIPE)
+		printf(RED "Node type:"RESET ORG" AST_NODE_PIPE\n" RESET);
 	print_ast_node(node->left, level + 1, 'l');
 	print_ast_node(node->right, level + 1, 'r');
 }

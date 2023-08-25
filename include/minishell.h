@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/25 14:58:34 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/25 18:33:54 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ typedef struct s_ast_node_content
 {
 	t_redirect		*stdin_redirect;
 	t_redirect		*stdout_redirect;
-	// t_redirect		*redirection;
 	t_assignment	*assignments;
 	char			**cmd;
 }	t_ast_node_content;
