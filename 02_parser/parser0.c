@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/25 17:28:18 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/26 09:19:15 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,18 @@ t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
 	return (node);
 }
 
-t_redirect_type	redirect_type(char *tpye)
+t_redirect_type	redirect_type(char *str)
 {
 	t_redirect_type	type;
 
-	if (ft_strncmp(tpye, "</0", 2))
-		type = REDIRECT_STDIN;
-	else if (ft_strncmp(tpye, ">/0", 2))
-		type = REDIRECT_STDOUT;
-	else if (ft_strncmp(tpye, "<</0", 3))
+	if (str[0] == '>' && str[1] == '>')
 		type = REDIRECT_HERE_DOC;
-	else if (ft_strncmp(tpye, ">>/0", 3))
+	else if (str[0] == '<' && str[1] == '<')
 		type = REDIRECT_STDOUT_APPEND;
+	else if (str[0] == '<' && str[1] == 0)
+		type = REDIRECT_STDIN;
+	else if (str[0] == '>' && str[1] == 0)
+		type = REDIRECT_STDOUT;
 	return (type);
 }
 
@@ -107,7 +107,7 @@ t_parser_state	parse_redirection(t_ast_node_content **content, t_token **tokens,
 	t_redirect		*new_redirection;
 	t_redirect_type	type;
 	t_parser_state	ret;
-	printf("ok2\n");
+	// printf("ok2\n");
 	// (*index)--;
 	new_redirection = (t_redirect *)ft_calloc(1, sizeof(t_redirect));
 	if (!new_redirection)
@@ -201,9 +201,9 @@ t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token 
 	}
 	if (head < 0)
 		head = 0;
-	// for (int i = head; i < *token_count; i++)
-	// 	printf("i:%d toekn:%s\n", i, (*tokens)[i].value);
-	// printf("head:%d token_count:%d" ORG" cmd:%d\n"RESET, head, *token_count, cmd_index);
+	for (int i = head; i < *token_count; i++)
+		printf("i:%d toekn:%s\n", i, (*tokens)[i].value);
+	printf("head:%d token_count:%d" ORG" cmd:%d\n"RESET, head, *token_count, cmd_index);
 	// exit(1);
 	// cmd_index++;
 	(*content)->cmd = (char **)ft_calloc((++cmd_index), sizeof(char *));
@@ -234,11 +234,11 @@ t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token 
 					(*content)->cmd[index++] = ft_strdup((*tokens)[head].value);
 					free((*tokens)[head].value);
 					(*tokens)[head].value = NULL;
+					head++;
 					(*token_count)--;
 				}
 				// if ((*tokens)[*token_count].type == TOKEN_PIPE)
 				// 	return (*content);
-				head++;
 				continue;
 			}
 			else
@@ -247,12 +247,12 @@ t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token 
 				(*content)->cmd[index++] = ft_strdup((*tokens)[head].value);
 				free((*tokens)[head].value);
 				(*tokens)[head].value = NULL;
+				(head)++;
+				(*token_count)--;
 			}	
 		}
 		else
 			(*content)->cmd[index] = NULL;
-		(head)++;
-		(*token_count)--;
 	}
 	return (*content);
 }
