@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/26 09:19:15 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/27 14:13:50 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,10 +129,10 @@ t_parser_state	parse_redirection(t_ast_node_content **content, t_token **tokens,
 	if (ret == PARSER_FAILURE)
 		return (PARSER_FAILURE);
 	// printf("redirect:%s\n", (*content)->redirection->word);
-	(*index)++;
-	(*index)++;
-	(*token_count)--;
-	(*token_count)--;
+	(*index)+= 2;
+	// (*index)++;
+	(*token_count)-= 2;
+	// (*token_count)--;
 	// free(new_redirection);
 	// new_redirection = NULL;
 	return PARSER_SUCCESS;
@@ -222,6 +222,7 @@ t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token 
 			{
 				ret = parse_redirection(content, tokens, &head, token_count);
 				printf("after redir type:%d valu:%s\n",(*tokens)[head].type, (*tokens)[head].value);
+				// if(ret == PARSER_SUCCESS && (*tokens)[head].type == TOKEN_ASSIGNMENT)
 				if(ret == PARSER_SUCCESS && (*tokens)[head].type == TOKEN_ASSIGNMENT)
 				{
 					ret = parse_assignment(content, tokens, &head, token_count);

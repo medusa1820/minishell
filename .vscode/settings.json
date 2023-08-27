@@ -1,5 +1,6 @@
 {
 	"files.associations": {
 		"libft.h": "c"
-	}
+	},
+	"codam-norminette-3.displayErrorName": true
 }
