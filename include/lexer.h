@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 15:38:45 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/27 10:29:16 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/27 15:01:11 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,11 @@ typedef struct s_ast_node_content t_ast_node_content;  // Forward declaration
 typedef enum e_parser_state t_parser_state;            // Forward declaration
 
 
-void 	tokenize(t_token **tokens, const char *input, int *token_count);
-void	print_tokens(t_token *tokens, int token_count);
-void	free_tokens(t_token **tokens, int *token_count);
+void    tokenize(t_minishell *minishell_data);
+// void 	ttokenize(t_token **tokens, const char *input, int *token_count);
+void	print_tokens(t_minishell sh);
+// void	print_tokens(t_token *tokens, int token_count);
+void	free_tokens(t_minishell *data);
+// void	free_tokens(t_token **tokens, int *token_count);
 
 #endif

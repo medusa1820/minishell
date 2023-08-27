@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/27 14:13:50 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/27 21:20:08 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,16 @@
 //     node->right = NULL;
 //     return node;
 // }
+
+bool	init_shell(t_minishell *shell)
+{
+	shell->ast_root = NULL;
+	shell->tokens = NULL;
+	shell->token_len = 0;
+	shell->head = 0;
+	shell->line = NULL;
+	return true;
+}
 
 t_ast_node	*create_command_node(t_ast_node_content *content)
 {
@@ -73,9 +83,9 @@ t_redirect_type	redirect_type(char *str)
 	t_redirect_type	type;
 
 	if (str[0] == '>' && str[1] == '>')
-		type = REDIRECT_HERE_DOC;
-	else if (str[0] == '<' && str[1] == '<')
 		type = REDIRECT_STDOUT_APPEND;
+	else if (str[0] == '<' && str[1] == '<')
+		type = REDIRECT_HERE_DOC;
 	else if (str[0] == '<' && str[1] == 0)
 		type = REDIRECT_STDIN;
 	else if (str[0] == '>' && str[1] == 0)
@@ -102,25 +112,25 @@ t_redirect *new_redirection)
 	return (PARSER_SUCCESS);
 }
 
-t_parser_state	parse_redirection(t_ast_node_content **content, t_token **tokens, int *index, int *token_count)
+t_parser_state	parse_redirection(t_ast_node_content **content, t_minishell *sh)
 {
 	t_redirect		*new_redirection;
 	t_redirect_type	type;
 	t_parser_state	ret;
-	// printf("ok2\n");
-	// (*index)--;
+
 	new_redirection = (t_redirect *)ft_calloc(1, sizeof(t_redirect));
 	if (!new_redirection)
 	{
 		perror("Memory allocation error");
 		return PARSER_FAILURE;
 	}
-	type = redirect_type((*tokens)[*index].value); // Set the type of redirection
+	printf(RED"inside redirection head:%d\n"RESET, sh->head);
+	type = redirect_type(sh->tokens[sh->head].value); // Set the type of redirection
 	printf("type:%d\n", type);
 	new_redirection->type = type;
-	new_redirection->word = ft_strdup((*tokens)[*index + 1].value); // put next head in value of this node
-	free((*tokens)[*index + 1].value);
-	(*tokens)[*index + 1].value = NULL;
+	new_redirection->word = ft_strdup(sh->tokens[sh->head + 1].value); // put next head in value of this node
+	free(sh->tokens[sh->head + 1].value);
+	sh->tokens[sh->head + 1].value = NULL;
 	new_redirection->next = NULL;
 	if (type == REDIRECT_STDIN || type == REDIRECT_HERE_DOC)
 		ret = add_redirect(&((*content)->stdin_redirect), new_redirection);
@@ -129,29 +139,24 @@ t_parser_state	parse_redirection(t_ast_node_content **content, t_token **tokens,
 	if (ret == PARSER_FAILURE)
 		return (PARSER_FAILURE);
 	// printf("redirect:%s\n", (*content)->redirection->word);
-	(*index)+= 2;
-	// (*index)++;
-	(*token_count)-= 2;
-	// (*token_count)--;
-	// free(new_redirection);
-	// new_redirection = NULL;
+	sh->head += 2;
+	sh->token_len -= 2;
 	return PARSER_SUCCESS;
 }
 
-t_parser_state parse_assignment(t_ast_node_content **content, t_token **tokens, int *index, int *token_count)
+t_parser_state parse_assignment(t_ast_node_content **content, t_minishell *sh)
 {
 	t_assignment *new_assignment = (t_assignment *)malloc(sizeof(t_assignment));
 	t_assignment *last_assignment;
 
-	// (*index)++;
 	if (!new_assignment)
 	{
 		perror("Memory allocation error");
 		return PARSER_FAILURE;
 	}
-	new_assignment->word = ft_strdup((*tokens)[*index].value);
-	free((*tokens)[*index].value);
-	(*tokens)[*index].value = NULL;
+	new_assignment->word = ft_strdup(sh->tokens[sh->head].value);
+	free(sh->tokens[sh->head].value);
+	sh->tokens[sh->head].value = NULL;
 	new_assignment->next = NULL;
 	if ((*content)->assignments == NULL)
 		(*content)->assignments = new_assignment;
@@ -162,100 +167,138 @@ t_parser_state parse_assignment(t_ast_node_content **content, t_token **tokens, 
 			last_assignment = last_assignment->next;
 		last_assignment->next = new_assignment;
 	}
-	(*index)++;
-	(*token_count)--;
+	sh->head++;
+	sh->token_len--;
 	return PARSER_SUCCESS;
 }
-
-t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token **tokens, int *token_count)
+t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 {
-	int	head;
+	(*content)->cmd[sh->index] = ft_strdup(sh->tokens[sh->head].value);
+	if (!(*content)->cmd[sh->index])
+		return (PARSER_FAILURE);
+	free(sh->tokens[sh->head].value);
+	sh->tokens[sh->head].value = NULL;
+	sh->head++;
+	sh->token_len--;
+	sh->index++;
+	return (PARSER_SUCCESS);
+}
+
+t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
+{
+	t_parser_state	ret;
+
+	printf("start type suffix:%d value:%s\n", sh->tokens[sh->head].type, sh->tokens[sh->head].value);
+	ret = PARSER_FAILURE;
+	while(true)
+	{
+		if (sh->tmp >= 2 && sh->tokens[sh->head].type && sh->tokens[sh->head].type == TOKEN_REDIRECT && \
+				(sh->tokens[sh->head + 1].type == TOKEN_ASSIGNMENT ||\
+				sh->tokens[sh->head + 1].type == TOKEN_WORD )) //later check variable of token,would better assign to the EOF and PIP
+		{
+			ret = parse_redirection(content, sh);
+			continue;
+		}
+		else if (sh->tokens[sh->head].type == TOKEN_ASSIGNMENT || \
+		sh->tokens[sh->head].type == TOKEN_WORD)
+		{
+			ret = parse_cmd_word(content, sh);
+			continue;
+		}
+		else
+			break;
+	}
+	return (ret);
+}
+
+
+t_parser_state	parse_prefix_cmd(t_ast_node_content **content, t_minishell *sh)
+{
+	t_parser_state	ret;
+
+	printf("start type perfix:%d value:%s\n", sh->tokens[sh->head].type, sh->tokens[sh->head].value);
+	ret = PARSER_FAILURE;
+	while(true)
+	{
+		if (sh->tmp >= 2 && sh->tokens[sh->head].type && sh->tokens[sh->head].type == TOKEN_REDIRECT && \
+				(sh->tokens[sh->head + 1].type == TOKEN_ASSIGNMENT ||\
+				sh->tokens[sh->head + 1].type == TOKEN_WORD )) //later check variable of token,would better assign to the EOF and PIP
+		{
+			ret = parse_redirection(content, sh);
+			continue;
+		}
+		else if (sh->tokens[sh->head].type == TOKEN_ASSIGNMENT)
+		{
+			ret = parse_assignment(content, sh);
+			continue;
+		}
+		else
+			break;
+	}
+	return (ret);
+}
+
+t_parser_state	parse_command_content(t_ast_node_content **content, t_minishell *sh)
+{
 	int cmd_index;
-	int	index;
-	int tmp;
 	t_parser_state ret;
 
-	head = *token_count - 1;
-	tmp = *token_count;
+	sh->head = sh->token_len - 1;
+	sh->tmp = sh->token_len;
 	cmd_index = 0;
-	// printf(ORG"\ntokens_Numbers:%d -> tokens_count:%d\n\n"RESET, *token_count -1, *token_count);
-	// if ((*tokens)[*token_count - 1].value)
-	// 	printf(ORG"item:%d len:%d value:%s\n"RESET, (*token_count), (*tokens)->len, (*tokens)[*token_count -1].value);
-	while (head >= 0)
+	while (sh->head >= 0)
 	{
-		if ((*tokens)[head].type == TOKEN_PIPE)
+		if (sh->tokens[sh->head].type == TOKEN_PIPE)
 			break ;
 		else
 			cmd_index++;
-		if ((head - 1) >= 0 && (*tokens)[head - 1].type == TOKEN_PIPE)
+		if ((sh->head - 1) >= 0 && sh->tokens[sh->head - 1].type == TOKEN_PIPE)
 			break ;
-		head--;
+		sh->head--;
 	}
 		// && (*tokens)[head--].type != TOKEN_END) //check if --head or head--
-	if (*token_count >= 0 && cmd_index < 1 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
+	if (sh->token_len >= 0 && cmd_index < 1 && sh->tokens[sh->token_len - 1].type == TOKEN_PIPE)
 	{
 		// printf(ORG"\ntoken_count:%d -> %d\n\n"RESET, *token_count -1, *token_count);
 		free(*content);
 		*content = NULL;
-		return NULL;
+		return PARSER_SUCCESS;
 	}
-	if (head < 0)
-		head = 0;
-	for (int i = head; i < *token_count; i++)
-		printf("i:%d toekn:%s\n", i, (*tokens)[i].value);
-	printf("head:%d token_count:%d" ORG" cmd:%d\n"RESET, head, *token_count, cmd_index);
-	// exit(1);
-	// cmd_index++;
+	if (sh->head < 0)
+		sh->head = 0;
+	for (int i = sh->head; i < sh->token_len; i++)
+		printf("i:%d toekn:%s\n", i, sh->tokens[i].value);
+
+	printf("head:%d token_count:%d" ORG" cmd:%d\n"RESET, sh->head, sh->token_len, cmd_index);
+	
 	(*content)->cmd = (char **)ft_calloc((++cmd_index), sizeof(char *));
 	(*content)->cmd[cmd_index] = NULL;
-	index = 0;
-	printf("\nstart type:%d value:%s\n",(*tokens)[head].type, (*tokens)[head].value);
-	while (head < tmp && (*tokens)[head].type != TOKEN_PIPE)
+	sh->index = 0;
+	printf("\nstart type:%d value:%s\n",sh->tokens[sh->head].type, sh->tokens[sh->head].value);
+	while (sh->head < sh->tmp && sh->tokens[sh->head].type != TOKEN_PIPE)
 	{
 				printf("in loop ok1\n");
-		if ((*tokens)[head].value != NULL)
+		if (sh->tokens[sh->head].value != NULL)
 		{
-			printf("start type:%d value:%s\n",(*tokens)[head].type, (*tokens)[head].value);
-			if (tmp >= 2 && (*tokens)[head].type && (*tokens)[head].type == TOKEN_REDIRECT && \
-				((*tokens)[head + 1].type == TOKEN_ASSIGNMENT ||\
-				(*tokens)[head + 1].type == TOKEN_WORD ))
-			{
-				ret = parse_redirection(content, tokens, &head, token_count);
-				printf("after redir type:%d valu:%s\n",(*tokens)[head].type, (*tokens)[head].value);
-				// if(ret == PARSER_SUCCESS && (*tokens)[head].type == TOKEN_ASSIGNMENT)
-				if(ret == PARSER_SUCCESS && (*tokens)[head].type == TOKEN_ASSIGNMENT)
-				{
-					ret = parse_assignment(content, tokens, &head, token_count);
-					printf("after assign type:%d valu:%s\n",(*tokens)[head].type, (*tokens)[head].value);
-					// printf("ok2\n"); //probably continue
-				}
-				else if (ret == PARSER_SUCCESS && (*tokens)[head].type == TOKEN_WORD)
-				{
-					printf("after redir inside cmd type:%d valu:%s\n",(*tokens)[head].type, (*tokens)[head].value);
-					(*content)->cmd[index++] = ft_strdup((*tokens)[head].value);
-					free((*tokens)[head].value);
-					(*tokens)[head].value = NULL;
-					head++;
-					(*token_count)--;
-				}
-				// if ((*tokens)[*token_count].type == TOKEN_PIPE)
-				// 	return (*content);
-				continue;
+			ret = parse_prefix_cmd(content, sh);
+			if (ret == PARSER_FAILURE)
+			{	
+				ret = parse_cmd_word(content, sh);
+				if (ret == PARSER_FAILURE)
+					return (ret);
 			}
 			else
-			{
-				printf("cmd index:%d type:%d valu:%s\n", index, (*tokens)[head].type, (*tokens)[head].value);
-				(*content)->cmd[index++] = ft_strdup((*tokens)[head].value);
-				free((*tokens)[head].value);
-				(*tokens)[head].value = NULL;
-				(head)++;
-				(*token_count)--;
-			}	
+			{		
+				if (parse_cmd_word(content, sh) == PARSER_FAILURE)
+					return (ret);
+			}
+			parse_sufix_cmd(content, sh);
 		}
 		else
-			(*content)->cmd[index] = NULL;
+			(*content)->cmd[sh->index] = NULL;
 	}
-	return (*content);
+	// return (*content);
+	return (PARSER_SUCCESS);
 }
 
 
@@ -331,7 +374,8 @@ t_ast_node_content *parse_command_content(t_ast_node_content **content, t_token 
 // 	return (*content);
 // }
 
-t_ast_node *parse_command(t_token **tokens, int *token_count)
+// t_ast_node *parse_command(t_token **tokens, int *token_count)
+t_ast_node *parse_command(t_minishell *sh)
 {
 	t_ast_node_content *content;
 
@@ -346,25 +390,30 @@ t_ast_node *parse_command(t_token **tokens, int *token_count)
 	// content->redirection = NULL;
 	content->assignments = NULL;
 	content->cmd = NULL;
-	parse_command_content(&content, tokens, token_count);
+	// parse_command_content(&content, tokens, token_count);
+	parse_command_content(&content, sh);
 	if (content == NULL)
 		return NULL;  // Return NULL if command content is empty (due to PIPE)
 	return create_command_node(content);
 }
 
-t_ast_node *parse_pipeline(t_token **tokens, int *token_count)
+// t_ast_node *parse_pipeline(t_token **tokens, int *token_count)
+t_ast_node *parse_pipeline(t_minishell *sh)
 {
 	t_ast_node *left;
 	t_ast_node *right;
 
-	right = parse_command(tokens, token_count);
+	// right = parse_command(tokens, token_count);
+	right = parse_command(sh);
 
-	if (*token_count > 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
+	if (sh->token_len > 0 && sh->tokens[sh->token_len - 1].type == TOKEN_PIPE)
 	{
-		free((*tokens)[*token_count - 1].value);
-		(*tokens)[*token_count - 1].value = NULL;
-		(*token_count)--;  // Consume the pipe operator
-		left = parse_pipeline(tokens, token_count);
+		free(sh->tokens[sh->token_len - 1].value);
+		sh->tokens[sh->token_len - 1].value = NULL;
+		sh->token_len--;
+		// (*token_count)--;  // Consume the pipe operator
+		// left = parse_pipeline(tokens, token_count);
+		left = parse_pipeline(sh);
 		return create_pipe_node(left, right);
 	}
 	return right;

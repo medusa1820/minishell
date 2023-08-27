@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 15:48:07 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/25 18:33:43 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/27 16:00:05 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # include <readline/history.h>
 # include "minishell.h"
 
-
 typedef enum e_parser_state
 {
 	PARSER_SUCCESS,
@@ -35,19 +34,55 @@ typedef enum e_parser_state
 }	t_parser_state;
 
 typedef struct s_token t_token;
-typedef struct s_ast_node t_ast_node;
+// typedef struct s_ast_node t_ast_node;
+typedef struct s_minishell t_minishell;
+typedef enum e_redirect_type
+{
+	REDIRECT_STDIN, //(<)
+	REDIRECT_STDOUT, //(>)
+	REDIRECT_HERE_DOC, //(<<)
+	REDIRECT_STDOUT_APPEND, //(>>)
+}	t_redirect_type;
 
-// typedef struct s_minishell
-// {
-// 	char		*line;
-// 	t_token 	*tokens;
-// 	int			token_len;
-// 	t_ast_node *ast_root;
-// }	t_minishell;
+typedef struct s_assignment
+{
+	char				*word;
+	struct s_assignment	*next;
+}	t_assignment;
+
+typedef struct s_redirect
+{
+	t_redirect_type		type;
+	char				*word;
+	struct s_redirect	*next;
+}	t_redirect;
+
+typedef struct s_ast_node_content
+{
+	t_redirect		*stdin_redirect;
+	t_redirect		*stdout_redirect;
+	t_assignment	*assignments;
+	char			**cmd;
+}	t_ast_node_content;
+
+typedef enum e_ast_node_type
+{
+	AST_NODE_CMD,
+	AST_NODE_PIPE
+}	t_ast_node_type;
+
+typedef struct s_ast_node
+{
+	t_ast_node_type		type;
+	t_ast_node_content	*content;
+	struct s_ast_node	*left;
+	struct s_ast_node	*right;
+}	t_ast_node;
 
 void		free_ast(t_ast_node	**node);
 void 		print_ast(t_ast_node *root);
-t_ast_node	*parse_pipeline(t_token **tokens, int *token_count);
+// t_ast_node	*parse_pipeline(t_token **tokens, int *token_count);
+t_ast_node *parse_pipeline(t_minishell *sh);
 void	 	print_ast_node(t_ast_node *node, int level, char x);
-
+bool		init_shell(t_minishell *shell);
 #endif

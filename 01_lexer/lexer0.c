@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/26 09:15:27 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/27 15:33:32 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,32 +27,35 @@ const char *token_names[] = {
 	// Add more names for additional token types if needed
 };
 
-void	print_tokens(t_token *tokens, int token_count)
+// void	print_tokens(t_token *tokens, int token_count)
+void	print_tokens(t_minishell sh)
 {
-		for(int i = 0; i < token_count; i++)
+		for(int i = 0; i < sh.token_len; i++)
 		{
-				printf(BLUE "Token Type" RESET " : " ORG "%s" RESET, token_names[tokens[i].type]);
-				printf(RED "	Value" RESET " : " ORG "%s\n" RESET, tokens[i].value);
+				printf(BLUE "Token Type" RESET " : " ORG "%s" RESET, token_names[sh.tokens[i].type]);
+				printf(RED "	Value" RESET " : " ORG "%s\n" RESET, sh.tokens[i].value);
 		}
 
 }
 
-void	free_tokens(t_token **tokens, int *token_count)
+// void	free_tokens(t_token **tokens, int *token_count)
+void	free_tokens(t_minishell *data)
 {
 	int	i;
 
 	i = -1;
-	while (++i < *token_count)
+	while (++i < data->token_len)
+	// while (++i < *token_count)
 	{
-		if((*tokens)[i].value)
+		if(data->tokens[i].value)
 		{
-			free((*tokens)[i].value);
-			(*tokens)[i].value = NULL;
+			free(data->tokens[i].value);
+			data->tokens[i].value = NULL;
 		}
 	}
-	free(*tokens);
-	*tokens = NULL;
-	*token_count = 0;
+	free(data->tokens);
+	data->tokens = NULL;
+	data->token_len = 0;
 }
 
 void *ft_realloc(void *ptr, size_t old_size, size_t new_size)
@@ -222,7 +225,7 @@ void	check_assignment(t_token **tokens, int token_count)
 		{
 			word = (*tokens)[i].value;
 			if (!ft_isalpha(*word) && *word != '_' &&
-                ft_strchr(word, '=') && ft_strchr(word, '=') != word)
+				ft_strchr(word, '=') && ft_strchr(word, '=') != word)
 				continue;
 			j = -1;
 			while (word[++j] != '=')
@@ -236,7 +239,36 @@ void	check_assignment(t_token **tokens, int token_count)
 	}
 }
 
-void tokenize(t_token **tokens, const char *input, int *token_count)
+void tokenize(t_minishell *sh)
+{
+	const char *current = sh->line;
+	t_token token;
+
+	while (*current != '\0')
+	{
+		if (*current == '\'')
+			single_quote_handling(&current, &token);
+		else if (*current == '"')
+			double_quote_handling(&current, &token);
+		else if (ft_strchr(OPERAND, *current))
+			tokenize_pipe_and_redirector(&current, &token);
+		else if (ft_strchr(WHITESPACE, *current))
+		{
+			current++;
+			continue;
+		}
+		else
+			tokenize_word(&current, &token);
+		sh->token_len++;
+		sh->head = sh->token_len - 1;
+		sh->tokens = ft_realloc(sh->tokens, (sh->token_len - 1) * \
+		sizeof(t_token), sh->token_len * sizeof(t_token));
+		sh->tokens[sh->token_len - 1] = token;
+	}
+	check_assignment(&(sh->tokens), sh->token_len);
+}
+
+void ttokenize(t_token **tokens, const char *input, int *token_count)
 {
 	const char  *current;
 	t_token     token;
