@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/27 15:33:32 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/28 11:31:17 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 #include "minishell.h"
 
 const char *token_names[] = {
-	"WORD",
+	"EMPTY",
 	"SIN_QUOTE",
 	"DUB_QUOTE",
 	"REDIRECT",
 	"PIPE",
-	"EMPTY",
+	"WORD",
 	"UNCL_QUO",
 	"ASSIGNMNT",
 	"END"
@@ -196,21 +196,21 @@ void	tokenize_word(const char **current, t_token *token)
 	}
 }
 
-int	strchr_count(const char *str, char c)
-{
-	int	i;
-	int	counter;
+// int	strchr_count(const char *str, char c)
+// {
+// 	int	i;
+// 	int	counter;
 
-	i = 0;
-	counter = 0;
-	while (str[i])
-	{
-		if (str[i] == c)
-			counter++;
-		i++;
-	}
-	return (counter);
-}
+// 	i = 0;
+// 	counter = 0;
+// 	while (str[i])
+// 	{
+// 		if (str[i] == c)
+// 			counter++;
+// 		i++;
+// 	}
+// 	return (counter);
+// }
 void	check_assignment(t_token **tokens, int token_count)
 {
 	int			i;

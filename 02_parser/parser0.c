@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/27 21:20:08 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/28 12:40:18 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,12 +118,13 @@ t_parser_state	parse_redirection(t_ast_node_content **content, t_minishell *sh)
 	t_redirect_type	type;
 	t_parser_state	ret;
 
-	new_redirection = (t_redirect *)ft_calloc(1, sizeof(t_redirect));
-	if (!new_redirection)
-	{
-		perror("Memory allocation error");
-		return PARSER_FAILURE;
-	}
+	new_redirection = NULL;
+	// new_redirection = (t_redirect *)ft_calloc(1, sizeof(t_redirect));
+	// if (!new_redirection)
+	// {
+	// 	perror("Memory allocation error");
+	// 	return PARSER_FAILURE;
+	// }
 	printf(RED"inside redirection head:%d\n"RESET, sh->head);
 	type = redirect_type(sh->tokens[sh->head].value); // Set the type of redirection
 	printf("type:%d\n", type);
@@ -146,15 +147,13 @@ t_parser_state	parse_redirection(t_ast_node_content **content, t_minishell *sh)
 
 t_parser_state parse_assignment(t_ast_node_content **content, t_minishell *sh)
 {
-	t_assignment *new_assignment = (t_assignment *)malloc(sizeof(t_assignment));
+	t_assignment *new_assignment;;
 	t_assignment *last_assignment;
 
-	if (!new_assignment)
-	{
-		perror("Memory allocation error");
-		return PARSER_FAILURE;
-	}
+	new_assignment = NULL;
 	new_assignment->word = ft_strdup(sh->tokens[sh->head].value);
+	if (!new_assignment->word)
+		return (PARSER_FAILURE);
 	free(sh->tokens[sh->head].value);
 	sh->tokens[sh->head].value = NULL;
 	new_assignment->next = NULL;
@@ -173,15 +172,19 @@ t_parser_state parse_assignment(t_ast_node_content **content, t_minishell *sh)
 }
 t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 {
-	(*content)->cmd[sh->index] = ft_strdup(sh->tokens[sh->head].value);
-	if (!(*content)->cmd[sh->index])
-		return (PARSER_FAILURE);
-	free(sh->tokens[sh->head].value);
-	sh->tokens[sh->head].value = NULL;
-	sh->head++;
-	sh->token_len--;
-	sh->index++;
-	return (PARSER_SUCCESS);
+	if (sh->tokens[sh->head].type == TOKEN_WORD)
+	{
+		(*content)->cmd[sh->index] = ft_strdup(sh->tokens[sh->head].value);
+		if (!(*content)->cmd[sh->index])
+			return (PARSER_FAILURE);
+		free(sh->tokens[sh->head].value);
+		sh->tokens[sh->head].value = NULL;
+		sh->head++;
+		sh->token_len--;
+		sh->index++;
+		return (PARSER_SUCCESS);
+	}
+	return (PARSER_FAILURE);
 }
 
 t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
@@ -301,80 +304,6 @@ t_parser_state	parse_command_content(t_ast_node_content **content, t_minishell *
 	return (PARSER_SUCCESS);
 }
 
-
-// t_ast_node_content *paarse_command_content(t_ast_node_content **content, t_token **tokens, int *token_count)
-// {
-// 	int	current;
-// 	int cmd_index;
-// 	t_parser_state ret;
-// 	current = *token_count;
-// 	cmd_index = 0;
-// 	if (*token_count >= 0 && (*tokens)[*token_count - 1].type == TOKEN_PIPE)
-// 	{
-// 		free(*content);
-// 		*content = NULL;
-// 		return NULL;
-// 	}
-// 	while (current > 0 && (*tokens)[--current].type != TOKEN_PIPE) //since token_count is one more than itrator
-// 		cmd_index++;
-// 	for (int i = current; i < *token_count; i++)
-// 		printf("i:%d toekn:%s\n", i, (*tokens)[i].value);
-// 	printf("currrent:%d token_count:%d\n", current, *token_count);
-// 	(*content)->cmd = (char **)ft_calloc((cmd_index + 1), sizeof(char *));
-// 	(*content)->cmd[cmd_index] = NULL;
-// 	while (--cmd_index >= 0 && (*tokens)[*token_count - 1].type != TOKEN_PIPE)
-// 	{
-// 		if ((*tokens)[*token_count - 1].value != NULL)
-// 		{
-// 			printf("start type:%d value:%s\n",(*tokens)[*token_count - 1].type, (*tokens)[*token_count - 1].value);
-// 			if (*token_count >= 2 && (*tokens)[*token_count - 2].type && (*tokens)[*token_count - 2].type == TOKEN_REDIRECT && 
-// 				((*tokens)[*token_count - 1].type == TOKEN_ASSIGNMENT ||
-// 				(*tokens)[*token_count - 1].type == TOKEN_WORD ))
-// 			{
-// 				// printf("ok1\n");
-// 				if ((*tokens)[*token_count - 1].type == TOKEN_ASSIGNMENT)
-// 				{
-// 					ret = parse_assignment(content, tokens, token_count);
-// 					printf("after assign type:%d valu:%s\n",(*tokens)[*token_count -1].type, (*tokens)[*token_count - 1].value);
-// 					if(ret == PARSER_SUCCESS && (*tokens)[*token_count - 1].type == TOKEN_REDIRECT)
-// 					{
-// 						// printf("ok2\n");
-// 						ret = parse_redirection(content, tokens, token_count);
-// 					printf("after redir type:%d valu:%s\n",(*tokens)[*token_count - 1].type, (*tokens)[*token_count - 1].value);
-// 					}
-// 					// continue;
-// 				}
-// 				if ((*tokens)[*token_count].type == TOKEN_PIPE)
-// 					return (*content);
-// 				if ((*tokens)[*token_count - 1].type == TOKEN_WORD)
-// 				{
-// 					current = *token_count;
-// 					while (current > 0 && (*tokens)[--current].type != TOKEN_PIPE) //since token_count is one more than itrator
-// 						cmd_index++;
-// 					printf("after redir inside cmd type:%d valu:%s\n",(*tokens)[*token_count - 1].type, (*tokens)[*token_count - 1].value);
-// 					(*content)->cmd[cmd_index] = ft_strdup((*tokens)[*token_count - 1].value);
-// 					free((*tokens)[*token_count - 1].value);
-// 					(*tokens)[*token_count - 1].value = NULL;
-// 				}
-// 				(*token_count)--;
-// 				continue;
-// 			}
-// 			else
-// 			{
-// 				(*content)->cmd[cmd_index] = ft_strdup((*tokens)[*token_count - 1].value);
-// 				free((*tokens)[*token_count - 1].value);
-// 				(*tokens)[*token_count - 1].value = NULL;
-// 			}	
-// 		}
-// 		else
-// 			(*content)->cmd[cmd_index] = NULL;
-// 		(*token_count)--;
-// 		// cmd_index--;
-// 	}
-// 	return (*content);
-// }
-
-// t_ast_node *parse_command(t_token **tokens, int *token_count)
 t_ast_node *parse_command(t_minishell *sh)
 {
 	t_ast_node_content *content;
@@ -439,6 +368,39 @@ void free_ast(t_ast_node **node_ptr)
 				}
 				free((*node_ptr)->content->cmd);
 				(*node_ptr)->content->cmd = NULL;
+			}
+			if ((*node_ptr)->content->stdin_redirect)
+			{
+				while ((*node_ptr)->content->stdin_redirect != NULL)
+				{
+					free((*node_ptr)->content->stdin_redirect->word);
+					(*node_ptr)->content->stdin_redirect->word = NULL;
+					(*node_ptr)->content->stdin_redirect = (*node_ptr)->content->stdin_redirect->next;
+				}
+				free((*node_ptr)->content->stdin_redirect);
+				(*node_ptr)->content->stdin_redirect = NULL;
+			}
+			if ((*node_ptr)->content->stdout_redirect)
+			{
+				while ((*node_ptr)->content->stdout_redirect != NULL)
+				{
+					free((*node_ptr)->content->stdout_redirect->word);
+					(*node_ptr)->content->stdout_redirect->word = NULL;
+					(*node_ptr)->content->stdout_redirect = (*node_ptr)->content->stdout_redirect->next;
+				}
+				free((*node_ptr)->content->stdout_redirect);
+				(*node_ptr)->content->stdout_redirect = NULL;
+			}
+			if ((*node_ptr)->content->assignments)
+			{
+				while ((*node_ptr)->content->assignments != NULL)
+				{
+					free((*node_ptr)->content->assignments->word);
+					(*node_ptr)->content->assignments->word = NULL;
+					(*node_ptr)->content->assignments = (*node_ptr)->content->assignments->next;
+				}
+				free((*node_ptr)->content->assignments);
+				(*node_ptr)->content->assignments = NULL;
 			}
 			free((*node_ptr)->content);
 			(*node_ptr)->content = NULL;
