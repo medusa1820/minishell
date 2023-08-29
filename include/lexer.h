@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 15:38:45 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/29 10:31:42 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/29 13:08:21 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,23 @@ typedef struct s_token
     // int     len;
 } t_token;
 
-typedef struct s_lexer
-{
-	t_token *tokens;
-    int     len;
-    int     free_len;
-}	t_lexer;
+// typedef struct s_lexer
+// {
+// 	t_token *tokens;
+//     int     len;
+//     int     free_len;
+// }	t_lexer;
 
 typedef struct s_ast_node_content t_ast_node_content;  // Forward declaration
 typedef enum e_parser_state t_parser_state;            // Forward declaration
 
 
-void    tokenize(t_minishell *minishell_data);
+void    tokenize(t_minishell *sh, const char *line);
 void *ft_realloc(void *ptr, size_t old_size, size_t new_size);
-// void 	ttokenize(t_token **tokens, const char *input, int *token_count);
-void	print_tokens(t_lexer *lexer);
+// void 	tokenize(t_token **tokens, const char *input, int *token_count);
+void	print_tokens(t_minishell sh);
 // void	print_tokens(t_token *tokens, int token_count);
-void	free_tokens(t_lexer **lexer);
+void	free_tokens(t_minishell *sh);
 // void	free_tokens(t_token **tokens, int *token_count);
 
 #endif

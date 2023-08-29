@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 15:48:07 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/29 10:28:22 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/29 11:57:40 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef enum e_parser_state
 }	t_parser_state;
 
 typedef struct s_token t_token;
-typedef struct s_lexer t_lexer;
+// typedef struct s_lexer t_lexer;
 typedef struct s_minishell t_minishell;
 typedef enum e_redirect_type
 {

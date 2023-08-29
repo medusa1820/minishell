@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/29 11:09:41 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/29 13:28:16 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(void)
 {
-	// char		*line;
+	char		*line;
 	// int			token_count;
 	// t_ast_node	*ast_root;
 	// t_token		*tokens;
@@ -23,32 +23,33 @@ int	main(void)
 	// sh = NULL;
 	init_shell(&shell_data);
 	// ast_root = shell_data.ast_root;
-	shell_data.line = readline("minishell>");
-	while (shell_data.line)
+	line = readline("minishell>");
+	while (line)
 	{
-		if (shell_data.line[0] != '\0')
+		if (line[0] != '\0')
 		{
-			add_history(shell_data.line);
-			tokenize(&shell_data);
+			add_history(line);
+			// tokenize(&shell_data.tokens, line, &shell_data.token_len);
+			tokenize(&shell_data, line);
 			// print_tokens(tokens, token_count);
-			print_tokens(shell_data.lexer);
+			print_tokens(shell_data);
 	
 			// tokens = shell_data.tokens;
 			// token_count = shell_data.token_len;
 			// ast_root = parse_pipeline(&tokens, &token_count);
-			// shell_data.ast_root = parse_pipeline(&shell_data);
+			shell_data.ast_root = parse_pipeline(&shell_data);
 
-			free_tokens(&shell_data.lexer);
+			free_tokens(&shell_data);
 			
-			// print_ast_node(shell_data.ast_root, 1, 'x');
-			// free_ast(&shell_data.ast_root);
-			printf("You entered: %s\n", shell_data.line); // use the line
+			print_ast_node(shell_data.ast_root, 1, 'x');
+			free_ast(&shell_data.ast_root);
+			printf("You entered: %s\n", line); // use the line
 		}
 		rl_replace_line("", 0); // Clear the current input line 
 		rl_redisplay(); // Update the display of the input line
-		free(shell_data.line); // Free the memory allocated by readline
-		shell_data.line = NULL;
-		shell_data.line = readline("minishell> ");
+		free(line); // Free the memory allocated by readline
+		line = NULL;
+		line = readline("minishell> ");
 	}
 	return (0);
 }
