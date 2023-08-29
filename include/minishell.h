@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/19 16:11:46 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/29 11:57:54 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,55 +23,28 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "parser.h"
+# include "lexer.h"
+
+typedef struct s_ast_node t_ast_node;
+typedef struct s_token t_token;
+typedef struct s_lexer t_lexer;
 
 
-// # include "get_next_line.h"
-
-typedef enum e_redirect_type
+typedef struct s_minishell
 {
-	REDIRECT_STDIN, //(<)
-	REDIRECT_STDOUT, //(>)
-	REDIRECT_HERE_DOC, //(<<)
-	REDIRECT_STDOUT_APPEND, //(>>)
-}	t_redirect_type;
-
-typedef struct s_assignment
-{
-	char				*word;
-	struct s_assignment	*next;
-}	t_assignment;
-
-typedef struct s_redirect
-{
-	t_redirect_type		type;
-	char				*word;
-	struct s_redirect	*next;
-}	t_redirect;
-
-typedef struct s_ast_node_content
-{
-	// t_redirect		*stdin_redirect;
-	// t_redirect		*stdout_redirect;
-	t_redirect		*redirection;
-	t_assignment	*assignments;
-	char			**cmd;
-}	t_ast_node_content;
-
-typedef enum e_ast_node_type
-{
-	AST_NODE_CMD,
-	AST_NODE_PIPE
-}	t_ast_node_type;
-
-typedef struct s_ast_node
-{
-	t_ast_node_type		type;
-	t_ast_node_content	*content;
-	struct s_ast_node	*left;
-	struct s_ast_node	*right;
-}	t_ast_node;
+	char		*line;
+	t_token 	*tokens;
+	// t_lexer		*lexer;
+	int			token_len;
+	int			free_lexer_token_len;
+	int			tmp;
+	int			head;
+	int			index;
+	int			cmd_index;
+	t_ast_node *ast_root;
+}	t_minishell;
 
 int			main(void);
-// char		**split_string(char *input_string);
-// void		print_cmd(char **cmd);
+
 #endif

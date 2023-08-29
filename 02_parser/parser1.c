@@ -4,6 +4,57 @@
 t_ast_node *parse_command(t_token **tokens, int *token_count);
 t_ast_node *parse_pipeline(t_token **tokens, int *token_count);
 
+
+char **ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
+{
+    char **new_ptr;
+
+	if (!ptr)
+	{
+		new_ptr = (char **) ft_calloc(new_count + 2, sizeof(char *));
+		if (!new_ptr)
+		{
+        	perror("Memory allocation error");
+        	exit(1);
+		}
+		return new_ptr;
+	}
+    if (new_count == 0)
+    {
+        // Free the old array and return NULL
+        for (size_t i = 0; i < old_count; ++i)
+            free(ptr[i]);
+        free(ptr);
+        return NULL;
+    }
+    
+    // Allocate memory for the new array of strings
+    new_ptr = ft_calloc(new_count, sizeof(char *));
+    if (new_ptr == NULL)
+        return ptr;  // Return the old array if allocation fails
+    
+    // Copy the existing strings to the new array
+    size_t copy_count = old_count < new_count ? old_count : new_count;
+    for (size_t i = 0; i < copy_count; ++i)
+    {
+        new_ptr[i] = ft_strdup(ptr[i]);
+        if (new_ptr[i] == NULL)
+        {
+            // Allocation failed for one of the strings, clean up and return
+            for (size_t j = 0; j < i; ++j)
+                free(new_ptr[j]);
+            free(new_ptr);
+            return ptr;
+        }
+    }
+    
+    // Free the old array and return the new array
+    for (size_t i = 0; i < old_count; ++i)
+        free(ptr[i]);
+    free(ptr);
+    return new_ptr;
+}
+
 void free_ast(t_ast_node *node);
 
 t_ast_node *create_command_node(t_ast_node_content *content) {

@@ -3,10 +3,10 @@ NAME				:=	minishell
 CC					:=	gcc
 
 CFLAGS				:=	-Wall -Werror -Wextra -g3
-CFLAGS				+=	-fsanitize=address
+# CFLAGS				+=	-fsanitize=address
 
 LDFLAGS				:=	-g3
-LDFLAGS				+=	-fsanitize=address
+# LDFLAGS				+=	-fsanitize=address
 
 MINISHELL_SRCS		=	./main.c \
 
@@ -15,8 +15,8 @@ LEXER_SRCS			=	./01_lexer/lexer0.c \
 PARSER_SRCS			=	./02_parser/parser0.c \
 
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
-						$(PARSER_SRCS) \
 						$(LEXER_SRCS) \
+						$(PARSER_SRCS) \
 
 HEADERS				:=	-I ./include
 HEADERS				+=	-I $(shell brew --prefix readline)/include

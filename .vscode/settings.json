@@ -1,0 +1,9 @@
+{
+	"files.associations": {
+		"libft.h": "c",
+		"minishell.h": "c",
+		"parser.h": "c",
+		"lexer.h": "c"
+	},
+	"codam-norminette-3.displayErrorName": true
+}
