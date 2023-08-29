@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/29 14:14:50 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/29 20:10:37 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,33 +329,45 @@ void free_ast(t_ast_node **node_ptr)
 			}
 			if ((*node_ptr)->content->stdin_redirect)
 			{
+				t_redirect	*temp;
 				while ((*node_ptr)->content->stdin_redirect != NULL)
 				{
-					free((*node_ptr)->content->stdin_redirect->word);
-					(*node_ptr)->content->stdin_redirect->word = NULL;
+					temp = (*node_ptr)->content->stdin_redirect;
 					(*node_ptr)->content->stdin_redirect = (*node_ptr)->content->stdin_redirect->next;
+					free(temp->word);
+					temp->word = NULL;
+					free(temp);
+					temp = NULL;
 				}
 				free((*node_ptr)->content->stdin_redirect);
 				(*node_ptr)->content->stdin_redirect = NULL;
 			}
 			if ((*node_ptr)->content->stdout_redirect)
 			{
+				t_redirect	*temp;
 				while ((*node_ptr)->content->stdout_redirect != NULL)
 				{
-					free((*node_ptr)->content->stdout_redirect->word);
-					(*node_ptr)->content->stdout_redirect->word = NULL;
+					temp = (*node_ptr)->content->stdout_redirect;
 					(*node_ptr)->content->stdout_redirect = (*node_ptr)->content->stdout_redirect->next;
+					free(temp->word);
+					temp->word = NULL;
+					free(temp);
+					temp = NULL;
 				}
 				free((*node_ptr)->content->stdout_redirect);
 				(*node_ptr)->content->stdout_redirect = NULL;
 			}
 			if ((*node_ptr)->content->assignments)
 			{
+				t_assignment	*temp;
 				while ((*node_ptr)->content->assignments != NULL)
 				{
-					free((*node_ptr)->content->assignments->word);
-					(*node_ptr)->content->assignments->word = NULL;
+					temp = (*node_ptr)->content->assignments;
 					(*node_ptr)->content->assignments = (*node_ptr)->content->assignments->next;
+					free(temp->word);
+					temp->word = NULL;
+					free(temp);
+					temp = NULL;
 				}
 				free((*node_ptr)->content->assignments);
 				(*node_ptr)->content->assignments = NULL;
