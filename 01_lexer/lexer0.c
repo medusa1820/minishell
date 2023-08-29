@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/28 11:31:17 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/29 10:31:35 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,34 +28,34 @@ const char *token_names[] = {
 };
 
 // void	print_tokens(t_token *tokens, int token_count)
-void	print_tokens(t_minishell sh)
+void	print_tokens(t_lexer *lexer)
 {
-		for(int i = 0; i < sh.token_len; i++)
+		for(int i = 0; i < lexer->len; i++)
 		{
-				printf(BLUE "Token Type" RESET " : " ORG "%s" RESET, token_names[sh.tokens[i].type]);
-				printf(RED "	Value" RESET " : " ORG "%s\n" RESET, sh.tokens[i].value);
+				printf(BLUE "Token Type" RESET " : " ORG "%s" RESET, token_names[lexer->tokens[i].type]);
+				printf(RED "	Value" RESET " : " ORG "%s\n" RESET, lexer->tokens[i].value);
 		}
 
 }
 
 // void	free_tokens(t_token **tokens, int *token_count)
-void	free_tokens(t_minishell *data)
+void	free_tokens(t_lexer **lexer)
 {
 	int	i;
 
 	i = -1;
-	while (++i < data->token_len)
+	while (++i < (*lexer)->free_len)
 	// while (++i < *token_count)
 	{
-		if(data->tokens[i].value)
+		if((*lexer)->tokens[i].value)
 		{
-			free(data->tokens[i].value);
-			data->tokens[i].value = NULL;
+			free((*lexer)->tokens[i].value);
+			(*lexer)->tokens[i].value = NULL;
 		}
 	}
-	free(data->tokens);
-	data->tokens = NULL;
-	data->token_len = 0;
+	free((*lexer)->tokens);
+	(*lexer)->tokens = NULL;
+	(*lexer)->len = 0;
 }
 
 void *ft_realloc(void *ptr, size_t old_size, size_t new_size)
@@ -211,33 +211,65 @@ void	tokenize_word(const char **current, t_token *token)
 // 	}
 // 	return (counter);
 // }
-void	check_assignment(t_token **tokens, int token_count)
-{
-	int			i;
-	int			j;
-	const char	*word;
 
-	i = -1;
-	while (++i < token_count)
-	{
-		if ((*tokens)[i].type == TOKEN_WORD || (*tokens)[i].type == TOKEN_SINGLE_QUOTE
-			|| (*tokens)[i].type == TOKEN_DOUBLE_QUOTE)
-		{
-			word = (*tokens)[i].value;
-			if (!ft_isalpha(*word) && *word != '_' &&
-				ft_strchr(word, '=') && ft_strchr(word, '=') != word)
-				continue;
-			j = -1;
-			while (word[++j] != '=')
-			{
-				if (!ft_isalnum(word[j]) && word[j] != '_')
-					break;
-			}
-			if (word[j] == '=')
-				(*tokens)[i].type = TOKEN_ASSIGNMENT;
-		}
-	}
+void check_assignment(t_token **tokens, int token_count)
+{
+    int i;
+    int j;
+    char *word;
+
+    i = -1;
+    while (++i < token_count)
+    {
+        if ((*tokens)[i].type == TOKEN_WORD || (*tokens)[i].type == TOKEN_SINGLE_QUOTE ||
+            (*tokens)[i].type == TOKEN_DOUBLE_QUOTE)
+        {
+            word = ft_strdup((*tokens)[i].value);
+            if (!ft_isalpha(*word) && *word != '_' && ft_strchr(word, '=') && ft_strchr(word, '=') != word)
+                continue;
+            j = -1;
+            while (word[++j] != '=')
+            {
+                if (!ft_isalnum(word[j]) && word[j] != '_')
+				{
+                    free(word);
+					break ;
+				}
+            }
+            if (word[j] == '=' && (*tokens)[i].type != TOKEN_ASSIGNMENT)
+                (*tokens)[i].type = TOKEN_ASSIGNMENT;
+			free(word);
+        }
+    }
 }
+
+// void	check_assignment(t_token **tokens, int token_count)
+// {
+// 	int			i;
+// 	int			j;
+// 	const char	*word;
+
+// 	i = -1;
+// 	while (++i < token_count)
+// 	{
+// 		if ((*tokens)[i].type == TOKEN_WORD || (*tokens)[i].type == TOKEN_SINGLE_QUOTE
+// 			|| (*tokens)[i].type == TOKEN_DOUBLE_QUOTE)
+// 		{
+// 			word = (*tokens)[i].value;
+// 			if (!ft_isalpha(*word) && *word != '_' &&
+// 				ft_strchr(word, '=') && ft_strchr(word, '=') != word)
+// 				continue;
+// 			j = -1;
+// 			while (word[++j] != '=')
+// 			{
+// 				if (!ft_isalnum(word[j]) && word[j] != '_')
+// 					break;
+// 			}
+// 			if (word[j] == '=')
+// 				(*tokens)[i].type = TOKEN_ASSIGNMENT;
+// 		}
+// 	}
+// }
 
 void tokenize(t_minishell *sh)
 {
@@ -259,48 +291,49 @@ void tokenize(t_minishell *sh)
 		}
 		else
 			tokenize_word(&current, &token);
-		sh->token_len++;
-		sh->head = sh->token_len - 1;
-		sh->tokens = ft_realloc(sh->tokens, (sh->token_len - 1) * \
-		sizeof(t_token), sh->token_len * sizeof(t_token));
-		sh->tokens[sh->token_len - 1] = token;
+		sh->lexer->len++;
+		sh->head = sh->lexer->len - 1;
+		sh->lexer->tokens = ft_realloc(sh->lexer->tokens, (sh->lexer->len - 1) * \
+		sizeof(t_token), sh->lexer->len * sizeof(t_token));
+		sh->lexer->tokens[sh->lexer->len - 1] = token;
 	}
-	check_assignment(&(sh->tokens), sh->token_len);
+	sh->lexer->free_len = sh->lexer->len;
+	check_assignment(&(sh->lexer->tokens), sh->lexer->len);
 }
 
-void ttokenize(t_token **tokens, const char *input, int *token_count)
-{
-	const char  *current;
-	t_token     token;
+// void ttokenize(t_token **tokens, const char *input, int *token_count)
+// {
+// 	const char  *current;
+// 	t_token     token;
 
-	current = input;
-	while (*current != '\0')
-	{
-		if (*current == '\'')
-			single_quote_handling(&current, &token);
-		else if (*current == '"')
-			double_quote_handling(&current, &token);
-		// else if (*current == '|' || *current == '<' || *current == '>')
-		else if (ft_strchr(OPERAND, *current))
-			tokenize_pipe_and_redirector(&current, &token);
-		else if (ft_strchr(WHITESPACE, *current))
-		{
-			current++;
-			continue;
-		}
-		else
-			tokenize_word(&current, &token);
-		// Process the token or store it for later processing
-		(*token_count)++;
-		*tokens = ft_realloc(*tokens, (*token_count - 1) * sizeof(t_token), *token_count * sizeof(t_token));
-		(*tokens)[*token_count - 1] = token;
-	}
-	// (*token_count)++;
-	// t_token null_token;
-	// null_token.type = TOKEN_END;
-	// null_token.value = NULL;
-	// null_token.len = *token_count;
-	// *tokens = ft_realloc(*tokens, (*token_count - 1) * sizeof(t_token), *token_count * sizeof(t_token));
-	// (*tokens)[*token_count - 1] = null_token;
-	check_assignment(tokens, *token_count);
-}
+// 	current = input;
+// 	while (*current != '\0')
+// 	{
+// 		if (*current == '\'')
+// 			single_quote_handling(&current, &token);
+// 		else if (*current == '"')
+// 			double_quote_handling(&current, &token);
+// 		// else if (*current == '|' || *current == '<' || *current == '>')
+// 		else if (ft_strchr(OPERAND, *current))
+// 			tokenize_pipe_and_redirector(&current, &token);
+// 		else if (ft_strchr(WHITESPACE, *current))
+// 		{
+// 			current++;
+// 			continue;
+// 		}
+// 		else
+// 			tokenize_word(&current, &token);
+// 		// Process the token or store it for later processing
+// 		(*token_count)++;
+// 		*tokens = ft_realloc(*tokens, (*token_count - 1) * sizeof(t_token), *token_count * sizeof(t_token));
+// 		(*tokens)[*token_count - 1] = token;
+// 	}
+// 	// (*token_count)++;
+// 	// t_token null_token;
+// 	// null_token.type = TOKEN_END;
+// 	// null_token.value = NULL;
+// 	// null_token.len = *token_count;
+// 	// *tokens = ft_realloc(*tokens, (*token_count - 1) * sizeof(t_token), *token_count * sizeof(t_token));
+// 	// (*tokens)[*token_count - 1] = null_token;
+// 	check_assignment(tokens, *token_count);
+// }
