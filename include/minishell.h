@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/29 11:57:54 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/30 15:56:55 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,21 @@
 # include "parser.h"
 # include "lexer.h"
 
-typedef struct s_ast_node t_ast_node;
-typedef struct s_token t_token;
-typedef struct s_lexer t_lexer;
-
+typedef struct s_ast_node	t_ast_node;
+typedef struct s_token		t_token;
+typedef struct s_lexer		t_lexer;
 
 typedef struct s_minishell
 {
 	char		*line;
-	t_token 	*tokens;
-	// t_lexer		*lexer;
+	t_token		*tokens;
 	int			token_len;
 	int			free_lexer_token_len;
 	int			tmp;
 	int			head;
 	int			index;
 	int			cmd_index;
-	t_ast_node *ast_root;
+	t_ast_node	*ast_root;
 }	t_minishell;
 
 int			main(void);

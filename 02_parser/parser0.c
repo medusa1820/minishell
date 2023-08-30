@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/29 20:10:37 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/30 16:24:07 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ bool	init_shell(t_minishell *shell)
 	shell->index = 0;
 	shell->cmd_index = 0;
 	shell->line = NULL;
-	return true;
+	return (true);
 }
 
 t_ast_node	*create_command_node(t_ast_node_content *content)
@@ -124,8 +124,8 @@ t_parser_state	parse_redirection(t_ast_node_content **content, t_minishell *sh)
 
 t_parser_state parse_assignment(t_ast_node_content **content, t_minishell *sh)
 {
-	t_assignment *new_assignment;;
-	t_assignment *last_assignment;
+	t_assignment	*new_assignment;
+	t_assignment	*last_assignment;
 
 	new_assignment = (t_assignment *)ft_calloc(1, sizeof(t_assignment));
 	if (!new_assignment)
@@ -180,52 +180,54 @@ t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
 	t_parser_state	ret;
 
 	ret = PARSER_FAILURE;
-	while(true)
+	while (true)
 	{
-		if (sh->tmp >= 2 && sh->tokens[sh->head].type && sh->tokens[sh->head].type == TOKEN_REDIRECT && \
-				(sh->tokens[sh->head + 1].type == TOKEN_ASSIGNMENT ||\
-				sh->tokens[sh->head + 1].type == TOKEN_WORD )) //later check variable of token,would better assign to the EOF and PIP
+		if (sh->tmp >= 2 && sh->tokens[sh->head].type && \
+		sh->tokens[sh->head].type == TOKEN_REDIRECT && \
+		(sh->tokens[sh->head + 1].type == TOKEN_ASSIGNMENT || \
+		sh->tokens[sh->head + 1].type == TOKEN_WORD )) //later check variable of token,would better assign to the EOF and PIP
 		{
 			ret = parse_redirection(content, sh);
-			continue;
+			continue ;
 		}
 		else if (sh->tokens[sh->head].type == TOKEN_ASSIGNMENT || \
 		sh->tokens[sh->head].type == TOKEN_WORD)
 		{
 			ret = parse_cmd_word(content, sh);
-			continue;
+			continue ;
 		}
 		else
-			break;
+			break ;
 	}
 	return (ret);
 }
-
 
 t_parser_state	parse_prefix_cmd(t_ast_node_content **content, t_minishell *sh)
 {
 	t_parser_state	ret;
 
 	ret = PARSER_FAILURE;
-	while(true)
+	while (true)
 	{
-		if (sh->tmp >= 2 && sh->tokens[sh->head].type && sh->tokens[sh->head].type == TOKEN_REDIRECT && \
-				(sh->tokens[sh->head + 1].type == TOKEN_ASSIGNMENT ||\
-				sh->tokens[sh->head + 1].type == TOKEN_WORD )) //later check variable of token,would better assign to the EOF and PIP
+		if (sh->tmp >= 2 && sh->tokens[sh->head].type && \
+		sh->tokens[sh->head].type == TOKEN_REDIRECT && \
+		(sh->tokens[sh->head + 1].type == TOKEN_ASSIGNMENT || \
+		sh->tokens[sh->head + 1].type == TOKEN_WORD )) //later check variable of token,would better assign to the EOF and PIP
 		{
 			ret = parse_redirection(content, sh);
-			continue;
+			continue ;
 		}
 		else if (sh->tokens[sh->head].type == TOKEN_ASSIGNMENT)
 		{
 			ret = parse_assignment(content, sh);
-			continue;
+			continue ;
 		}
 		else
-			break;
+			break ;
 	}
 	return (ret);
 }
+
 void	finding_segment_head(t_minishell *sh)
 {
 	sh->head = sh->token_len - 1;
@@ -244,22 +246,22 @@ void	finding_segment_head(t_minishell *sh)
 
 t_parser_state	parse_command_content(t_ast_node_content **content, t_minishell *sh)
 {
-	t_parser_state ret;
+	t_parser_state	ret;
 
 	if (sh->token_len >= 0 && sh->tokens[sh->token_len - 1].type == TOKEN_PIPE)
 		return (free(*content),*content = NULL, PARSER_SUCCESS);
 	finding_segment_head(sh);
-	while (sh->head < sh->tmp )//&& sh->tokens[sh->head].type != TOKEN_PIPE)
+	while (sh->head < sh->tmp) //&& sh->tokens[sh->head].type != TOKEN_PIPE)
 	{
 		ret = parse_prefix_cmd(content, sh);
 		if (ret == PARSER_FAILURE)
-		{	
+		{
 			ret = parse_cmd_word(content, sh);
 			if (ret == PARSER_FAILURE)
 				return (ret);
 		}
 		else
-		{		
+		{
 			if (parse_cmd_word(content, sh) == PARSER_FAILURE)
 				return (ret);
 		}
@@ -270,7 +272,7 @@ t_parser_state	parse_command_content(t_ast_node_content **content, t_minishell *
 
 t_ast_node *parse_command(t_minishell *sh)
 {
-	t_ast_node_content *content;
+	t_ast_node_content	*content;
 
 	content = (t_ast_node_content *)ft_calloc(1, sizeof(t_ast_node_content));
 	if (!content)
@@ -284,107 +286,102 @@ t_ast_node *parse_command(t_minishell *sh)
 	content->cmd = NULL;
 	parse_command_content(&content, sh);
 	if (content == NULL)
-		return NULL;  // Return NULL if command content is empty (due to PIPE)
-	return create_command_node(content);
+		return (NULL);  // Return NULL if command content is empty (due to PIPE)
+	return (create_command_node(content));
 }
 
 t_ast_node *parse_pipeline(t_minishell *sh)
 {
-	t_ast_node *left;
-	t_ast_node *right;
+	t_ast_node	*left;
+	t_ast_node	*right;
 
 	right = parse_command(sh);
-
 	if (sh->token_len > 0 && sh->tokens[sh->token_len - 1].type == TOKEN_PIPE)
 	{
 		free(sh->tokens[sh->token_len - 1].value);
 		sh->tokens[sh->token_len - 1].value = NULL;
 		sh->token_len--;
 		left = parse_pipeline(sh);
-		return create_pipe_node(left, right);
+		return (create_pipe_node(left, right));
 	}
-	return right;
+	return (right);
 }
 
-void free_ast(t_ast_node **node_ptr)
+void	cmd_freeing(char **cmd)
+{
+	int i;
+
+	i = 0;
+	while (cmd[i] != NULL)
+	{
+		free(cmd[i]);
+		cmd[i] = NULL;
+		i++;
+	}
+	free(cmd);
+	cmd = NULL;
+}
+
+void	redirection_freeing(t_redirect *ptr)
+{
+	t_redirect	*temp;
+
+	while (ptr != NULL)
+	{
+		temp = ptr;
+		ptr = ptr->next;
+		free(temp->word);
+		temp->word = NULL;
+		free(temp);
+		temp = NULL;
+	}
+	free(ptr);
+	ptr = NULL;
+}
+void	assignment_freeing(t_assignment *ptr)
+{
+	t_assignment	*temp;
+
+	while (ptr != NULL)
+	{
+		temp = ptr;
+		ptr = ptr->next;
+		free(temp->word);
+		temp->word = NULL;
+		free(temp);
+		temp = NULL;
+	}
+	free(ptr);
+	ptr = NULL;
+}
+
+int	free_ast(t_ast_node **node_ptr)
 {
 	if (!(*node_ptr))
-		return;
-
+		return (1);
 	if ((*node_ptr)->type == AST_NODE_CMD)
 	{
 		if ((*node_ptr)->content)
 		{
 			if ((*node_ptr)->content->cmd)
-			{
-				int i = 0;
-				while ((*node_ptr)->content->cmd[i] != NULL)
-				{
-					free((*node_ptr)->content->cmd[i]);
-					(*node_ptr)->content->cmd[i] = NULL;
-					i++;
-				}
-				free((*node_ptr)->content->cmd);
-				(*node_ptr)->content->cmd = NULL;
-			}
+				cmd_freeing((*node_ptr)->content->cmd);
 			if ((*node_ptr)->content->stdin_redirect)
-			{
-				t_redirect	*temp;
-				while ((*node_ptr)->content->stdin_redirect != NULL)
-				{
-					temp = (*node_ptr)->content->stdin_redirect;
-					(*node_ptr)->content->stdin_redirect = (*node_ptr)->content->stdin_redirect->next;
-					free(temp->word);
-					temp->word = NULL;
-					free(temp);
-					temp = NULL;
-				}
-				free((*node_ptr)->content->stdin_redirect);
-				(*node_ptr)->content->stdin_redirect = NULL;
-			}
+				redirection_freeing((*node_ptr)->content->stdin_redirect);
 			if ((*node_ptr)->content->stdout_redirect)
-			{
-				t_redirect	*temp;
-				while ((*node_ptr)->content->stdout_redirect != NULL)
-				{
-					temp = (*node_ptr)->content->stdout_redirect;
-					(*node_ptr)->content->stdout_redirect = (*node_ptr)->content->stdout_redirect->next;
-					free(temp->word);
-					temp->word = NULL;
-					free(temp);
-					temp = NULL;
-				}
-				free((*node_ptr)->content->stdout_redirect);
-				(*node_ptr)->content->stdout_redirect = NULL;
-			}
+				redirection_freeing((*node_ptr)->content->stdout_redirect);
 			if ((*node_ptr)->content->assignments)
-			{
-				t_assignment	*temp;
-				while ((*node_ptr)->content->assignments != NULL)
-				{
-					temp = (*node_ptr)->content->assignments;
-					(*node_ptr)->content->assignments = (*node_ptr)->content->assignments->next;
-					free(temp->word);
-					temp->word = NULL;
-					free(temp);
-					temp = NULL;
-				}
-				free((*node_ptr)->content->assignments);
-				(*node_ptr)->content->assignments = NULL;
-			}
-			free((*node_ptr)->content);
-			(*node_ptr)->content = NULL;
+				assignment_freeing((*node_ptr)->content->assignments);
 		}
-	} else if ((*node_ptr)->type == AST_NODE_PIPE)
+		free((*node_ptr)->content); // (*node_ptr)->content = NULL;
+	}
+	else if ((*node_ptr)->type == AST_NODE_PIPE)
 	{
 		free_ast(&((*node_ptr)->left));
 		free_ast(&((*node_ptr)->right));
 		(*node_ptr)->left = NULL;
 		(*node_ptr)->right = NULL;
 	}
-
-	free(*node_ptr);
-	*node_ptr = NULL;
+	return (free(*node_ptr), *node_ptr = NULL, 0);
 }
 
 void print_ast_node(t_ast_node *node, int level, char x)
@@ -401,7 +398,8 @@ void print_ast_node(t_ast_node *node, int level, char x)
 		printf(BLUE "Right child:\n" RESET);
 	for (int i = 0; i < level; i++)
 		printf("    ");
-	if (node->type == AST_NODE_CMD) {
+	if (node->type == AST_NODE_CMD)
+	{
 		printf(RED "Node type:" RESET ORG" AST_NODE_CMD\n" RESET);
 		if (node->content)
 		{
@@ -426,8 +424,8 @@ void print_ast_node(t_ast_node *node, int level, char x)
 					printf(ORG " %s" RESET, tmp->word);
 				printf("\n");
 			}
-			 if (node->content->stdin_redirect)
-			 {
+			if (node->content->stdin_redirect)
+			{
 				for (int i = 0; i < level; i++)
 					printf("    ");
 				printf("stdin_redirect:");

@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 15:48:07 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/29 11:57:40 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/30 15:49:38 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ typedef enum e_parser_state
 	PARSER_MALLOC_ERROR
 }	t_parser_state;
 
-typedef struct s_token t_token;
-// typedef struct s_lexer t_lexer;
-typedef struct s_minishell t_minishell;
+typedef struct s_token		t_token;
+typedef struct s_minishell	t_minishell;
+
 typedef enum e_redirect_type
 {
 	REDIRECT_STDIN, //(<)
@@ -79,11 +79,10 @@ typedef struct s_ast_node
 	struct s_ast_node	*right;
 }	t_ast_node;
 
-void		free_ast(t_ast_node	**node);
-void 		print_ast(t_ast_node *root);
-// t_ast_node	*parse_pipeline(t_token **tokens, int *token_count);
-t_ast_node *parse_pipeline(t_minishell *sh);
-void	 	print_ast_node(t_ast_node *node, int level, char x);
+int			free_ast(t_ast_node	**node);
+void		print_ast(t_ast_node *root);
+t_ast_node	*parse_pipeline(t_minishell *sh);
+void		print_ast_node(t_ast_node *node, int level, char x);
 bool		init_shell(t_minishell *shell);
 
 #endif
