@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 15:38:45 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/30 15:56:11 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/31 15:14:08 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,14 @@
 # define RESET "\033[0m"
 
 # define WHITESPACE " \t\v\f\r"
-# define OPERAND "<>|"
+# define OPERAND "<>|\"\'"
+
+typedef enum e_lexer_state
+{
+	LEXER_SUCCESS,
+	UNCLOSED_QUOTE,
+	MALLOC_ERROR
+}	t_lexer_state;
 
 typedef enum e_token_type
 {
@@ -45,7 +52,7 @@ typedef struct s_token
 typedef struct s_ast_node_content	t_ast_node_content;
 typedef enum e_parser_state	t_parser_state;
 
-void	tokenize(t_minishell *sh, const char *line);
+t_lexer_state	tokenize(t_minishell *sh, const char *line);
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 void	print_tokens(t_minishell sh);
 void	free_tokens(t_minishell *sh);

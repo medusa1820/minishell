@@ -6,32 +6,34 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/30 16:24:37 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/31 15:24:22 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-const char *token_names[] = { //SHOULD REMOVE IT LATER ON
-	"EMPTY",
-	"SIN_QUOTE",
-	"DUB_QUOTE",
-	"REDIRECT",
-	"PIPE",
-	"WORD",
-	"UNCL_QUO",
-	"ASSIGNMNT",
-	"END"
-	// Add more names for additional token types if needed
-};
 
 void	print_tokens(t_minishell sh)
 {
-	printf("len:%d free_len:%d\n", sh.token_len, sh.free_lexer_token_len);
-	for(int i = 0; i < sh.token_len; i++)
+	const char	*token_names[9];
+	int			i;
+
+	token_names[0] = "EMPTY";
+	token_names[1] = "SIN_QUOTE";
+	token_names[2] = "DUB_QUOTE";
+	token_names[3] = "REDIRECT";
+	token_names[4] = "PIPE";
+	token_names[5] = "WORD";
+	token_names[6] = "UNCL_QUO";
+	token_names[7] = "ASSIGNMNT";
+	token_names[8] = "END";
+	i = 0;
+	while (i < sh.token_len)
 	{
-		printf(BLUE "Token Type" RESET " : " ORG "%s" RESET, token_names[sh.tokens[i].type]);
-		printf(RED "	Value" RESET " : " ORG "%s\n" RESET, sh.tokens[i].value);
+		printf(BLUE "Token Type" RESET " : " ORG "%s" RESET, \
+		token_names[sh.tokens[i].type]);
+		printf(RED "	Value" RESET " : " ORG "%s\n" RESET, \
+		sh.tokens[i++].value);
 	}
 }
 
@@ -80,22 +82,28 @@ void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 	return (new_ptr);
 }
 
-void	token_unclosed(const char **current, t_token *token)
+t_lexer_state	token_unclosed(const char **current, t_token *token)
 {
+	int	ret;
+
+	ret = UNCLOSED_QUOTE;
 	token->type = TOKEN_UNCLOSED_Q;
-	token->value = malloc(1); // Allocate memory for null-terminator
-	token->value[0] = '\0';
+	if (token->value)
+	{
+		free(token->value);
+		token->value = '\0';
+	}
 	(*current)++;
-	return ;
+	return (ret);
 }
 
-void	single_quote_handling(const char **current, t_token *token)
+t_lexer_state	single_quote_handling(const char **current, t_token *token)
 {
 	int	len;
 
 	len = 0;
 	if ((*current)[1] == '\0')
-		return (token_unclosed(current, token));
+		return (token_unclosed(current, token), 1);
 	token->type = TOKEN_SINGLE_QUOTE;
 	token->value = NULL;
 	(*current)++; 
@@ -110,11 +118,13 @@ void	single_quote_handling(const char **current, t_token *token)
 	if (**current == '\'')
 		(*current)++;
 	else
-		token->type = TOKEN_UNCLOSED_Q;
+		// token->type = TOKEN_UNCLOSED_Q;
+		return (token_unclosed(current, token));
 	if (!token->value)
 		token->type = TOKEN_EMPTY;
+	return (LEXER_SUCCESS);
 }
-void double_quote_handling(const char **current, t_token *token)
+t_lexer_state	double_quote_handling(const char **current, t_token *token)
 {
 	int	len;
 
@@ -135,17 +145,21 @@ void double_quote_handling(const char **current, t_token *token)
 	if (**current == '"')
 		(*current)++;
 	else
-		token->type = TOKEN_UNCLOSED_Q;
+		// token->type = TOKEN_UNCLOSED_Q;
+		return (token_unclosed(current, token));
 	if (!token->value)
 		token->type = TOKEN_EMPTY;
+	return (LEXER_SUCCESS);
 }
-void	tokenize_pipe_and_redirector(const char **current, t_token *token)
+t_lexer_state	tokenize_pipe_and_redirector(const char **current, t_token *token)
 {
 	token->type = TOKEN_REDIRECT;
 	if ((**current == '<' && *(*current + 1) == '<') \
 	|| (**current == '>' && *(*current + 1) == '>'))
 	{
 		token->value = ft_calloc(3, 1);
+		if (!token->value)
+			return (MALLOC_ERROR);
 		token->value[0] = **current;
 		(*current)++;
 		token->value[1] = **current;
@@ -160,26 +174,31 @@ void	tokenize_pipe_and_redirector(const char **current, t_token *token)
 		token->value[1] = '\0';
 	}
 	(*current)++;
+	return (LEXER_SUCCESS);
 }
-void	tokenize_word(const char **current, t_token *token)
+t_lexer_state	tokenize_word(const char **current, t_token *token)
 {
 	int	len;
 
 	len = 0;
 	token->type = TOKEN_WORD;
 	token->value = ft_calloc(1, 1);
+	if (!token->value)
+		return (MALLOC_ERROR);
 	while (!(ft_strchr(WHITESPACE, **current)) && \
 	!(ft_strchr(OPERAND, **current) && **current != '\0'))
 	{
 		len++;
 		token->value = ft_realloc(token->value, \
 						ft_strlen(token->value), len + 1);
+		if (!token->value)
+			return (MALLOC_ERROR);
 		token->value[len - 1] = **current;
 		token->value[len] = '\0';
 		(*current)++;
 	}
+	return (LEXER_SUCCESS);
 }
-
 void	check_assignment(t_token **tokens, int token_count)
 {
 	int			i;
@@ -208,39 +227,54 @@ void	check_assignment(t_token **tokens, int token_count)
 		}
 	}
 }
-
-void	feed_tokens_array(t_minishell *sh, t_token token)
+t_lexer_state	feed_tokens_array(t_minishell *sh, t_token *token)
 {
 	sh->token_len++;
 	sh->head = sh->token_len - 1;
 	sh->tokens = ft_realloc(sh->tokens, (sh->token_len - 1) * \
 	sizeof(t_token), sh->token_len * sizeof(t_token));
-	sh->tokens[sh->token_len - 1] = token;
+	if (!sh->tokens)
+		return (MALLOC_ERROR);
+	sh->tokens[sh->token_len - 1] = *token;
+	return (LEXER_SUCCESS);
+}
+t_lexer_state	checking_tokenizer(t_token *token, t_minishell *sh, const char **current)
+{
+	int			ret;
+
+	ret = LEXER_SUCCESS;
+	if (**current == '\'' && ret == LEXER_SUCCESS)
+		ret = single_quote_handling(current, token);
+	else if (**current == '"' && ret == LEXER_SUCCESS)
+		ret = double_quote_handling(current, token);
+	else if (ft_strchr(OPERAND, **current) && ret == LEXER_SUCCESS)
+		ret = tokenize_pipe_and_redirector(current, token);
+	else if (ft_strchr(WHITESPACE, **current) && ret == LEXER_SUCCESS)
+	{
+		(*current)++;
+		return (LEXER_SUCCESS);
+	}
+	else if (ret == LEXER_SUCCESS)
+		ret = tokenize_word(current, token);
+	if (ret == LEXER_SUCCESS)
+		ret = feed_tokens_array(sh, token);
+	return (ret);
 }
 
-void tokenize(t_minishell *sh, const char *line)
+t_lexer_state	tokenize(t_minishell *sh, const char *line)
 {
 	const char	*current;
 	t_token		token;
+	int			ret;
 
+	ret = LEXER_SUCCESS;
 	current = line;
-	while (*current != '\0')
+	while (*current != '\0' && ret == LEXER_SUCCESS)
 	{
-		if (*current == '\'')
-			single_quote_handling(&current, &token);
-		else if (*current == '"')
-			double_quote_handling(&current, &token);
-		else if (ft_strchr(OPERAND, *current))
-			tokenize_pipe_and_redirector(&current, &token);
-		else if (ft_strchr(WHITESPACE, *current))
-		{
-			current++;
-			continue ;
-		}
-		else
-			tokenize_word(&current, &token);
-		feed_tokens_array(sh, token);
+		ret = checking_tokenizer(&token, sh, &current);
 	}
 	sh->free_lexer_token_len = sh->token_len;
-	check_assignment(&(sh->tokens), sh->token_len);
+	if (ret == LEXER_SUCCESS)
+		check_assignment(&(sh->tokens), sh->token_len);
+	return (ret);
 }

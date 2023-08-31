@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/29 20:15:09 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/08/31 15:26:46 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,17 @@ int	main(void)
 		if (line[0] != '\0')
 		{
 			add_history(line);
-			tokenize(&shell_data, line);
-			print_tokens(shell_data);
-			shell_data.ast_root = parse_pipeline(&shell_data);
+			if (!tokenize(&shell_data, line))
+			{
+				print_tokens(shell_data);
+				// shell_data.ast_root = parse_pipeline(&shell_data);
+				free_tokens(&shell_data);
+				// print_ast_node(shell_data.ast_root, 1, 'x');
+				// free_ast(&shell_data.ast_root);
+				printf("You entered: %s\n", line); // use the line
+			}
+			printf("Unclosed quotation\n");
 			free_tokens(&shell_data);
-			print_ast_node(shell_data.ast_root, 1, 'x');
-			free_ast(&shell_data.ast_root);
-			printf("You entered: %s\n", line); // use the line
 		}
 		rl_replace_line("", 0); // Clear the current input line 
 		rl_redisplay(); // Update the display of the input line
