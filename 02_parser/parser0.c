@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/09/02 17:59:22 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/09/02 23:05:17 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,7 +311,7 @@ t_parser_state	parse_command_content(t_ast_node_content **content, t_minishell *
 	t_parser_state	ret;
 
 	if (sh->token_len >= 0 && sh->tokens[sh->token_len - 1].type == TOKEN_PIPE)
-		return (free(*content),*content = NULL, PARSER_SUCCESS);
+		return (free(*content),*content = NULL, PARSER_SYNTAX_ERROR);
 	finding_segment_head(sh);
 	while (sh->head < sh->seg_end) //&& sh->tokens[sh->head].type != TOKEN_PIPE)
 	{
@@ -334,6 +334,8 @@ t_parser_state	parse_command_content(t_ast_node_content **content, t_minishell *
 
 void	free_content(t_ast_node_content *content)
 {
+	if (content == NULL)
+		return ;
 	if (content->assignments)
 		freeing_assignment(content->assignments);
 	if (content->stdin_redirect)
@@ -374,7 +376,7 @@ t_ast_node *parse_pipeline(t_minishell *sh)
 	t_ast_node	*right;
 
 	right = parse_command(sh);
-	if (sh->token_len > 0 && sh->tokens[sh->token_len - 1].type == TOKEN_PIPE)
+	if (sh->token_len > 0 && right != NULL && sh->tokens[sh->token_len - 1].type == TOKEN_PIPE)
 	{
 		free(sh->tokens[sh->token_len - 1].value);
 		sh->tokens[sh->token_len - 1].value = NULL;
