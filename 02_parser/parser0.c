@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/09/02 15:10:31 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/09/02 17:59:22 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,9 +161,6 @@ t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, t_minishel
 	tmp_seg_end = sh->seg_end;
 	while (tmp_head < tmp_seg_end && sh->tokens[tmp_head].type != TOKEN_REDIRECT)
 	{
-		// if (sh->tokens[tmp_head].type != TOKEN_ASSIGNMENT && 
-		// 	sh->tokens[tmp_head].type != TOKEN_WORD)
-		// 	return (PARSER_SYNTAX_ERROR);
 		if (sh->tokens[tmp_head].type == TOKEN_ASSIGNMENT)
 			sh->tokens[tmp_head].type = TOKEN_WORD;
 		tmp_head++;
@@ -173,62 +170,42 @@ t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, t_minishel
 
 size_t count_strings(char* strings[])
 {
-    size_t count = 0;
-    if (strings != NULL)
+	size_t count = 0;
+	if (strings != NULL)
 	{
-        while (strings[count] != NULL)
-            count++;
-    }
-    return count;
+		while (strings[count] != NULL)
+			count++;
+	}
+	return count;
 }
 
 char **ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
 {
-    char **new_ptr;
+	char	**new_ptr;
+	size_t	copy_count;
+	size_t	i;
 
 	if (!ptr)
 	{
 		new_ptr = (char **) ft_calloc(new_count + 2, sizeof(char *));
 		if (!new_ptr)
-		{
-        	perror("Memory allocation error");
-        	exit(1);
-		}
-		return new_ptr;
+			return (freeing_cmd(new_ptr), NULL);
+		return (new_ptr);
 	}
-    // if (new_count == 0)
-    // {
-    //     // Free the old array and return NULL
-    //     for (size_t i = 0; i < old_count; ++i)
-    //         free(ptr[i]);
-    //     free(ptr);
-    //     return NULL;
-    // }
-    
-    // Allocate memory for the new array of strings
-    new_ptr = ft_calloc(new_count + 2, sizeof(char *));
-    if (new_ptr == NULL)
-        return ptr;  // Return the old array if allocation fails
-    
-    // Copy the existing strings to the new array
-    size_t copy_count = old_count < new_count ? old_count : new_count;
-    for (size_t i = 0; i < copy_count; ++i)
-    {
-        new_ptr[i] = ft_strdup(ptr[i]);
-        if (new_ptr[i] == NULL)
-        {
-            // Allocation failed for one of the strings, clean up and return
-            for (size_t j = 0; j < i; ++j)
-                free(new_ptr[j]);
-            free(new_ptr);
-            return ptr;
-        }
-    }
-    // Free the old array and return the new array
-    for (size_t i = 0; i < old_count; ++i)
-        free(ptr[i]);
-    free(ptr);
-    return new_ptr;
+	new_ptr = ft_calloc(old_count + new_count + 2, sizeof(char *));
+	if (new_ptr == NULL)
+			return (freeing_cmd(ptr), NULL);
+	copy_count = old_count;// < new_count ? old_count : new_count;
+	i = 0;
+	while (i < copy_count)
+	{
+		new_ptr[i] = ft_strdup(ptr[i]);
+		if (new_ptr[i] == NULL)
+			return (freeing_cmd(new_ptr), NULL);
+		i++;
+	}
+	freeing_cmd(ptr);
+	return (new_ptr);
 }
 
 t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
@@ -237,14 +214,12 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 
 	sh->cmd_count = sh->head;
 	ret = PARSER_FAILURE;
-	// if (sh->tokens[sh->head].flag == true)
-	// 	sh->tokens[sh->head].type = TOKEN_WORD;
 	if (sh->tokens[sh->head].type != TOKEN_WORD)
 		return (ret);
 	while (sh->tokens[sh->cmd_count++].type == TOKEN_WORD)
 		sh->index++;
-	// (*content)->cmd = (char **) ft_calloc(sh->index + 2, sizeof(char *));
-	(*content)->cmd = ft_realloc_strings((*content)->cmd, count_strings((*content)->cmd), sh->index);
+	(*content)->cmd = ft_realloc_strings((*content)->cmd, \
+				count_strings((*content)->cmd), sh->index);
 	sh->index = count_strings((*content)->cmd);
 	while (sh->tokens[sh->head].type == TOKEN_WORD)
 	{
@@ -257,7 +232,7 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 		sh->token_len--;
 		ret = PARSER_SUCCESS;
 	}
-	sh->index = 0;	// exit(1);
+	sh->index = 0;
 	return (ret);
 }
 
@@ -280,9 +255,6 @@ t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
 		else if (sh->tokens[sh->head].type == TOKEN_ASSIGNMENT || \
 		sh->tokens[sh->head].type == TOKEN_WORD)
 		{
-			// if (sh->tokens[sh->head].type == TOKEN_ASSIGNMENT)
-			// 	sh->tokens[sh->head].flag = true;
-			// ret = parse_cmd_word(content, sh);
 			ret = feed_remained_cmd_tokens(content, sh);
 			continue ;
 		}
@@ -417,6 +389,8 @@ void	freeing_cmd(char **cmd)
 {
 	int i;
 
+	if (cmd == NULL)
+		return ;
 	i = 0;
 	while (cmd[i] != NULL)
 	{
