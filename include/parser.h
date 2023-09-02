@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 15:48:07 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/30 15:49:38 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/09/01 14:14:27 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_minishell	t_minishell;
 
 typedef enum e_redirect_type
 {
+	UNDEFINED_TYPE,
 	REDIRECT_STDIN, //(<)
 	REDIRECT_STDOUT, //(>)
 	REDIRECT_HERE_DOC, //(<<)
@@ -80,6 +81,9 @@ typedef struct s_ast_node
 }	t_ast_node;
 
 int			free_ast(t_ast_node	**node);
+void	freeing_assignment(t_assignment *ptr);
+void	freeing_redirection(t_redirect *ptr);
+void	freeing_cmd(char **cmd);
 void		print_ast(t_ast_node *root);
 t_ast_node	*parse_pipeline(t_minishell *sh);
 void		print_ast_node(t_ast_node *node, int level, char x);

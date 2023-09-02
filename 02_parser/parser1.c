@@ -19,17 +19,17 @@ char **ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
 		}
 		return new_ptr;
 	}
-    if (new_count == 0)
-    {
-        // Free the old array and return NULL
-        for (size_t i = 0; i < old_count; ++i)
-            free(ptr[i]);
-        free(ptr);
-        return NULL;
-    }
+    // if (new_count == 0)
+    // {
+    //     // Free the old array and return NULL
+    //     for (size_t i = 0; i < old_count; ++i)
+    //         free(ptr[i]);
+    //     free(ptr);
+    //     return NULL;
+    // }
     
     // Allocate memory for the new array of strings
-    new_ptr = ft_calloc(new_count, sizeof(char *));
+    new_ptr = ft_calloc(new_count + 2, sizeof(char *));
     if (new_ptr == NULL)
         return ptr;  // Return the old array if allocation fails
     
@@ -47,7 +47,6 @@ char **ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
             return ptr;
         }
     }
-    
     // Free the old array and return the new array
     for (size_t i = 0; i < old_count; ++i)
         free(ptr[i]);

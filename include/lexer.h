@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 15:38:45 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/31 15:14:08 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/09/01 11:58:42 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
+	bool			flag;
 }	t_token;
 
 typedef struct s_ast_node_content	t_ast_node_content;

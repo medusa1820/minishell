@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/08/31 15:24:22 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/09/01 12:05:27 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,13 +261,21 @@ t_lexer_state	checking_tokenizer(t_token *token, t_minishell *sh, const char **c
 	return (ret);
 }
 
+void	init_token(t_token *token)
+{
+	token->type = TOKEN_EMPTY;
+	token->value = NULL;
+	token->flag = false;
+}
+
 t_lexer_state	tokenize(t_minishell *sh, const char *line)
 {
-	const char	*current;
-	t_token		token;
 	int			ret;
+	t_token		token;
+	const char	*current;
 
 	ret = LEXER_SUCCESS;
+	init_token(&token);
 	current = line;
 	while (*current != '\0' && ret == LEXER_SUCCESS)
 	{
