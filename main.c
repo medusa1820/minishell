@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/31 17:21:39 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/09/02 18:03:45 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,25 @@ int	main(void)
 			{
 				print_tokens(shell_data);
 				shell_data.ast_root = parse_pipeline(&shell_data);
-				free_tokens(&shell_data);
-				print_ast_node(shell_data.ast_root, 1, 'x');
-				free_ast(&shell_data.ast_root);
-				printf("You entered: %s\n", line); // use the line
+				if (shell_data.ast_root)
+				{
+					free_tokens(&shell_data);
+					print_ast_node(shell_data.ast_root, 1, 'x');
+					free_ast(&shell_data.ast_root);
+					printf("You entered: %s\n", line); // use the line
+				}
+				else
+				{
+					printf("PARSER FAILED\n");
+					free_tokens(&shell_data);
+					free_ast(&shell_data.ast_root);
+				}
 			}
-			printf("Unclosed quotation\n");
-			free_tokens(&shell_data);
+			else
+			{
+				printf("LEXER FAILED\n");
+				free_tokens(&shell_data);
+			}
 		}
 		rl_replace_line("", 0); // Clear the current input line 
 		rl_redisplay(); // Update the display of the input line

@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/30 15:56:55 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/09/01 13:56:54 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ typedef struct s_minishell
 	t_token		*tokens;
 	int			token_len;
 	int			free_lexer_token_len;
-	int			tmp;
+	int			seg_end;
 	int			head;
+	int			cmd_count;
 	int			index;
 	int			cmd_index;
 	t_ast_node	*ast_root;
