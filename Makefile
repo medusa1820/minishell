@@ -7,7 +7,7 @@ CFLAGS				+=	-g3
 CFLAGS				+=	-fsanitize=address
 
 LDFLAGS				:=	-g3
-LDFLAGS				+=	-fsanitize=address
+# LDFLAGS				+=	-fsanitize=address
 
 MINISHELL_SRCS		=	./main.c
 
