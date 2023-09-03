@@ -6,11 +6,13 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/09/03 20:29:55 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/09/03 20:51:39 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// /check/
 
 bool	init_shell(t_minishell *shell)
 {
