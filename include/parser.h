@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/03 18:14:36 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/03 19:19:18 by musenov          ###   ########.fr       */
+/*   Created: 2023/08/19 15:48:07 by nnavidd           #+#    #+#             */
+/*   Updated: 2023/09/03 19:16:40 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef PARSER_H
+# define PARSER_H
 
-# include "lexer.h"
-# include "parser.h"
-# include "executor.h"
-# include "utils.h"
+# include "common.h"
 
-// main.c
 
-// int			main(int argc, char **argv, char **envp);
-int			main(void);
+
+int			free_ast(t_ast_node	**node);
+void		freeing_assignment(t_assignment *ptr);
+void		freeing_redirection(t_redirect *ptr);
+void		freeing_cmd(char **cmd);
+void		print_ast(t_ast_node *root);
+t_ast_node	*parse_pipeline(t_minishell *sh);
+void		print_ast_node(t_ast_node *node, int level, char x);
+bool		init_shell(t_minishell *shell);
 
 #endif
