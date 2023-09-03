@@ -4,7 +4,7 @@ CC					:=	gcc
 
 CFLAGS				:=	-Wall -Werror -Wextra
 CFLAGS				+=	-g3
-CFLAGS				+=	-fsanitize=address
+# CFLAGS				+=	-fsanitize=address
 
 LDFLAGS				:=	-g3
 # LDFLAGS				+=	-fsanitize=address
