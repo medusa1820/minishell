@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 18:14:36 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/03 19:19:18 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/04 11:55:38 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 // main.c
 
-// int			main(int argc, char **argv, char **envp);
-int			main(void);
+int			main(int argc, char **argv, char **envp);
+// int			main(void);
 
 #endif

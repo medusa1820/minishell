@@ -6,13 +6,13 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/03 19:11:45 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/04 11:55:15 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
+
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -71,7 +71,7 @@ int	main(int argc, char **argv, char **envp)
 	return (0);
 }
 
-*/
+
 
 
 
@@ -97,7 +97,7 @@ int	main(int argc, char **argv, char **envp)
 
 
 
-
+/*
 
 int	main(void)
 {
@@ -144,7 +144,7 @@ int	main(void)
 	return (0);
 }
 
-
+*/
 
 
 
