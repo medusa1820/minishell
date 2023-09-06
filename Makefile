@@ -3,10 +3,10 @@ NAME				:=	minishell
 CC					:=	gcc
 
 CFLAGS				:=	-Wall -Werror -Wextra -g3
-# CFLAGS				+=	-fsanitize=address
+CFLAGS				+=	-fsanitize=address
 
 LDFLAGS				:=	-g3
-# LDFLAGS				+=	-fsanitize=address
+LDFLAGS				+=	-fsanitize=address
 
 MINISHELL_SRCS		=	./main.c \
 
