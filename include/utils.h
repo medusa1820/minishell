@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 18:02:13 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/03 19:16:50 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/11 12:17:29 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 # define UTILS_H
 
 # include "common.h"
-
-
-
 
 // print_ast.c
 

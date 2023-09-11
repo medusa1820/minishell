@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/03 19:13:33 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/11 20:44:25 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,7 @@
 # define WHITESPACE	" \t\v\f\r"
 # define OPERAND	"<>|\"\'"
 
-
-
-
-
 /////////////////// common.h
-
-
-
 
 typedef struct s_ast_node	t_ast_node;
 typedef struct s_token		t_token;
@@ -59,13 +52,7 @@ typedef struct s_minishell
 	t_ast_node	*ast_root;
 }	t_minishell;
 
-
-
-
 /////////////////// lexer.h
-
-
-
 
 typedef enum e_lexer_state
 {
@@ -94,13 +81,7 @@ typedef struct s_token
 	bool			flag;
 }	t_token;
 
-
-
-
 /////////////////// parser.h
-
-
-
 
 typedef enum e_parser_state
 {
@@ -157,12 +138,7 @@ typedef struct s_ast_node
 	struct s_ast_node	*right;
 }	t_ast_node;
 
-
-
-
 /////////////////// executor.h
-
-
 
 typedef struct s_pipe
 {
@@ -174,8 +150,5 @@ typedef struct s_pipe
 	char	*cmd_path;
 	char	**cmd_split;
 }	t_pipe;
-
-
-
 
 #endif

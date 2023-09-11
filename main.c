@@ -6,13 +6,11 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/04 11:55:15 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/11 20:24:23 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -33,21 +31,21 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 			if (!tokenize(&shell_data, line))
 			{
-				print_tokens(shell_data);
+				// print_tokens(shell_data);
 				shell_data.ast_root = parse_pipeline(&shell_data);
 				if (shell_data.ast_root)
 				{
 					free_tokens(&shell_data);
-					print_ast_node(shell_data.ast_root, 1, 'x');
-					printf("\n");
+					// print_ast_node(shell_data.ast_root, 1, 'x');
+					// printf("\n");
 					print_ast_tree0(shell_data.ast_root, 0);
-					printf("\n");
+					// printf("\n");
 					i = 0;
 					data.nr_of_cmd_nodes = 0;
 					if (!execute_cmds(shell_data.ast_root, &i, &data, envp))
 						free_ast_meder(shell_data.ast_root);
 					free_ast(&shell_data.ast_root);
-					printf("You entered: %s\n", line);
+					// printf("You entered: %s\n", line);
 				}
 				else
 				{
@@ -62,10 +60,10 @@ int	main(int argc, char **argv, char **envp)
 				free_tokens(&shell_data);
 			}
 		}
-		rl_replace_line("", 0); // Clear the current input line 
-		rl_redisplay(); // Update the display of the input line
+		// rl_replace_line("", 0); // Clear the current input line 
+		// rl_redisplay(); // Update the display of the input line
 		free(line); // Free the memory allocated by readline
-		line = NULL;
+		// line = NULL;
 		line = readline("minishell> ");
 	}
 	return (0);
