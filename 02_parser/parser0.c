@@ -6,13 +6,11 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/09/04 11:57:23 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/11 12:00:14 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// /check/
 
 bool	init_shell(t_minishell *shell)
 {
@@ -76,7 +74,8 @@ t_redirect_type	redirect_type(char *str)
 		type = REDIRECT_STDIN;
 	else if (str[0] == '>' && str[1] == 0)
 		type = REDIRECT_STDOUT;
-	free(str);
+	// if (str)
+	// 	free(str);
 	return (type);
 }
 
@@ -214,16 +213,17 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 {
 	t_parser_state	ret;
 
-	sh->cmd_count = sh->head;
+	sh->cmd_count = sh->head - 1;
 	ret = PARSER_FAILURE;
-	if (sh->tokens[sh->head].type != TOKEN_WORD)
+	if (sh->head < sh->seg_end && sh->tokens[sh->head].type != TOKEN_WORD)
 		return (ret);
-	while (sh->tokens[sh->cmd_count++].type == TOKEN_WORD)
+	while (++sh->cmd_count < sh->seg_end && \
+			sh->tokens[sh->cmd_count].type == TOKEN_WORD)
 		sh->index++;
 	(*content)->cmd = ft_realloc_strings((*content)->cmd, \
 				count_strings((*content)->cmd), sh->index);
 	sh->index = count_strings((*content)->cmd);
-	while (sh->tokens[sh->head].type == TOKEN_WORD)
+	while (sh->head < sh->seg_end && sh->tokens[sh->head].type == TOKEN_WORD)
 	{
 		(*content)->cmd[sh->index] = ft_strdup(sh->tokens[sh->head].value);
 		(*content)->cmd[sh->index + 1] = NULL;
@@ -246,7 +246,8 @@ t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
 	ret = PARSER_FAILURE;
 	while (true)
 	{
-		if (sh->seg_end >= 2 && sh->tokens[sh->head].type && \
+		if (sh->seg_end >= 2 && sh->head + 1 < sh->seg_end && \
+		sh->tokens[sh->head].type && \
 		sh->tokens[sh->head].type == TOKEN_REDIRECT && \
 		(sh->tokens[sh->head + 1].type == TOKEN_ASSIGNMENT || \
 		sh->tokens[sh->head + 1].type == TOKEN_WORD )) //later check variable of token,would better assign to the EOF and PIP
@@ -254,8 +255,8 @@ t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
 			ret = parse_redirection(content, sh);
 			continue ;
 		}
-		else if (sh->tokens[sh->head].type == TOKEN_ASSIGNMENT || \
-		sh->tokens[sh->head].type == TOKEN_WORD)
+		else if (sh->head <= sh->token_len && (sh->tokens[sh->head].type == TOKEN_ASSIGNMENT || \
+		sh->tokens[sh->head].type == TOKEN_WORD))
 		{
 			ret = feed_remained_cmd_tokens(content, sh);
 			continue ;
@@ -273,7 +274,8 @@ t_parser_state	parse_prefix_cmd(t_ast_node_content **content, t_minishell *sh)
 	ret = PARSER_FAILURE;
 	while (true)
 	{
-		if (sh->seg_end >= 2 && sh->tokens[sh->head].type && \
+		if (sh->seg_end >= 2 && sh->head + 1 < sh->seg_end && \
+		sh->tokens[sh->head].type && \
 		sh->tokens[sh->head].type == TOKEN_REDIRECT && \
 		(sh->tokens[sh->head + 1].type == TOKEN_ASSIGNMENT || \
 		sh->tokens[sh->head + 1].type == TOKEN_WORD )) //later check variable of token,would better assign to the EOF and PIP
@@ -281,7 +283,8 @@ t_parser_state	parse_prefix_cmd(t_ast_node_content **content, t_minishell *sh)
 			ret = parse_redirection(content, sh);
 			continue ;
 		}
-		else if (sh->tokens[sh->head].type == TOKEN_ASSIGNMENT)
+		else if (sh->head <= sh->token_len && \
+				sh->tokens[sh->head].type == TOKEN_ASSIGNMENT)
 		{
 			ret = parse_assignment(content, sh);
 			continue ;
