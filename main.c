@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/11 20:24:23 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/13 18:11:47 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ int	main(int argc, char **argv, char **envp)
 	t_minishell	shell_data;
 	int			i;
 	t_pipe		data;
+	int		status;
+	int		exit_code;
+	pid_t	wait_pid;
 
 	(void)argc;
 	(void)argv;
@@ -60,25 +63,25 @@ int	main(int argc, char **argv, char **envp)
 				free_tokens(&shell_data);
 			}
 		}
+		wait_pid = 0;
+		exit_code = 0;
+		while (wait_pid != -1)
+		{
+			wait_pid = waitpid(-1, &status, 0);
+			if (wait_pid == data.pid)
+			{
+				if (WIFEXITED(status))
+				exit_code = WEXITSTATUS(status);
+			}
+		}
 		// rl_replace_line("", 0); // Clear the current input line 
 		// rl_redisplay(); // Update the display of the input line
 		free(line); // Free the memory allocated by readline
 		// line = NULL;
 		line = readline("minishell> ");
 	}
-	return (0);
+	return (exit_code);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 ==============================================================================
@@ -87,13 +90,6 @@ int	main(int argc, char **argv, char **envp)
 ==============================================================================
 ==============================================================================
 */
-
-
-
-
-
-
-
 
 /*
 
@@ -144,21 +140,6 @@ int	main(void)
 
 */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 ==============================================================================
 ==============================================================================
@@ -166,9 +147,6 @@ int	main(void)
 ==============================================================================
 ==============================================================================
 */
-
-
-
 
 /*
 
@@ -216,12 +194,6 @@ int	main(int argc, char **argv, char **envp)
 
 */
 
-
-
-
-
-
-
 /*
 
 int	main(int argc, char **argv, char **envp)
@@ -245,11 +217,6 @@ int	main(int argc, char **argv, char **envp)
 
 
 */
-
-
-
-
-
 
 /*
 
@@ -280,12 +247,6 @@ int	main(int argc, char **argv, char **envp)
 
 */
 
-
-
-
-
-
-
 /*
 
 ls -la | < main.c << E < Makefile  cat >> out_file | grep 1 | wc -c
@@ -293,8 +254,3 @@ ls -la | < main.c << E < Makefile  cat >> out_file | grep 1 | wc -c
 ls -la | grep 1 | wc -c | wc -l
 
 */
-
-
-
-
-
