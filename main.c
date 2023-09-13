@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/13 18:11:47 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/13 19:28:29 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ int	main(int argc, char **argv, char **envp)
 	t_minishell	shell_data;
 	int			i;
 	t_pipe		data;
-	int		status;
-	int		exit_code;
-	pid_t	wait_pid;
+	int			status;
+	int			exit_code;
+	pid_t		wait_pid;
 
 	(void)argc;
 	(void)argv;
@@ -42,13 +42,22 @@ int	main(int argc, char **argv, char **envp)
 					// print_ast_node(shell_data.ast_root, 1, 'x');
 					// printf("\n");
 					print_ast_tree0(shell_data.ast_root, 0);
-					// printf("\n");
 					i = 0;
-					data.nr_of_cmd_nodes = 0;
-					if (!execute_cmds(shell_data.ast_root, &i, &data, envp))
-						free_ast_meder(shell_data.ast_root);
-					free_ast(&shell_data.ast_root);
-					// printf("You entered: %s\n", line);
+					// printf("\n");
+					if (shell_data.ast_root->type == AST_NODE_CMD)
+					{
+						if (!(piper(&data, &i) && forker_one_cmd(&data, envp, shell_data.ast_root)))
+							free_ast_meder(shell_data.ast_root);
+						free_ast(&shell_data.ast_root);
+					}
+					else
+					{
+						data.nr_of_cmd_nodes = 0;
+						if (!execute_cmds(shell_data.ast_root, &i, &data, envp))
+							free_ast_meder(shell_data.ast_root);
+						free_ast(&shell_data.ast_root);
+						// printf("You entered: %s\n", line);
+					}
 				}
 				else
 				{

@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 17:42:55 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/03 19:16:47 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/13 19:18:05 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ bool				execute_cmds(t_ast_node *head, int *i, t_pipe *data, \
 void				print_2d_array(char **cmd);
 bool				forker(t_pipe *data, int *i, char **envp, t_ast_node *head);
 bool				piper(t_pipe *data, int *i);
+bool				forker_one_cmd(t_pipe *data, char **envp, t_ast_node *head);
 
 // child_process.c
 
+void				first_cmd_one_cmd(t_pipe *data, char **envp);
 void				first_cmd(t_pipe *data, char **envp);
 void				middle_cmd(t_pipe *data, char **envp, int *i);
 void				last_cmd(t_pipe *data, char **envp, int *i);

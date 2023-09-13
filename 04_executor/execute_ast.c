@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/11 20:07:18 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/13 19:17:56 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,21 @@ bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *head)
 		else
 			middle_cmd(data, envp, i);
 		(*i)++;
+		return (true);
+	}
+}
+
+
+bool	forker_one_cmd(t_pipe *data, char **envp, t_ast_node *head)
+{
+	// printf("nr_of_cmd_nodes = %d\n", data->nr_of_cmd_nodes);
+	data->pid = fork();
+	if (data->pid == -1)
+		return (false);
+	else
+	{
+		data->cmd_split = head->content->cmd;
+		first_cmd_one_cmd(data, envp);
 		return (true);
 	}
 }
