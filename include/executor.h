@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 17:42:55 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/13 19:18:05 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/13 20:44:16 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ bool				forker_one_cmd(t_pipe *data, char **envp, t_ast_node *head);
 
 void				first_cmd_one_cmd(t_pipe *data, char **envp);
 void				first_cmd(t_pipe *data, char **envp);
+// void				first_cmd(t_pipe *data, char **envp, t_ast_node *head);
 void				middle_cmd(t_pipe *data, char **envp, int *i);
 void				last_cmd(t_pipe *data, char **envp, int *i);
 

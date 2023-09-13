@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/11 20:44:25 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/13 20:41:12 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,13 +142,16 @@ typedef struct s_ast_node
 
 typedef struct s_pipe
 {
-	int		pipe0_fd[2];
-	int		pipe1_fd[2];
-	pid_t	pid;
-	int		nr_of_cmd_nodes;
-	char	**paths;
-	char	*cmd_path;
-	char	**cmd_split;
+	int				pipe0_fd[2];
+	int				pipe1_fd[2];
+	pid_t			pid;
+	int				nr_of_cmd_nodes;
+	char			**paths;
+	char			*cmd_path;
+	char			**cmd_split;
+	int				fd_infile;
+	bool			here_doc;
+	t_minishell		*shell_data;
 }	t_pipe;
 
 #endif

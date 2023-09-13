@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/13 19:27:25 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/13 20:40:04 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,17 @@ void	first_cmd(t_pipe *data, char **envp)
 		find_cmd_path(data, envp);
 		dup2(data->pipe0_fd[1], STDOUT_FILENO);
 		close_pipe0_fds(data);
-		execve(data->cmd_path, data->cmd_split, envp);
-		// exit(127);
+		// execve(data->cmd_path, data->cmd_split, envp);
+		/*
+		if (data->here_doc)
+		{
+			if (unlink("here_doc_file") == -1)
+				exit_error(errno, "Error deleting here_doc temp file", data);
+		}
+		close(data->fd_infile);
+		*/
+		if (execve(data->cmd_path, data->cmd_split, envp) == -1)
+			exit_error(errno, "Couldn't execute execve() first", data);
 	}
 }
 

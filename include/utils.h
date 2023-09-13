@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 18:02:13 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/11 12:17:29 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/13 20:26:53 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,15 @@ void				create_node_right(char *cmd_str, \
 									t_ast_node **new_node_right);
 void				create_node_pipe(t_ast_node **new_node_head, \
 						t_ast_node *new_node_left, t_ast_node *new_node_right);
+
+// exit_utils.c
+
+void				exit_error(int exit_code, char *error_msg, t_pipe *data);
+void				free_all(t_pipe *data);
+void				free_str(t_pipe *data);
+void				free_2d_str(t_pipe *data);
+void				free_2d_str_func(char **str);
+void				exit_error_cmd_notfound(int exit_code, char *error_msg, t_pipe *data);
 
 // free_ast.c
 
