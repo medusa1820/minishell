@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/13 20:53:40 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/14 11:14:22 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ void	prepare_cmd_path(t_pipe *data)
 		i++;
 	}
 	if (data->paths[i] == NULL)
+	{
+		
 		exit_error_cmd_notfound(127, "Command not found: ", data);
+	}
 }
 
 void	prepare_cmd_path_slash(t_pipe *data)

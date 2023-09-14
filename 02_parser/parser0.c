@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/09/11 13:50:48 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/14 11:05:30 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -445,8 +445,12 @@ void	freeing_assignment(t_assignment *ptr)
 
 int	free_ast(t_ast_node **node_ptr)
 {
+	// exit(1);
 	if (!(*node_ptr))
+	{
+		printf("hi\n");
 		return (1);
+	}
 	if ((*node_ptr)->type == AST_NODE_CMD)
 	{
 		if ((*node_ptr)->content)

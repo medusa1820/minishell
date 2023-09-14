@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/13 19:28:29 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/14 11:38:29 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	// (void)envp;
 	init_shell(&shell_data);
+	data.shell_data = &shell_data;
 	line = readline("minishell>");
 	while (line)
 	{
