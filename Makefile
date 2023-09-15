@@ -23,7 +23,8 @@ EXECUTOR_SRCS		=	./04_executor/execute_ast.c \
 UTILS_SRCS			=	./05_utils/create_ast.c \
 						./05_utils/print_ast.c \
 						./05_utils/free_ast.c \
-						./05_utils/exit_utils.c
+						./05_utils/exit_utils0.c \
+						./05_utils/exit_utils1.c
 
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(LEXER_SRCS) \

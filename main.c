@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/14 11:38:29 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/15 18:15:30 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,14 @@ int	main(int argc, char **argv, char **envp)
 					// printf("\n");
 					if (shell_data.ast_root->type == AST_NODE_CMD)
 					{
-						if (!(piper(&data, &i) && forker_one_cmd(&data, envp, shell_data.ast_root)))
-							free_ast_meder(shell_data.ast_root);
+						piper(&data, &i);
+						forker_one_cmd(&data, envp, shell_data.ast_root);
 						free_ast(&shell_data.ast_root);
 					}
 					else
 					{
 						data.nr_of_cmd_nodes = 0;
-						if (!execute_cmds(shell_data.ast_root, &i, &data, envp))
-							free_ast_meder(shell_data.ast_root);
+						execute_cmds(shell_data.ast_root, &i, &data, envp);
 						free_ast(&shell_data.ast_root);
 						// printf("You entered: %s\n", line);
 					}
@@ -84,10 +83,7 @@ int	main(int argc, char **argv, char **envp)
 				exit_code = WEXITSTATUS(status);
 			}
 		}
-		// rl_replace_line("", 0); // Clear the current input line 
-		// rl_redisplay(); // Update the display of the input line
 		free(line); // Free the memory allocated by readline
-		// line = NULL;
 		line = readline("minishell> ");
 	}
 	return (exit_code);
