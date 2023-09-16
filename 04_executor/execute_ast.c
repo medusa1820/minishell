@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/15 18:23:42 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/16 15:48:11 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,37 +68,36 @@ bool	piper(t_pipe *data, int *i)
 	}
 }
 
-bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *head)
+bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *node)
 {
 	data->pid = fork();
 	if (data->pid == -1)
 		return (false);
 	else
 	{
-		data->cmd_split = head->content->cmd;
+		data->cmd_split = node->content->cmd;
 		if (*i == 0)
-			first_cmd(data, envp);
+			first_pipe(data, envp, node);
 		else if (*i == data->nr_of_cmd_nodes - 1)
-			last_cmd(data, envp, i);
+			last_pipe(data, envp, i);
 		else
-			middle_cmd(data, envp, i);
+			middle_pipe(data, envp, i);
 		(*i)++;
 		return (true);
 	}
 }
 
-bool	forker_one_cmd(t_pipe *data, char **envp, t_ast_node *head)
+bool	forker_no_pipe(t_pipe *data, char **envp, t_ast_node *node)
 {
-	(void)head;
 	data->pid = fork();
 	if (data->pid == -1)
 		return (false);
 	else
 	{
-		data->cmd_split = head->content->cmd;
+		data->cmd_split = node->content->cmd;
 		// data->cmd_split = data->shell_data->ast_root->content->cmd;
 		// printf(RED"the content command:%s\n"RESET, data->shell_data->ast_root->content->cmd[0]);
-		first_cmd_one_cmd(data, envp);
+		no_pipe(data, envp);
 		return (true);
 	}
 }

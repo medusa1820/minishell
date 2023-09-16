@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/13 20:41:12 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/16 16:28:48 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ typedef struct s_pipe
 	char			*cmd_path;
 	char			**cmd_split;
 	int				fd_infile;
+	int				fd_outfile;
 	bool			here_doc;
 	t_minishell		*shell_data;
 }	t_pipe;

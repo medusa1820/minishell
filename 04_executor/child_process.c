@@ -6,13 +6,13 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/15 18:21:35 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/16 17:18:48 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	first_cmd_one_cmd(t_pipe *data, char **envp)
+void	no_pipe(t_pipe *data, char **envp)
 {
 	if (data->pid == 0)
 	{
@@ -23,6 +23,31 @@ void	first_cmd_one_cmd(t_pipe *data, char **envp)
 	}
 	close_pipe0_fds(data);
 }
+
+
+
+
+/*							FROM PIPEX
+
+void	get_fd_infile(char **argv, t_pipex *data)
+{
+	if (!ft_strncmp(argv[1], "here_doc", 9))
+	{	
+		here_doc_open(data, argv);
+		data->fd_infile = open("here_doc_file", O_RDONLY);
+	}
+	else
+	{
+		data->fd_infile = open(argv[1], O_RDONLY);
+	}
+	if (data->fd_infile < 0)
+		exit_error(errno, "Error openning file", data);
+}
+*/
+
+
+
+
 
 /*					FROM PIPEX
 
@@ -47,16 +72,43 @@ void	first_cmd(t_pipex *data, char **envp, char **argv)
 }
 */
 
-void	first_cmd(t_pipe *data, char **envp)
+void	first_pipe(t_pipe *data, char **envp, t_ast_node *node)
 {
+	t_redirect	*redirect;
+
 	if (data->pid == 0)
 	{
-		find_cmd_path(data, envp);
-		dup2(data->pipe0_fd[1], STDOUT_FILENO);
-		close_pipe0_fds(data);
-		if (execve(data->cmd_path, data->cmd_split, envp) == -1)
-			exit_error(errno, "Couldn't execute execve() first", data);
+		if (node->content->stdin_redirect)
+		{
+			redirect = go_to_last_redirect(node->content->stdin_redirect);
+			if (redirect->type == REDIRECT_STDIN)
+			{
+				data->fd_infile = open(redirect->word, O_RDONLY);
+				if (data->fd_infile < 0)
+					exit_error(errno, "Error openning file", data);
+			}
+			if (node->type == REDIRECT_HERE_DOC)
+			{
+				here_doc_open(data, argv);
+				data->fd_infile = open("here_doc_file", O_RDONLY);
+			}
+		}
+		if (node->content->cmd)
+		{
+			find_cmd_path(data, envp);
+			dup2(data->pipe0_fd[1], STDOUT_FILENO);
+			close_pipe0_fds(data);
+			if (execve(data->cmd_path, data->cmd_split, envp) == -1)
+				exit_error(errno, "Couldn't execute execve() first", data);
+		}
 	}
+}
+
+t_redirect	*go_to_last_redirect(t_redirect *head)
+{
+	while (head->next != NULL)
+		head = head->next;
+	return (head);
 }
 
 /*					FROM PIPEX
@@ -88,7 +140,7 @@ void	middle_cmd(t_pipex *data, char **envp, int i)
 }
 */
 
-void	middle_cmd(t_pipe *data, char **envp, int *i)
+void	middle_pipe(t_pipe *data, char **envp, int *i)
 {
 	if (data->pid == 0)
 	{
@@ -138,7 +190,7 @@ void	last_cmd(t_pipex *data, char **envp, int i, char **argv)
 }
 */
 
-void	last_cmd(t_pipe *data, char **envp, int *i)
+void	last_pipe(t_pipe *data, char **envp, int *i)
 {
 	if (data->pid == 0)
 	{

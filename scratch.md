@@ -1,0 +1,1 @@
+ls -la | < main.c << E < Makefile  cat >> out_file | grep 1 | wc -c | a=5
