@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/18 19:25:34 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/18 21:44:23 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,22 @@ void	here_doc_open(t_pipex *data, char **argv)
 }
 */
 
+void	first_pipe(t_pipe *data, char **envp)
+{
+	if (data->pid == 0)
+	{
+		find_cmd_path(data, envp);
+		dup2(data->fd_infile, STDIN_FILENO);
+		dup2(data->fd_outfile, STDOUT_FILENO);
+		dup2(data->pipe0_fd[1], STDOUT_FILENO);
+		close_pipe0_fds(data);
+		close(data->fd_infile);
+		if (execve(data->cmd_path, data->cmd_split, envp) == -1)
+			exit_error(errno, "Couldn't execute execve() first", data);
+	}
+}
 
-
-
+/*
 void	first_pipe(t_pipe *data, char **envp, t_ast_node *node)
 {
 	t_redirect	*redirect;
@@ -164,6 +177,7 @@ void	first_pipe(t_pipe *data, char **envp, t_ast_node *node)
 			exit_error(errno, "Couldn't execute execve() first", data);
 	}
 }
+*/
 
 t_redirect	*go_to_last_redirect(t_redirect *head)
 {
