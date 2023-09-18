@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/18 21:42:43 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/18 22:08:24 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,13 @@ bool	piper(t_pipe *data, int *i)
 
 bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *node)
 {
+	handle_in_redirections(data, node);
+	handle_out_redirections(data, node);
 	data->pid = fork();
 	if (data->pid == -1)
 		return (false);
 	else
 	{
-		handle_in_redirections(data, node);
-		handle_out_redirections(data, node);
 		data->cmd_split = node->content->cmd;
 		if (*i == 0)
 			first_pipe(data, envp);
@@ -124,7 +124,7 @@ void	handle_out_redirections(t_pipe *data, t_ast_node *node)
 	data->fd_outfile = STDOUT_FILENO;
 	while (redirect)
 	{
-		if (data->fd_outfile != STDIN_FILENO)
+		if (data->fd_outfile != STDOUT_FILENO)
 			close(data->fd_outfile);
 		if (redirect->type == REDIRECT_STDOUT)
 		{

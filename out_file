@@ -1,0 +1,23 @@
+total 600
+drwxr-xr-x  21 musenov  2022_heilbronn     714 Sep 18 21:58 .
+drwxr-xr-x  80 musenov  2022_heilbronn    2788 Sep 18 19:42 ..
+drwxr-xr-x  15 musenov  2022_heilbronn     510 Sep 18 21:44 .git
+drwxr-xr-x   3 musenov  2022_heilbronn     102 Sep 14 11:56 .vscode
+drwxr-xr-x   4 musenov  2022_heilbronn     136 Sep 18 21:57 01_lexer
+drwxr-xr-x   4 musenov  2022_heilbronn     136 Sep 18 21:57 02_parser
+drwxr-xr-x   3 musenov  2022_heilbronn     102 Sep 14 11:56 03_expander
+drwxr-xr-x  10 musenov  2022_heilbronn     340 Sep 18 21:57 04_executor
+drwxr-xr-x  14 musenov  2022_heilbronn     476 Sep 18 21:57 05_utils
+-rw-r--r--   1 musenov  2022_heilbronn    1854 Sep 18 16:31 Makefile
+drwxr-xr-x   9 musenov  2022_heilbronn     306 Sep 18 16:09 include
+drwxr-xr-x   3 musenov  2022_heilbronn     102 Sep  2 19:50 lib
+-rw-r--r--   1 musenov  2022_heilbronn    6340 Sep 16 15:14 main.c
+-rw-r--r--   1 musenov  2022_heilbronn   11856 Sep 18 21:57 main.o
+-rwxr-xr-x   1 musenov  2022_heilbronn  267960 Sep 18 21:57 minishell
+-rw-r--r--   1 musenov  2022_heilbronn       0 Sep 18 21:15 out_file
+-rw-r--r--   1 musenov  2022_heilbronn      24 Sep 15 19:39 out_file1
+-rw-r--r--   1 musenov  2022_heilbronn      58 Sep 15 20:00 out_file2
+-rw-r--r--   1 musenov  2022_heilbronn       0 Sep 15 20:00 out_file3
+-rw-r--r--   1 musenov  2022_heilbronn       0 Sep 18 19:46 out_file_4
+-rw-r--r--   1 musenov  2022_heilbronn     186 Sep 18 19:09 scratch.md
+[?2004hminishell> ^C[?2004l

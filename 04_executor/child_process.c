@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/18 21:44:23 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/18 22:25:44 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,14 +111,33 @@ void	first_pipe(t_pipe *data, char **envp)
 	if (data->pid == 0)
 	{
 		find_cmd_path(data, envp);
-		dup2(data->fd_infile, STDIN_FILENO);
-		dup2(data->fd_outfile, STDOUT_FILENO);
-		dup2(data->pipe0_fd[1], STDOUT_FILENO);
+		if (data_has_infile(data))
+		{
+			dup2(data->fd_infile, STDIN_FILENO);
+			close(data->fd_infile);
+		}
+		if (data_has_outfile(data))
+		{
+			dup2(data->fd_outfile, STDOUT_FILENO);
+			close(data->fd_outfile);
+		}
+		else
+			dup2(data->pipe0_fd[1], STDOUT_FILENO);
+		// fprintf(stderr, "%d %d %d\n", data->fd_infile, data->fd_outfile, data->pipe0_fd[1]);
 		close_pipe0_fds(data);
-		close(data->fd_infile);
 		if (execve(data->cmd_path, data->cmd_split, envp) == -1)
 			exit_error(errno, "Couldn't execute execve() first", data);
 	}
+}
+
+bool	data_has_infile(t_pipe *data)
+{
+	return (data->fd_infile != STDIN_FILENO);
+}
+
+bool	data_has_outfile(t_pipe *data)
+{
+	return (data->fd_outfile != STDOUT_FILENO);
 }
 
 /*
@@ -213,7 +232,6 @@ void	here_doc_open(t_pipe *data, char *word)
 	}
 	close(fd_here_doc);
 }
-
 
 /*					FROM PIPEX
 
