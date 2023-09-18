@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/16 15:48:11 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/18 20:35:55 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *node)
 		return (false);
 	else
 	{
+		
 		data->cmd_split = node->content->cmd;
 		if (*i == 0)
 			first_pipe(data, envp, node);

@@ -3,10 +3,10 @@ NAME				:=	minishell
 CC					:=	gcc
 
 CFLAGS				:=	-Wall -Werror -Wextra
-CFLAGS				+=	-g3
+CFLAGS				+=	-g
 CFLAGS				+=	-fsanitize=address
 
-LDFLAGS				:=	-g3
+LDFLAGS				:=	-g
 LDFLAGS				+=	-fsanitize=address
 
 MINISHELL_SRCS		=	./main.c
@@ -24,7 +24,8 @@ UTILS_SRCS			=	./05_utils/create_ast.c \
 						./05_utils/print_ast.c \
 						./05_utils/free_ast.c \
 						./05_utils/exit_utils0.c \
-						./05_utils/exit_utils1.c
+						./05_utils/exit_utils1.c \
+						./05_utils/get_next_line.c
 
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(LEXER_SRCS) \

@@ -1,274 +1,26 @@
-{"arguments":["/Users/musenov/msh1/minishell","ls","-la"]}/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/15 18:15:30 by musenov          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
-#include "minishell.h"
-
-int	main(int argc, char **argv, char **envp)
-{
-	char		*line;
-	t_minishell	shell_data;
-	int			i;
-	t_pipe		data;
-	int			status;
-	int			exit_code;
-	pid_t		wait_pid;
-
-	(void)argc;
-	(void)argv;
-	// (void)envp;
-	init_shell(&shell_data);
-	data.shell_data = &shell_data;
-	line = readline("minishell>");
-	while (line)
-	{
-		if (line[0] != '\0')
-		{
-			add_history(line);
-			if (!tokenize(&shell_data, line))
-			{
-				// print_tokens(shell_data);
-				shell_data.ast_root = parse_pipeline(&shell_data);
-				if (shell_data.ast_root)
-				{
-					free_tokens(&shell_data);
-					// print_ast_node(shell_data.ast_root, 1, 'x');
-					// printf("\n");
-					print_ast_tree0(shell_data.ast_root, 0);
-					i = 0;
-					// printf("\n");
-					if (shell_data.ast_root->type == AST_NODE_CMD)
-					{
-						piper(&data, &i);
-						forker_one_cmd(&data, envp, shell_data.ast_root);
-						free_ast(&shell_data.ast_root);
-					}
-					else
-					{
-						data.nr_of_cmd_nodes = 0;
-						execute_cmds(shell_data.ast_root, &i, &data, envp);
-						free_ast(&shell_data.ast_root);
-						// printf("You entered: %s\n", line);
-					}
-				}
-				else
-				{
-					printf("PARSER FAILED\n");
-					free_tokens(&shell_data);
-					free_ast(&shell_data.ast_root);
-				}
-			}
-			else
-			{
-				printf("LEXER FAILED\n");
-				free_tokens(&shell_data);
-			}
-		}
-		wait_pid = 0;
-		exit_code = 0;
-		while (wait_pid != -1)
-		{
-			wait_pid = waitpid(-1, &status, 0);
-			if (wait_pid == data.pid)
-			{
-				if (WIFEXITED(status))
-				exit_code = WEXITSTATUS(status);
-			}
-		}
-		free(line); // Free the memory allocated by readline
-		line = readline("minishell> ");
-	}
-	return (exit_code);
-}
-
-/*
-==============================================================================
-==============================================================================
-========================== NAVID FUNCTIONS =================================== 
-==============================================================================
-==============================================================================
-*/
-
-/*
-
-int	main(void)
-{
-	char		*line;
-	t_minishell	shell_data;
-
-	init_shell(&shell_data);
-	line = readline("minishell>");
-	while (line)
-	{
-		if (line[0] != '\0')
-		{
-			add_history(line);
-			if (!tokenize(&shell_data, line))
-			{
-				print_tokens(shell_data);
-				shell_data.ast_root = parse_pipeline(&shell_data);
-				if (shell_data.ast_root)
-				{
-					free_tokens(&shell_data);
-					print_ast_node(shell_data.ast_root, 1, 'x');
-					free_ast(&shell_data.ast_root);
-					printf("You entered: %s\n", line); // use the line
-				}
-				else
-				{
-					printf("PARSER FAILED\n");
-					free_tokens(&shell_data);
-					free_ast(&shell_data.ast_root);
-				}
-			}
-			else
-			{
-				printf("LEXER FAILED\n");
-				free_tokens(&shell_data);
-			}
-		}
-		rl_replace_line("", 0); // Clear the current input line 
-		rl_redisplay(); // Update the display of the input line
-		free(line); // Free the memory allocated by readline
-		line = NULL;
-		line = readline("minishell> ");
-	}
-	return (0);
-}
-
-*/
-
-/*
-==============================================================================
-==============================================================================
-========================== MEDER FUNCTIONS =================================== 
-==============================================================================
-==============================================================================
-*/
-
-/*
-
-int	main(int argc, char **argv, char **envp)
-{
-	char		*line;
-	int			token_count;
-	t_ast_node	*ast_root;
-	t_token		*tokens;
-	t_pipe		data;
-	int			i;
-
-	(void)argc;
-	(void)argv;
-	tokens = NULL;
-	ast_root = NULL;
-	token_count = 0;
-	line = readline("minishell>");
-	while (line)
-	{
-		if (line[0] != '\0')
-		{
-			add_history(line);
-			tokenize(&tokens, line, &token_count);
-			print_tokens(tokens, token_count);
-			ast_root = parse_pipeline(&tokens, &token_count);
-			free_tokens(&tokens, &token_count);
-			print_ast_node(ast_root, 1, 'x');
-			print_ast_tree0(ast_root, 0);
-			printf("\n");
-			i = 0;
-			data.nr_of_cmd_nodes = 0;
-			if (!execute_cmds(ast_root, &i, &data, envp))
-				free_ast_meder(ast_root);
-			free_ast(&ast_root);
-			printf("You entered: %s\n", line); // use the line
-		}
-		rl_replace_line("", 0); // Clear the current input line 
-		rl_redisplay(); // Update the display of the input line
-		free(line); // Free the memory allocated by readline
-		line = readline("minishell>");
-	}
-	return (0);
-}
-
-*/
-
-/*
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_ast_node	*head;
-	int			i;
-	t_pipe		data;
-
-	(void)argc;
-	(void)argv;
-	head = create_ast();
-	print_ast_tree0(head, 0);
-	printf("\n");
-	i = 0;
-	data.nr_of_cmd_nodes = 0;
-	if (!execute_cmds(head, &i, &data, envp))
-		free_ast(head);
-	free_ast(head);
-	return (0);
-}
+bre
+g reg
+greg 
+dfbsdf 
+jksdhkg 
+gljkdhs a
 
 
-*/
 
-/*
 
-int	main(int argc, char **argv, char **envp)
-{
-	char		*line;
-	t_ast_node	*head;
 
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	head = NULL;
-	line = readline("minishell>");
-	while (line)
-	{
-		add_history(line);
-		// printf("You entered: %s\n", line); // use the line
-		rl_replace_line("", 0); // Clear the current input line 
-		rl_redisplay(); // Update the display of the input line
-		free(line); // Free the memory allocated by readline
-		line = readline("minishell>");
-	}
-	head = create_ast();
-	print_ast_tree0(head, 0);
-	free_ast_meder(head);
-	return (0);
-}
 
-*/
-
-/*
-
-ls -la | < main.c << E < Makefile  cat >> out_file | grep 1 | wc -c
-
-ls -la | grep 1 | wc -c | wc -l
-
-*/
+jHfewf
 NAME				:=	minishell
 
 CC					:=	gcc
 
 CFLAGS				:=	-Wall -Werror -Wextra
-CFLAGS				+=	-g3
+CFLAGS				+=	-g
 CFLAGS				+=	-fsanitize=address
 
-LDFLAGS				:=	-g3
+LDFLAGS				:=	-g
 LDFLAGS				+=	-fsanitize=address
 
 MINISHELL_SRCS		=	./main.c
@@ -286,7 +38,251 @@ UTILS_SRCS			=	./05_utils/create_ast.c \
 						./05_utils/print_ast.c \
 						./05_utils/free_ast.c \
 						./05_utils/exit_utils0.c \
-						./05_utils/exit_utils1.c
+						./05_utils/exit_utils1.c \
+						./05_utils/get_next_line.c
+
+ALL_SRCS			:=	$(MINISHELL_SRCS) \
+						$(LEXER_SRCS) \
+						$(PARSER_SRCS) \
+						$(EXECUTOR_SRCS) \
+						$(UTILS_SRCS)
+
+HEADERS				:=	-I ./include
+HEADERS				+=	-I ./05_utils
+HEADERS				+=	-I $(shell brew --prefix readline)/include
+HEADERS				+=	-I ../LeakSanitizer
+
+LDFLAGS				+=	-L ./lib/ft_printf -lft_ft_printf
+LDFLAGS				+=	-lreadline -L $(shell brew --prefix readline)/lib
+LDFLAGS				+=	-L ../LeakSanitizer -llsan -lstdc++ -Wno-gnu-include-next
+
+LIBFT_FT_PRINTF		:=	lib/ft_printf/libft_ft_printf.a
+LIBFT_FT_PRINTF_DIR	:=	./lib/ft_printf
+
+OBJS				=	$(ALL_SRCS:.c=.o)
+
+all: $(NAME)
+
+$(NAME): $(LIBFT_FT_PRINTF) $(OBJS)
+	$(CC) $(OBJS) -o $(NAME) $(LDFLAGS) \
+	&& echo "Compilation of $(NAME) successful"
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
+
+$(LIBFT_FT_PRINTF):
+	${MAKE} -C $(LIBFT_FT_PRINTF_DIR) -j
+
+re: fclean all
+
+fclean: clean
+	rm -f $(NAME)
+
+clean:
+	${MAKE} -C $(LIBFT_FT_PRINTF_DIR) fclean
+	rm -f $(OBJS)
+
+leaks:
+	@valgrind	--track-fds=yes \
+				--track-origins=yes \
+				--tool=memcheck \
+				--trace-children=yes \
+				--leak-check=full \
+				--show-leak-kinds=all \
+				-s \
+				./minishell < infile cat | grep PATH | grep /usr > outfile
+
+.PHONY: all clean fclean re leaks
+NAME				:=	minishell
+
+CC					:=	gcc
+
+CFLAGS				:=	-Wall -Werror -Wextra
+CFLAGS				+=	-g
+CFLAGS				+=	-fsanitize=address
+
+LDFLAGS				:=	-g
+LDFLAGS				+=	-fsanitize=address
+
+MINISHELL_SRCS		=	./main.c
+
+LEXER_SRCS			=	./01_lexer/lexer0.c
+
+PARSER_SRCS			=	./02_parser/parser0.c
+
+EXECUTOR_SRCS		=	./04_executor/execute_ast.c \
+						./04_executor/child_process.c \
+						./04_executor/child_process_utils0.c \
+						./04_executor/child_process_utils1.c
+
+UTILS_SRCS			=	./05_utils/create_ast.c \
+						./05_utils/print_ast.c \
+						./05_utils/free_ast.c \
+						./05_utils/exit_utils0.c \
+						./05_utils/exit_utils1.c \
+						./05_utils/get_next_line.c
+
+ALL_SRCS			:=	$(MINISHELL_SRCS) \
+						$(LEXER_SRCS) \
+						$(PARSER_SRCS) \
+						$(EXECUTOR_SRCS) \
+						$(UTILS_SRCS)
+
+HEADERS				:=	-I ./include
+HEADERS				+=	-I ./05_utils
+HEADERS				+=	-I $(shell brew --prefix readline)/include
+HEADERS				+=	-I ../LeakSanitizer
+
+LDFLAGS				+=	-L ./lib/ft_printf -lft_ft_printf
+LDFLAGS				+=	-lreadline -L $(shell brew --prefix readline)/lib
+LDFLAGS				+=	-L ../LeakSanitizer -llsan -lstdc++ -Wno-gnu-include-next
+
+LIBFT_FT_PRINTF		:=	lib/ft_printf/libft_ft_printf.a
+LIBFT_FT_PRINTF_DIR	:=	./lib/ft_printf
+
+OBJS				=	$(ALL_SRCS:.c=.o)
+
+all: $(NAME)
+
+$(NAME): $(LIBFT_FT_PRINTF) $(OBJS)
+	$(CC) $(OBJS) -o $(NAME) $(LDFLAGS) \
+	&& echo "Compilation of $(NAME) successful"
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
+
+$(LIBFT_FT_PRINTF):
+	${MAKE} -C $(LIBFT_FT_PRINTF_DIR) -j
+
+re: fclean all
+
+fclean: clean
+	rm -f $(NAME)
+
+clean:
+	${MAKE} -C $(LIBFT_FT_PRINTF_DIR) fclean
+	rm -f $(OBJS)
+
+leaks:
+	@valgrind	--track-fds=yes \
+				--track-origins=yes \
+				--tool=memcheck \
+				--trace-children=yes \
+				--leak-check=full \
+				--show-leak-kinds=all \
+				-s \
+				./minishell < infile cat | grep PATH | grep /usr > outfile
+
+.PHONY: all clean fclean re leaks
+NAME				:=	minishell
+
+CC					:=	gcc
+
+CFLAGS				:=	-Wall -Werror -Wextra
+CFLAGS				+=	-g
+CFLAGS				+=	-fsanitize=address
+
+LDFLAGS				:=	-g
+LDFLAGS				+=	-fsanitize=address
+
+MINISHELL_SRCS		=	./main.c
+
+LEXER_SRCS			=	./01_lexer/lexer0.c
+
+PARSER_SRCS			=	./02_parser/parser0.c
+
+EXECUTOR_SRCS		=	./04_executor/execute_ast.c \
+						./04_executor/child_process.c \
+						./04_executor/child_process_utils0.c \
+						./04_executor/child_process_utils1.c
+
+UTILS_SRCS			=	./05_utils/create_ast.c \
+						./05_utils/print_ast.c \
+						./05_utils/free_ast.c \
+						./05_utils/exit_utils0.c \
+						./05_utils/exit_utils1.c \
+						./05_utils/get_next_line.c
+
+ALL_SRCS			:=	$(MINISHELL_SRCS) \
+						$(LEXER_SRCS) \
+						$(PARSER_SRCS) \
+						$(EXECUTOR_SRCS) \
+						$(UTILS_SRCS)
+
+HEADERS				:=	-I ./include
+HEADERS				+=	-I ./05_utils
+HEADERS				+=	-I $(shell brew --prefix readline)/include
+HEADERS				+=	-I ../LeakSanitizer
+
+LDFLAGS				+=	-L ./lib/ft_printf -lft_ft_printf
+LDFLAGS				+=	-lreadline -L $(shell brew --prefix readline)/lib
+LDFLAGS				+=	-L ../LeakSanitizer -llsan -lstdc++ -Wno-gnu-include-next
+
+LIBFT_FT_PRINTF		:=	lib/ft_printf/libft_ft_printf.a
+LIBFT_FT_PRINTF_DIR	:=	./lib/ft_printf
+
+OBJS				=	$(ALL_SRCS:.c=.o)
+
+all: $(NAME)
+
+$(NAME): $(LIBFT_FT_PRINTF) $(OBJS)
+	$(CC) $(OBJS) -o $(NAME) $(LDFLAGS) \
+	&& echo "Compilation of $(NAME) successful"
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
+
+$(LIBFT_FT_PRINTF):
+	${MAKE} -C $(LIBFT_FT_PRINTF_DIR) -j
+
+re: fclean all
+
+fclean: clean
+	rm -f $(NAME)
+
+clean:
+	${MAKE} -C $(LIBFT_FT_PRINTF_DIR) fclean
+	rm -f $(OBJS)
+
+leaks:
+	@valgrind	--track-fds=yes \
+				--track-origins=yes \
+				--tool=memcheck \
+				--trace-children=yes \
+				--leak-check=full \
+				--show-leak-kinds=all \
+				-s \
+				./minishell < infile cat | grep PATH | grep /usr > outfile
+
+.PHONY: all clean fclean re leaks
+NAME				:=	minishell
+
+CC					:=	gcc
+
+CFLAGS				:=	-Wall -Werror -Wextra
+CFLAGS				+=	-g
+CFLAGS				+=	-fsanitize=address
+
+LDFLAGS				:=	-g
+LDFLAGS				+=	-fsanitize=address
+
+MINISHELL_SRCS		=	./main.c
+
+LEXER_SRCS			=	./01_lexer/lexer0.c
+
+PARSER_SRCS			=	./02_parser/parser0.c
+
+EXECUTOR_SRCS		=	./04_executor/execute_ast.c \
+						./04_executor/child_process.c \
+						./04_executor/child_process_utils0.c \
+						./04_executor/child_process_utils1.c
+
+UTILS_SRCS			=	./05_utils/create_ast.c \
+						./05_utils/print_ast.c \
+						./05_utils/free_ast.c \
+						./05_utils/exit_utils0.c \
+						./05_utils/exit_utils1.c \
+						./05_utils/get_next_line.c
 
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(LEXER_SRCS) \
