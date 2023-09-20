@@ -4,10 +4,10 @@ CC					:=	gcc
 
 CFLAGS				:=	-Wall -Werror -Wextra
 CFLAGS				+=	-g
-# CFLAGS				+=	-fsanitize=address
+CFLAGS				+=	-fsanitize=address
 
 LDFLAGS				:=	-g
-# LDFLAGS				+=	-fsanitize=address
+LDFLAGS				+=	-fsanitize=address
 
 MINISHELL_SRCS		=	./main.c
 
@@ -15,7 +15,8 @@ LEXER_SRCS			=	./01_lexer/lexer0.c
 
 PARSER_SRCS			=	./02_parser/parser0.c
 
-EXECUTOR_SRCS		=	./04_executor/execute_ast.c \
+EXECUTOR_SRCS		=	./04_executor/execute_ast0.c \
+						./04_executor/execute_ast1.c \
 						./04_executor/child_process.c \
 						./04_executor/child_process_utils0.c \
 						./04_executor/child_process_utils1.c
@@ -36,11 +37,11 @@ ALL_SRCS			:=	$(MINISHELL_SRCS) \
 HEADERS				:=	-I ./include
 HEADERS				+=	-I ./05_utils
 HEADERS				+=	-I $(shell brew --prefix readline)/include
-# HEADERS				+=	-I ../LeakSanitizer
+HEADERS				+=	-I ../LeakSanitizer
 
 LDFLAGS				+=	-L ./lib/ft_printf -lft_ft_printf
 LDFLAGS				+=	-lreadline -L $(shell brew --prefix readline)/lib
-# LDFLAGS				+=	-L ../LeakSanitizer -llsan -lstdc++ -Wno-gnu-include-next
+LDFLAGS				+=	-L ../LeakSanitizer -llsan -lstdc++ -Wno-gnu-include-next
 
 LIBFT_FT_PRINTF		:=	lib/ft_printf/libft_ft_printf.a
 LIBFT_FT_PRINTF_DIR	:=	./lib/ft_printf

@@ -9,5 +9,5 @@ set follow-exec-mode new
 
 
 
-< main.c << E < Makefile  cat >> out_file | ls -la
+< in_file0 << E < in_file1 >out_file0 cat >> out_file1 | ls -la
 

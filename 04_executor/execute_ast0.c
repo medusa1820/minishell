@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_ast.c                                      :+:      :+:    :+:   */
+/*   execute_ast0.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/18 22:08:24 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/20 18:26:59 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,6 @@ bool	execute_cmds(t_ast_node *head, int *i, t_pipe *data, char **envp)
 	}
 	else
 		return (piper(data, i) && forker(data, i, envp, head));
-}
-
-void	print_2d_array(char **cmd)
-{
-	printf("content->cmd: ");
-	while (*cmd)
-	{
-		printf("%s ", *cmd);
-		cmd++;
-	}
-	printf("\n");
 }
 
 bool	piper(t_pipe *data, int *i)
@@ -139,20 +128,5 @@ void	handle_out_redirections(t_pipe *data, t_ast_node *node)
 		if (data->fd_outfile < 0)
 			exit_error(errno, "Error openning file", data);
 		redirect = redirect->next;
-	}
-}
-
-bool	forker_no_pipe(t_pipe *data, char **envp, t_ast_node *node)
-{
-	data->pid = fork();
-	if (data->pid == -1)
-		return (false);
-	else
-	{
-		data->cmd_split = node->content->cmd;
-		// data->cmd_split = data->shell_data->ast_root->content->cmd;
-		// printf(RED"the content command:%s\n"RESET, data->shell_data->ast_root->content->cmd[0]);
-		no_pipe(data, envp);
-		return (true);
 	}
 }
