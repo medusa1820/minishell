@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/20 18:26:59 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/20 19:19:23 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,13 @@ bool	piper(t_pipe *data, int *i)
 		return (true);
 	}
 }
+
+/*
+
+Input and Output redirections are handled before forking otherwise at least 
+here_doc will propagate to child processes
+
+*/
 
 bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *node)
 {

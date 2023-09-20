@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/20 18:44:08 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/20 19:45:03 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	no_pipe(t_pipe *data, char **envp)
 	}
 	close_pipe0_fds(data);
 }
-
 
 /*							FROM PIPEX
 
@@ -42,8 +41,6 @@ void	get_fd_infile(char **argv, t_pipex *data)
 		exit_error(errno, "Error openning file", data);
 }
 */
-
-
 
 /*					FROM PIPEX
 
@@ -67,8 +64,6 @@ void	first_cmd(t_pipex *data, char **envp, char **argv)
 	}
 }
 */
-
-
 
 void	first_pipe(t_pipe *data, char **envp)
 {
@@ -122,6 +117,8 @@ void	middle_cmd(t_pipex *data, char **envp, int i)
 }
 */
 
+/*
+
 void	middle_pipe(t_pipe *data, char **envp, int *i)
 {
 	if (data->pid == 0)
@@ -136,6 +133,62 @@ void	middle_pipe(t_pipe *data, char **envp, int *i)
 		{
 			dup2(data->pipe0_fd[0], STDIN_FILENO);
 			dup2(data->pipe1_fd[1], STDOUT_FILENO);
+		}
+		close_pipe0_fds(data);
+		close_pipe1_fds(data);
+		if (execve(data->cmd_path, data->cmd_split, envp) == -1)
+			exit_error(errno, "Couldn't execute execve() middle", data);
+	}
+	if (*i % 2 == 0)
+		close_pipe1_fds(data);
+	else
+		close_pipe0_fds(data);
+}
+
+*/
+
+void	middle_pipe(t_pipe *data, char **envp, int *i)
+{
+	if (data->pid == 0)
+	{
+		find_cmd_path(data, envp);
+		if (*i % 2 == 0)
+		{
+			// dup2(data->pipe1_fd[0], STDIN_FILENO);
+			// dup2(data->pipe0_fd[1], STDOUT_FILENO);
+			if (data_has_infile(data))
+			{
+				dup2(data->fd_infile, STDIN_FILENO);
+				close(data->fd_infile);
+			}
+			else
+				dup2(data->pipe1_fd[0], STDIN_FILENO);
+			if (data_has_outfile(data))
+			{
+				dup2(data->fd_outfile, STDOUT_FILENO);
+				close(data->fd_outfile);
+			}
+			else
+				dup2(data->pipe0_fd[1], STDOUT_FILENO);
+		}
+		else
+		{
+			// dup2(data->pipe0_fd[0], STDIN_FILENO);
+			// dup2(data->pipe1_fd[1], STDOUT_FILENO);
+			if (data_has_infile(data))
+			{
+				dup2(data->fd_infile, STDIN_FILENO);
+				close(data->fd_infile);
+			}
+			else
+				dup2(data->pipe0_fd[0], STDIN_FILENO);
+			if (data_has_outfile(data))
+			{
+				dup2(data->fd_outfile, STDOUT_FILENO);
+				close(data->fd_outfile);
+			}
+			else
+				dup2(data->pipe1_fd[1], STDOUT_FILENO);
 		}
 		close_pipe0_fds(data);
 		close_pipe1_fds(data);
