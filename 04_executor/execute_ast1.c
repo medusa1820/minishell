@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:27:01 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/20 18:44:14 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/25 18:09:52 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 bool	forker_no_pipe(t_pipe *data, char **envp, t_ast_node *node)
 {
+	handle_in_redirections(data, node);
+	handle_out_redirections(data, node);
 	data->pid = fork();
 	if (data->pid == -1)
 		return (false);
@@ -52,4 +54,3 @@ void	here_doc_open(t_pipe *data, char *word)
 	}
 	close(fd_here_doc);
 }
-

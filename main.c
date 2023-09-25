@@ -6,11 +6,13 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/16 15:14:32 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/22 18:54:53 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// extern char	**environ;
 
 int	main(int argc, char **argv, char **envp)
 {
