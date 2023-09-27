@@ -1,0 +1,5 @@
+# Ignore tester directory
+tester_minishell/
+
+# Ignore vscode settings
+.vscode

@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/22 18:54:53 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/26 19:57:20 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, char **argv, char **envp)
 	// (void)envp;
 	init_shell(&shell_data);
 	data.shell_data = &shell_data;
-	line = readline("minishell>");
+	line = readline(RED "minishell> " RESET);
 	while (line)
 	{
 		if (line[0] != '\0')
@@ -86,7 +86,7 @@ int	main(int argc, char **argv, char **envp)
 			}
 		}
 		free(line); // Free the memory allocated by readline
-		line = readline("minishell> ");
+		line = readline(RED "minishell> " RESET);
 	}
 	return (exit_code);
 }

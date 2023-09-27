@@ -28,7 +28,7 @@ UTILS_SRCS			=	./05_utils/create_ast.c \
 						./05_utils/exit_utils0.c \
 						./05_utils/exit_utils1.c \
 						./05_utils/get_next_line.c
-
+\
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(LEXER_SRCS) \
 						$(PARSER_SRCS) \
