@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer0.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/09/01 12:05:27 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/09/27 13:15:26 by nnabaeei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ t_lexer_state	token_unclosed(const char **current, t_token *token)
 	if (token->value)
 	{
 		free(token->value);
-		token->value = '\0';
+		token->value = NULL;
 	}
 	(*current)++;
 	return (ret);
