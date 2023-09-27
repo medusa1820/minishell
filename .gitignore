@@ -2,4 +2,4 @@
 tester_minishell/
 
 # Ignore vscode settings
-.vscode
+.vscode/
