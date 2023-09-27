@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/26 19:57:20 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/27 22:11:24 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int	main(int argc, char **argv, char **envp)
 			}
 		}
 		free(line); // Free the memory allocated by readline
+		print_env_list(shell_data.envp_ll);
 		line = readline(RED "minishell> " RESET);
 	}
 	return (exit_code);

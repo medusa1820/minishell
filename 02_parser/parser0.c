@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/09/14 11:05:30 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/27 19:46:00 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ bool	init_shell(t_minishell *shell)
 	shell->index = 0;
 	shell->cmd_index = 0;
 	shell->line = NULL;
+	init_envp_internal(shell);
 	return (true);
 }
 
