@@ -11,7 +11,10 @@ LDFLAGS				+=	-fsanitize=address
 
 MINISHELL_SRCS		=	./main.c
 
-DATA_INIT_SRCS		=	./00_data_init/envp_init0.c
+DATA_INIT_SRCS		=	./00_data_init/envp_ll_init.c \
+						./00_data_init/envp_ll_utils.c \
+						./00_data_init/envp_local_init.c \
+						./00_data_init/envp_local_utils.c
 
 LEXER_SRCS			=	./01_lexer/lexer0.c
 

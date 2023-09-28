@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   envp_init0.c                                       :+:      :+:    :+:   */
+/*   envp_ll_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 19:17:58 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/27 22:07:47 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/28 15:37:22 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_envp_internal(t_minishell *shell)
+void	init_envp_linked_list(t_minishell *shell)
 {
 	t_envp_ll	*head;
 	char		**env;
@@ -78,43 +78,5 @@ t_envp_ll	*create_new_node(char *var, char *value)
 	new_node->value = ft_strdup(value);
 	new_node->var_internal = false;
 	new_node->next = NULL;
-
 	return (new_node);
 }
-
-void	print_env_list(t_envp_ll *head)
-{
-	t_envp_ll	*current;
-
-	current = head;
-	while (current)
-	{
-		printf("Var: %s, Value: %s\n", current->var, current->value);
-		current = current->next;
-	}
-}
-
-// ... Other utility functions to free the list, print the list, etc.
-
-/*
-bool	init_envp_internal(t_minishell *shell)
-{
-	t_envp_ll	*envp_ll;
-
-	envp_ll = do_ll(shell);
-}
-
-char	**do_ll(t_minishell *shell)
-{
-	create_envp_ll_node();
-	add_envp_ll_node();
-	delete_envp_ll_node();
-	go_to_end_envp_ll();
-}
-
-t_envp_ll	*create_envp_ll_node()
-{
-	
-}
-*/
-
