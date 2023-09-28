@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/16 16:28:48 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/27 22:03:23 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,20 @@
 # define WHITESPACE	" \t\v\f\r"
 # define OPERAND	"<>|\"\'"
 
+/////////////////// data_init.h
+
+/*
+Data structure for 
+*/
+
+typedef struct s_envp_ll
+{
+	char				*var;
+	char				*value;
+	bool				var_internal;
+	struct s_envp_ll	*next;
+}	t_envp_ll;
+
 /////////////////// common.h
 
 typedef struct s_ast_node	t_ast_node;
@@ -40,16 +54,18 @@ typedef struct s_lexer		t_lexer;
 
 typedef struct s_minishell
 {
-	char		*line;
-	t_token		*tokens;
-	int			token_len;
-	int			free_lexer_token_len;
-	int			seg_end;
-	int			head;
-	int			cmd_count;
-	int			index;
-	int			cmd_index;
-	t_ast_node	*ast_root;
+	char				*line;
+	t_token				*tokens;
+	int					token_len;
+	int					free_lexer_token_len;
+	int					seg_end;
+	int					head;
+	int					cmd_count;
+	int					index;
+	int					cmd_index;
+	t_ast_node			*ast_root;
+	t_envp_ll			*envp_ll;
+	char				**envp_local;
 }	t_minishell;
 
 /////////////////// lexer.h

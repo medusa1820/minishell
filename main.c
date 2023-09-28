@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/26 19:57:20 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/28 17:25:44 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	// (void)envp;
+	(void)envp;
 	init_shell(&shell_data);
 	data.shell_data = &shell_data;
 	line = readline(RED "minishell> " RESET);
@@ -50,13 +50,13 @@ int	main(int argc, char **argv, char **envp)
 					if (shell_data.ast_root->type == AST_NODE_CMD)
 					{
 						piper(&data, &i);
-						forker_no_pipe(&data, envp, shell_data.ast_root);
+						forker_no_pipe(&data, shell_data.envp_local, shell_data.ast_root);
 						free_ast(&shell_data.ast_root);
 					}
 					else
 					{
 						data.nr_of_cmd_nodes = 0;
-						execute_cmds(shell_data.ast_root, &i, &data, envp);
+						execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local);
 						free_ast(&shell_data.ast_root);
 						// printf("You entered: %s\n", line);
 					}
@@ -86,8 +86,12 @@ int	main(int argc, char **argv, char **envp)
 			}
 		}
 		free(line); // Free the memory allocated by readline
+		print_envp_ll(shell_data.envp_ll);
+		print_envp_local(shell_data.envp_local);
 		line = readline(RED "minishell> " RESET);
 	}
+	free_envp_ll(shell_data.envp_ll);
+	free_envp_local(shell_data.envp_local);
 	return (exit_code);
 }
 

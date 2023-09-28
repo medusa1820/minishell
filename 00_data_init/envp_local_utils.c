@@ -1,28 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   envp_local_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/03 18:14:36 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/27 19:17:26 by musenov          ###   ########.fr       */
+/*   Created: 2023/09/28 15:35:25 by musenov           #+#    #+#             */
+/*   Updated: 2023/09/28 15:36:05 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include "data_init.h"
-# include "lexer.h"
-# include "parser.h"
-# include "expander.h"
-# include "executor.h"
-# include "utils.h"
+void	print_envp_local(char **array)
+{
+	int		i;
 
-// main.c
+	i = 0;
+	if (!array)
+		printf("Array is NULL\n");
+	else
+	{
+		while (array[i])
+		{
+			printf("%s\n", array[i]);
+			i++;
+		}
+	}
+}
 
-int			main(int argc, char **argv, char **envp);
-// int			main(void);
+void	free_envp_local(char **array)
+{
+	int		i;
 
-#endif
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
