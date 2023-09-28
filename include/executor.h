@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 17:42:55 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/25 17:00:24 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/28 20:22:02 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,9 @@ void				middle_pipe_in_out(t_pipe *data, int *i);
 void				last_pipe_in_out(t_pipe *data, int *i);
 void				dup2_fd_infile_std_in(t_pipe *data);
 void				dup2_fd_outfile_std_out(t_pipe *data);
+
+// exit_code_handler0.c
+
+void				ft_waiting(t_pipe *data);
 
 #endif
