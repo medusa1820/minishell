@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/27 22:03:23 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/29 15:14:44 by nnabaeei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef enum e_token_type
 	TOKEN_REDIRECT,
 	TOKEN_PIPE,
 	TOKEN_WORD,
+	TOKEN_SPACE,
 	TOKEN_UNCLOSED_Q,
 	TOKEN_ASSIGNMENT,
 	TOKEN_END,

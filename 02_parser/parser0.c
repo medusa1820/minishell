@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser0.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/09/28 15:30:37 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/29 16:07:21 by nnabaeei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -444,6 +444,9 @@ void	freeing_assignment(t_assignment *ptr)
 	free(ptr);
 	ptr = NULL;
 }
+
+
+// HI "HI" ""HI "H"I
 
 int	free_ast(t_ast_node **node_ptr)
 {
