@@ -98,3 +98,12 @@ bash-3.2$
 
 
 
+bash-3.2$ ls | cab | cat
+bash: cab: command not found
+bash-3.2$ echo $?
+0
+bash-3.2$ 
+
+
+
+
