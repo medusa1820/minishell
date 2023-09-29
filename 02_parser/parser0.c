@@ -6,7 +6,7 @@
 /*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/09/29 16:07:21 by nnabaeei         ###   ########.fr       */
+/*   Updated: 2023/09/29 19:11:20 by nnabaeei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ char **ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
 	freeing_cmd(ptr);
 	return (new_ptr);
 }
-
+// HI "HI" ""HI "H"I
 t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 {
 	t_parser_state	ret;

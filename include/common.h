@@ -6,7 +6,7 @@
 /*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/29 18:33:35 by nnabaeei         ###   ########.fr       */
+/*   Updated: 2023/09/29 18:38:09 by nnabaeei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 /////////////////// data_init.h
 
 /*
-Data structure for 
+	Data structure for environment variables
 */
 
 typedef struct s_envp_ll
@@ -67,6 +67,12 @@ typedef struct s_minishell
 	t_envp_ll			*envp_ll;
 	char				**envp_local;
 }	t_minishell;
+
+typedef struct s_wait
+{
+	int		wstatus;	
+	int		status_code;
+}	t_wait;
 
 /////////////////// lexer.h
 
@@ -170,6 +176,7 @@ typedef struct s_pipe
 	int				fd_outfile;
 	bool			here_doc;
 	t_minishell		*shell_data;
+	int				exit_code;
 }	t_pipe;
 
 #endif

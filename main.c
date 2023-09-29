@@ -6,7 +6,7 @@
 /*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/29 15:04:28 by nnabaeei         ###   ########.fr       */
+/*   Updated: 2023/09/29 18:39:59 by nnabaeei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,8 @@ int	main(int argc, char **argv, char **envp)
 		line = NULL;
 		line = readline("minishell> ");
 	}
+	free_envp_ll(shell_data.envp_ll);
+	free_envp_local(shell_data.envp_local);
 	return (0);
 }
 

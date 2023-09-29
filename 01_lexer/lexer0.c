@@ -6,7 +6,7 @@
 /*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/09/29 18:17:16 by nnabaeei         ###   ########.fr       */
+/*   Updated: 2023/09/29 20:01:18 by nnabaeei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,8 +244,7 @@ void	check_assignment(t_token **tokens, int token_count)
 }
 t_lexer_state	feed_tokens_array(t_minishell *sh, t_token *token)
 {
-	if (token->type != TOKEN_SPACE)
-		sh->token_len++;
+	sh->token_len++;
 	sh->head = sh->token_len - 1;
 	sh->tokens = ft_realloc(sh->tokens, (sh->token_len - 1) * \
 	sizeof(t_token), sh->token_len * sizeof(t_token));
@@ -267,9 +266,9 @@ t_lexer_state	checking_tokenizer(t_token *token, t_minishell *sh, const char **c
 		ret = tokenize_pipe_and_redirector(current, token);
 	else if (ft_strchr(WHITESPACE, **current) && ret == LEXER_SUCCESS)
 	{
-		(*current)++;
-		return (LEXER_SUCCESS);
-		// ret = tokenize_space(current, token);
+		// (*current)++;
+		// return (LEXER_SUCCESS);
+		ret = tokenize_space(current, token);
 	}
 	else if (ret == LEXER_SUCCESS)
 		ret = tokenize_word(current, token);
@@ -296,6 +295,14 @@ void	expandor(t_minishell *sh)
 	while (i < sh->token_len)
 	{
 		tmp = sh->envp_ll;
+		if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) | \
+		(sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) | \
+		(sh->tokens[i].type == TOKEN_SINGLE_QUOTE) | \
+		(sh->tokens[i].type ==TOKEN_SPACE))
+		{
+			// if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) | (sh->tokens[i].type == TOKEN_SINGLE_QUOTE))
+				sh->tokens[i].type = TOKEN_WORD;
+		}
 		printf(" We have this stupid : %d\n", sh->token_len);
 		if (sh->tokens[i].value[0] == '\0')
 			;
@@ -304,11 +311,16 @@ void	expandor(t_minishell *sh)
 			iter_str = ft_strdup(sh->tokens[i].value + 1);
 			while (tmp)
 			{
-				if (((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) | (sh->tokens[i].type == TOKEN_WORD)) && sh->tokens[i].value[0] == '$' && !ft_strncmp(tmp->var, iter_str, ft_strlen(tmp->var)))
+				if (((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) | (sh->tokens[i].type == TOKEN_WORD)) && sh->tokens[i].value[0] == '$')
 				{
-					tmp_str = sh->tokens[i].value;
-					sh->tokens[i].value = ft_strdup(tmp->value);
-					free(tmp_str);
+					if (!ft_strncmp(tmp->var, iter_str, ft_strlen(tmp->var)))
+					{
+						tmp_str = sh->tokens[i].value;
+						sh->tokens[i].value = ft_strdup(tmp->value);
+						free(tmp_str);
+					}
+					else 
+						sh->tokens[i].type = TOKEN_EMPTY;
 					break;
 				}
 				tmp = tmp->next;
