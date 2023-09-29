@@ -81,3 +81,20 @@ no pipe
 
 
 
+
+========================== TESTING EXIT CODE =====================
+
+
+
+
+bash-3.2$ ls -la | grep 45
+bash-3.2$ echo $?
+1
+bash-3.2$ 
+
+
+
+
+
+
+
