@@ -6,7 +6,7 @@
 /*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/09/29 19:11:20 by nnabaeei         ###   ########.fr       */
+/*   Updated: 2023/09/30 18:01:56 by nnabaeei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ bool	init_shell(t_minishell *shell)
 	shell->cmd_count = 0;
 	shell->index = 0;
 	shell->cmd_index = 0;
+	shell->space_flag = false;
 	shell->line = NULL;
 	init_envp_linked_list(shell);
 	envp_ll_to_envp_local(shell);
@@ -215,13 +216,26 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 {
 	t_parser_state	ret;
 
+	while (sh->space_flag && (sh->tokens[sh->head].value = '\0'))
+	{
+		sh->head++;
+		sh->token_len--;	
+	}
 	sh->cmd_count = sh->head - 1;
 	ret = PARSER_FAILURE;
 	if (sh->head < sh->seg_end && sh->tokens[sh->head].type != TOKEN_WORD)
 		return (ret);
+	// while (sh->space_flag)
+	// {
+		
+	// }
+	// 	return (PARSER_SUCCESS, sh);
 	while (++sh->cmd_count < sh->seg_end && \
 			sh->tokens[sh->cmd_count].type == TOKEN_WORD)
+	{
+		if ((sh->tokens[sh->head].value = '\0'))
 		sh->index++;
+	}
 	(*content)->cmd = ft_realloc_strings((*content)->cmd, \
 				count_strings((*content)->cmd), sh->index);
 	sh->index = count_strings((*content)->cmd);

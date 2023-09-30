@@ -6,7 +6,7 @@
 /*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/29 18:38:09 by nnabaeei         ###   ########.fr       */
+/*   Updated: 2023/09/30 17:58:33 by nnabaeei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_minishell
 	int					cmd_count;
 	int					index;
 	int					cmd_index;
+	bool				space_flag;
 	t_ast_node			*ast_root;
 	t_envp_ll			*envp_ll;
 	char				**envp_local;
