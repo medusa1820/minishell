@@ -29,7 +29,9 @@ EXECUTOR_SRCS		=	./04_executor/execute_ast0.c \
 						./04_executor/child_process_utils1.c \
 						./04_executor/child_process_utils2.c \
 						./04_executor/exit_code_handler0.c \
-						./04_executor/signals0.c
+						./04_executor/signals0.c \
+						./04_executor/signals1.c \
+						./04_executor/signals2.c
 
 UTILS_SRCS			=	./05_utils/create_ast.c \
 						./05_utils/print_ast.c \

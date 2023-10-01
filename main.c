@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/29 22:25:32 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/01 15:00:30 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,12 @@ int	main(int argc, char **argv, char **envp)
 	init_shell(&shell_data);
 	data.shell_data = &shell_data;
 	ms_terminal_settings_change();
-	ms_signal_handlers_interactive_set();
-	line = readline(RED "minishell> " RESET);
-	while (line)
+	while (1)
 	{
+		set_signals_interactive();
+		line = readline(RED "minishell> " RESET);
+		set_signals_noninteractive();
+		// if (line != NULL)
 		if (line[0] != '\0')
 		{
 			add_history(line);
@@ -40,7 +42,7 @@ int	main(int argc, char **argv, char **envp)
 				if (shell_data.ast_root)
 				{
 					free_tokens(&shell_data);
-					print_ast_tree0(shell_data.ast_root, 0);
+					// print_ast_tree0(shell_data.ast_root, 0);
 					i = 0;
 					if (shell_data.ast_root->type == AST_NODE_CMD)
 					{
@@ -67,18 +69,22 @@ int	main(int argc, char **argv, char **envp)
 				printf("LEXER FAILED\n");
 				free_tokens(&shell_data);
 			}
+			free(line);
+			ft_waiting(&data);
+			printf("Exit code: %d\n", data.exit_code);
 		}
-		ft_waiting(&data);
-		free(line);
-		printf("Exit code: %d\n", data.exit_code);
-		print_envp_ll(shell_data.envp_ll);
-		print_envp_local(shell_data.envp_local);
-		line = readline(RED "minishell> " RESET);
+		// else
+		// {
+		// 	break ;
+		// }
+		// print_envp_ll(shell_data.envp_ll);
+		// print_envp_local(shell_data.envp_local);
+		// line = readline(RED "minishell> " RESET);
 	}
 	free_envp_ll(shell_data.envp_ll);
 	free_envp_local(shell_data.envp_local);
 	printf("Exit code: %d\n", data.exit_code);
 	ms_terminal_settings_restore();
-	// return (data.exit_code);
-	return (g_exit_code);
+	return (data.exit_code);
+	// return (g_exit_code);
 }

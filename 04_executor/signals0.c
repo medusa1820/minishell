@@ -6,35 +6,11 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 21:17:00 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/29 22:33:46 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/01 13:32:28 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	ms_terminal_settings_change(void)
-{
-	struct termios	term;
-
-	if (tcgetattr(STDIN_FILENO, &term) == -1)
-		return (EXIT_FAILURE);
-	term.c_lflag &= ~ECHOCTL;
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-}
-
-int	ms_terminal_settings_restore(void)
-{
-	struct termios	term;
-
-	if (tcgetattr(STDIN_FILENO, &term) == -1)
-		return (EXIT_FAILURE);
-	term.c_lflag |= ECHOCTL;
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-}
 
 /*
 1. **Ctrl-C (`^C`)**:
@@ -61,6 +37,17 @@ int	ms_terminal_settings_restore(void)
     - **Signal**: `SIGQUIT`
 */
 
+
+
+
+
+
+
+
+
+
+
+
 void	ms_signal_handler_interative(int signum)
 {
 	(void)signum;
@@ -72,6 +59,8 @@ void	ms_signal_handler_interative(int signum)
 													strlen(RESET));
 	g_exit_code = EC_FAILURE;
 }
+
+
 
 int	ms_signal_handlers_interactive_set(void)
 {
@@ -86,6 +75,14 @@ int	ms_signal_handlers_interactive_set(void)
 	// sigaction(SIGTSTP, &sigact, NULL);
 	return (EXIT_SUCCESS);
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -112,8 +109,6 @@ int	ms_signal_handlers_foreground_command_set(void)
 }
 
 */
-
-
 
 /*
 
@@ -161,6 +156,8 @@ static void	handle_signals(int signum)
 
 static void	handle_signals_child(int signum)
 {
+
+	
 	if (signum == SIGINT)
 	{
 		ft_putchar_fd('\n', STDOUT_FILENO);
@@ -176,6 +173,8 @@ static void	handle_signals_child(int signum)
 void	set_signals(void)
 {
 	struct sigaction	sa;
+
+	// g_sig_nmbr = SIGINT
 
 	sigemptyset(&sa.sa_mask);
 	sa.sa_handler = &handle_signals;
@@ -216,6 +215,33 @@ void	set_signals_child(void)
 	}
 }
 
-
-
 */
+
+
+
+
+
+
+int	ms_terminal_settings_change(void)
+{
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		return (EXIT_FAILURE);
+	term.c_lflag &= ~ECHOCTL;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
+
+int	ms_terminal_settings_restore(void)
+{
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		return (EXIT_FAILURE);
+	term.c_lflag |= ECHOCTL;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
