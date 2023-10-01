@@ -6,7 +6,7 @@
 /*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/30 17:32:55 by nnabaeei         ###   ########.fr       */
+/*   Updated: 2023/10/01 15:14:25 by nnabaeei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	main(int argc, char **argv, char **envp)
 		if (line[0] != '\0')
 		{
 			add_history(line);
-			if (!tokenize(&shell_data, line))
+			if (tokenize(&shell_data, line) == LEXER_SUCCESS)
 			{
 				print_tokens(shell_data);
 				shell_data.ast_root = parse_pipeline(&shell_data);
