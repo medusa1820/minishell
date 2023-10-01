@@ -6,11 +6,42 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 13:37:46 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/01 14:47:33 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/01 15:56:50 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/* set_signals_interactive:
+*	Sets the behavior in response to SIGINT (ctrl-c) and SIGQUIT (ctrl-\).
+*	SIGINT resets the user input prompt to a new blank line.
+*	SIGQUIT is ignored.
+*	Used when minishell is in interactive mode, meaning it is awaiting
+*	user input.
+*/
+
+void	set_signals_interactive(void)
+{
+	struct sigaction	act;
+
+	ignore_sigquit();
+	ft_memset(&act, 0, sizeof(act));
+	act.sa_handler = &signal_reset_prompt;
+	sigaction(SIGINT, &act, NULL);
+}
+
+/* ignore_sigquit:
+*	Replaces SIGQUIT signals (ctrl-\) with SIG_IGN to ignore
+*	the signal.
+*/
+void	ignore_sigquit(void)
+{
+	struct sigaction	act;
+
+	ft_memset(&act, 0, sizeof(act));
+	act.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &act, NULL);
+}
 
 /* signal_reset_prompt:
 *	Resets the readline user input prompt for interactive signal handling.
@@ -22,32 +53,6 @@ void	signal_reset_prompt(int signo)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-}
-
-/* set_signals_interactive:
-*	Sets the behavior in response to SIGINT (ctrl-c) and SIGQUIT (ctrl-\).
-*	SIGINT resets the user input prompt to a new blank line.
-*	SIGQUIT is ignored.
-*	Used when minishell is in interactive mode, meaning it is awaiting
-*	user input.
-*/
-void	set_signals_interactive(void)
-{
-	struct sigaction	act;
-
-	ignore_sigquit();
-	ft_memset(&act, 0, sizeof(act));
-	act.sa_handler = &signal_reset_prompt;
-	sigaction(SIGINT, &act, NULL);
-}
-
-/* signal_print_newline:
-*	Prints a newline for noninteractive signal handling.
-*/
-void	signal_print_newline(int signal)
-{
-	(void)signal;
-	rl_on_new_line();
 }
 
 /* set_signals_noninteractive:
@@ -63,21 +68,19 @@ void	set_signals_noninteractive(void)
 
 	ft_memset(&act, 0, sizeof(act));
 	act.sa_handler = &signal_print_newline;
+	// act.sa_handler = &signal_reset_prompt;
 	sigaction(SIGINT, &act, NULL);
 	sigaction(SIGQUIT, &act, NULL);
 }
 
-/* ignore_sigquit:
-*	Replaces SIGQUIT signals (ctrl-\) with SIG_IGN to ignore
-*	the signal.
+/* signal_print_newline:
+*	Prints a newline for noninteractive signal handling.
 */
-void	ignore_sigquit(void)
+void	signal_print_newline(int signal)
 {
-	struct sigaction	act;
-
-	ft_memset(&act, 0, sizeof(act));
-	act.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &act, NULL);
+	(void)signal;
+	rl_on_new_line();
+	// exit(1);
 }
 
 

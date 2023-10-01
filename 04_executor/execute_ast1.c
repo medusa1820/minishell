@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:27:01 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/25 18:09:52 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/01 16:05:50 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ void	here_doc_open(t_pipe *data, char *word)
 	if (fd_here_doc < 0)
 		exit_error(errno, "Error creating temporary here_doc_file", data);
 	ft_putstr_fd("here_doc>", STDOUT_FILENO);
+	// set_signals_interactive();
 	buffer = get_next_line(STDIN_FILENO);
+	// set_signals_noninteractive();
 	while (buffer)
 	{
 		if (ft_strlen(word) == ft_strlen(buffer) - 1 && \
@@ -50,7 +52,40 @@ void	here_doc_open(t_pipe *data, char *word)
 			ft_putstr_fd(buffer, fd_here_doc);
 		free(buffer);
 		ft_putstr_fd("here_doc>", STDOUT_FILENO);
+		set_signals_interactive();
 		buffer = get_next_line(STDIN_FILENO);
+		set_signals_noninteractive();
 	}
 	close(fd_here_doc);
 }
+
+
+/*
+
+// fill_heredoc:
+// Copies user input into a temporary file. If user inputs an environment variable
+// like $USER, expands the variable before writing to the heredoc.
+// Returns true on success, false on failure.
+
+bool	fill_heredoc(t_data *data, t_io_fds *io, int fd)
+{
+	char	*line;
+	bool	ret;
+
+	ret = false;
+	line = NULL;
+	while (1)
+	{
+		set_signals_interactive();
+		line = readline(">");
+		set_signals_noninteractive();
+		if (!evaluate_heredoc_line(data, &line, io, &ret))
+			break ;
+		ft_putendl_fd(line, fd);
+		free_ptr(line);
+	}
+	free_ptr(line);
+	return (ret);
+}
+
+*/

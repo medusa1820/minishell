@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/01 15:00:30 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/01 15:14:28 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,51 +32,53 @@ int	main(int argc, char **argv, char **envp)
 		set_signals_interactive();
 		line = readline(RED "minishell> " RESET);
 		set_signals_noninteractive();
-		// if (line != NULL)
-		if (line[0] != '\0')
+		if (line != NULL)
 		{
-			add_history(line);
-			if (!tokenize(&shell_data, line))
+			if (line[0] != '\0')
 			{
-				shell_data.ast_root = parse_pipeline(&shell_data);
-				if (shell_data.ast_root)
+				add_history(line);
+				if (!tokenize(&shell_data, line))
 				{
-					free_tokens(&shell_data);
-					// print_ast_tree0(shell_data.ast_root, 0);
-					i = 0;
-					if (shell_data.ast_root->type == AST_NODE_CMD)
+					shell_data.ast_root = parse_pipeline(&shell_data);
+					if (shell_data.ast_root)
 					{
-						piper(&data, &i);
-						forker_no_pipe(&data, shell_data.envp_local, shell_data.ast_root);
-						free_ast(&shell_data.ast_root);
+						free_tokens(&shell_data);
+						// print_ast_tree0(shell_data.ast_root, 0);
+						i = 0;
+						if (shell_data.ast_root->type == AST_NODE_CMD)
+						{
+							piper(&data, &i);
+							forker_no_pipe(&data, shell_data.envp_local, shell_data.ast_root);
+							free_ast(&shell_data.ast_root);
+						}
+						else
+						{
+							data.nr_of_cmd_nodes = 0;
+							execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local);
+							free_ast(&shell_data.ast_root);
+						}
 					}
 					else
 					{
-						data.nr_of_cmd_nodes = 0;
-						execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local);
+						printf("PARSER FAILED\n");
+						free_tokens(&shell_data);
 						free_ast(&shell_data.ast_root);
 					}
 				}
 				else
 				{
-					printf("PARSER FAILED\n");
+					printf("LEXER FAILED\n");
 					free_tokens(&shell_data);
-					free_ast(&shell_data.ast_root);
 				}
+				free(line);
+				ft_waiting(&data);
+				printf("Exit code: %d\n", data.exit_code);
 			}
-			else
-			{
-				printf("LEXER FAILED\n");
-				free_tokens(&shell_data);
-			}
-			free(line);
-			ft_waiting(&data);
-			printf("Exit code: %d\n", data.exit_code);
 		}
-		// else
-		// {
-		// 	break ;
-		// }
+		else
+		{
+			break ;
+		}
 		// print_envp_ll(shell_data.envp_ll);
 		// print_envp_local(shell_data.envp_local);
 		// line = readline(RED "minishell> " RESET);
