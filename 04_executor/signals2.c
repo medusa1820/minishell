@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 13:37:46 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/01 15:56:50 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/01 22:15:36 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,16 @@ void	set_signals_interactive(void)
 	sigaction(SIGINT, &act, NULL);
 }
 
+void	set_signals_interactive_here_doc(void)
+{
+	struct sigaction	act;
+
+	ignore_sigquit();
+	ft_memset(&act, 0, sizeof(act));
+	act.sa_handler = &signal_reset_prompt_here_doc;
+	sigaction(SIGINT, &act, NULL);
+}
+
 /* ignore_sigquit:
 *	Replaces SIGQUIT signals (ctrl-\) with SIG_IGN to ignore
 *	the signal.
@@ -46,11 +56,41 @@ void	ignore_sigquit(void)
 /* signal_reset_prompt:
 *	Resets the readline user input prompt for interactive signal handling.
 */
+
+/*
 void	signal_reset_prompt(int signo)
 {
 	(void)signo;
 	write(1, "\n", 1);
 	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+*/
+
+void	signal_reset_prompt(int signo)
+{
+	// (void)signo;
+	g_sig_nbr = signo;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	// exit_error(g_sig_nbr, NULL, );
+}
+
+void	exit_for_signals(t_pipe *data)
+{
+	if (g_sig_nbr == 2)
+		data->exit_code = 1;
+	// exit_error(g_sig_nbr, NULL, data);
+}
+
+void	signal_reset_prompt_here_doc(int signo)
+{
+	(void)signo;
+	write(1, "\n", 1);
+	// rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
 }
@@ -76,15 +116,21 @@ void	set_signals_noninteractive(void)
 /* signal_print_newline:
 *	Prints a newline for noninteractive signal handling.
 */
+// void	signal_print_newline(int signal)
+// {
+// 	(void)signal;
+// 	write(1, "\n", 1);
+// 	rl_on_new_line();
+// 	// exit(1);
+// }
+
 void	signal_print_newline(int signal)
 {
-	(void)signal;
+	g_sig_nbr = signal;
+	write(1, "\n", 1);
 	rl_on_new_line();
 	// exit(1);
 }
-
-
-
 
 /*
 
@@ -104,3 +150,4 @@ void	minishell_interactive(t_data *data)
 }
 
 */
+

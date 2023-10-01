@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/01 15:14:28 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/01 22:08:15 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,14 @@ int	main(int argc, char **argv, char **envp)
 	(void)envp;
 	init_shell(&shell_data);
 	data.shell_data = &shell_data;
-	ms_terminal_settings_change();
 	while (1)
 	{
+		ms_terminal_settings_change();
 		set_signals_interactive();
+		exit_for_signals(&data);
+		printf("Exit code0: %d\n", data.exit_code);
 		line = readline(RED "minishell> " RESET);
+		ms_terminal_settings_restore();
 		set_signals_noninteractive();
 		if (line != NULL)
 		{
@@ -73,6 +76,8 @@ int	main(int argc, char **argv, char **envp)
 				free(line);
 				ft_waiting(&data);
 				printf("Exit code: %d\n", data.exit_code);
+				// exit_for_signals(&data);
+				// printf("Exit code0: %d\n", data.exit_code);
 			}
 		}
 		else
@@ -82,11 +87,13 @@ int	main(int argc, char **argv, char **envp)
 		// print_envp_ll(shell_data.envp_ll);
 		// print_envp_local(shell_data.envp_local);
 		// line = readline(RED "minishell> " RESET);
+		exit_for_signals(&data);
+		printf("Exit code1: %d\n", data.exit_code);
 	}
 	free_envp_ll(shell_data.envp_ll);
 	free_envp_local(shell_data.envp_local);
-	printf("Exit code: %d\n", data.exit_code);
-	ms_terminal_settings_restore();
-	return (data.exit_code);
+	// printf("Exit code: %d\n", data.exit_code);
+	// ms_terminal_settings_restore();
+	// return (data.exit_code);
 	// return (g_exit_code);
 }

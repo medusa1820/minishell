@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 21:17:00 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/01 13:32:28 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/01 21:29:27 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 
 
 
-
+/*
 
 void	ms_signal_handler_interative(int signum)
 {
@@ -59,8 +59,6 @@ void	ms_signal_handler_interative(int signum)
 													strlen(RESET));
 	g_exit_code = EC_FAILURE;
 }
-
-
 
 int	ms_signal_handlers_interactive_set(void)
 {
@@ -76,8 +74,7 @@ int	ms_signal_handlers_interactive_set(void)
 	return (EXIT_SUCCESS);
 }
 
-
-
+*/
 
 
 

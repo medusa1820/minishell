@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 17:42:55 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/01 15:19:19 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/01 21:36:14 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,9 @@ changes the value of g_exit_code, then that change will be visible immediately
 to other parts of the code once the signal handler returns.
 */
 
-volatile t_ms_exit_code	g_exit_code;
+// volatile t_ms_exit_code	g_exit_code;
+
+volatile int	g_sig_nbr;
 
 // execute_ast0.c
 
@@ -109,8 +111,11 @@ int					ms_terminal_settings_restore(void);
 // signals2.c
 
 void				set_signals_interactive(void);
+void				set_signals_interactive_here_doc();
 void				ignore_sigquit(void);
 void				signal_reset_prompt(int signo);
+void				exit_for_signals(t_pipe *data); ////////////////
+void				signal_reset_prompt_here_doc(int signo);
 void				set_signals_noninteractive(void);
 void				signal_print_newline(int signal);
 
