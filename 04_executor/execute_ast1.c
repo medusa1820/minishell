@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:27:01 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/01 19:32:55 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/02 12:39:22 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 bool	forker_no_pipe(t_pipe *data, char **envp, t_ast_node *node)
 {
-	handle_in_redirections(data, node);
-	handle_out_redirections(data, node);
+	if (!handle_in_redirections(data, node))
+		return (false);
+	if (!handle_out_redirections(data, node))
+		return (false);
 	data->pid = fork();
 	if (data->pid == -1)
 		return (false);

@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/09/28 15:30:37 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/02 11:41:38 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,24 +222,26 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 	while (++sh->cmd_count < sh->seg_end && \
 			sh->tokens[sh->cmd_count].type == TOKEN_WORD)
 		sh->index++;
-	(*content)->cmd = ft_realloc_strings((*content)->cmd, \
-				count_strings((*content)->cmd), sh->index);
-	sh->index = count_strings((*content)->cmd);
-	while (sh->head < sh->seg_end && sh->tokens[sh->head].type == TOKEN_WORD)
+	if (sh->index)
 	{
-		(*content)->cmd[sh->index] = ft_strdup(sh->tokens[sh->head].value);
-		(*content)->cmd[sh->index + 1] = NULL;
-		if (!(*content)->cmd[sh->index++])
-			return (PARSER_FAILURE);
-		free(sh->tokens[sh->head].value);
-		sh->tokens[sh->head++].value = NULL;
-		sh->token_len--;
-		ret = PARSER_SUCCESS;
+		(*content)->cmd = ft_realloc_strings((*content)->cmd, \
+					count_strings((*content)->cmd), sh->index);
+		sh->index = count_strings((*content)->cmd);
+		while (sh->head < sh->seg_end && sh->tokens[sh->head].type == TOKEN_WORD)
+		{
+			(*content)->cmd[sh->index] = ft_strdup(sh->tokens[sh->head].value);
+			(*content)->cmd[sh->index + 1] = NULL;
+			if (!(*content)->cmd[sh->index++])
+				return (PARSER_FAILURE);
+			free(sh->tokens[sh->head].value);
+			sh->tokens[sh->head++].value = NULL;
+			sh->token_len--;
+			ret = PARSER_SUCCESS;
+		}
 	}
 	sh->index = 0;
 	return (ret);
 }
-
 
 t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
 {

@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/15 18:16:52 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/02 11:46:14 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	prepare_cmd_path(t_pipe *data)
 		temp = ft_strjoin("/", data->cmd_split[0]);
 		cmd_path_func = ft_strjoin(data->paths[i], temp);
 		free(temp);
-		data->cmd_path = NULL;
+		// data->cmd_path = NULL;
 		if (access(cmd_path_func, X_OK) != -1)
 		{
 			data->cmd_path = cmd_path_func;

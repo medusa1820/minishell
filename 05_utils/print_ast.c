@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:58:47 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/02 20:01:30 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/02 11:22:14 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	print_command(char **cmd, int level)
 		printf("Command: (null)\n");
 	}
 }
-
 
 void	print_ast_tree0(t_ast_node *node, int level)
 {

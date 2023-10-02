@@ -14,7 +14,8 @@ MINISHELL_SRCS		=	./main.c
 DATA_INIT_SRCS		=	./00_data_init/envp_ll_init.c \
 						./00_data_init/envp_ll_utils.c \
 						./00_data_init/envp_local_init.c \
-						./00_data_init/envp_local_utils.c
+						./00_data_init/envp_local_utils.c \
+						./00_data_init/pipe_data.c
 
 LEXER_SRCS			=	./01_lexer/lexer0.c
 
@@ -39,7 +40,7 @@ UTILS_SRCS			=	./05_utils/create_ast.c \
 						./05_utils/exit_utils0.c \
 						./05_utils/exit_utils1.c \
 						./05_utils/get_next_line.c
-\
+
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(DATA_INIT_SRCS) \
 						$(LEXER_SRCS) \

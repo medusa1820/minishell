@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 17:42:55 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/01 21:36:14 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/02 12:40:21 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ bool				execute_cmds(t_ast_node *head, int *i, t_pipe *data, \
 								char **envp);
 bool				forker(t_pipe *data, int *i, char **envp, t_ast_node *head);
 bool				piper(t_pipe *data, int *i);
-void				handle_in_redirections(t_pipe *data, t_ast_node *node);
-void				handle_out_redirections(t_pipe *data, t_ast_node *node);
+bool				handle_in_redirections(t_pipe *data, t_ast_node *node);
+bool				handle_out_redirections(t_pipe *data, t_ast_node *node);
 
 // execute_ast1.c
 

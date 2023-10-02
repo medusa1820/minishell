@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/20 19:19:23 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/02 12:43:39 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,10 @@ here_doc will propagate to child processes
 
 bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *node)
 {
-	handle_in_redirections(data, node);
-	handle_out_redirections(data, node);
+	if (!handle_in_redirections(data, node))
+		return (false);
+	if (!handle_out_redirections(data, node))
+		return (false);
 	data->pid = fork();
 	if (data->pid == -1)
 		return (false);
@@ -85,7 +87,7 @@ bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *node)
 	}
 }
 
-void	handle_in_redirections(t_pipe *data, t_ast_node *node)
+bool	handle_in_redirections(t_pipe *data, t_ast_node *node)
 {
 	t_redirect	*redirect;
 
@@ -107,12 +109,17 @@ void	handle_in_redirections(t_pipe *data, t_ast_node *node)
 				exit_error(errno, "Error deleting here_doc temp file", data);
 		}
 		if (data->fd_infile < 0)
-			exit_error(errno, "Error openning file", data);
+		{
+			// exit_error(errno, "Error openning file", data);
+			error_do_next_iter(errno, "Error openning file", data);
+			return (false);
+		}
 		redirect = redirect->next;
 	}
+	return (true);
 }
 
-void	handle_out_redirections(t_pipe *data, t_ast_node *node)
+bool	handle_out_redirections(t_pipe *data, t_ast_node *node)
 {
 	t_redirect	*redirect;
 
@@ -133,7 +140,12 @@ void	handle_out_redirections(t_pipe *data, t_ast_node *node)
 													O_APPEND, 0644);
 		}
 		if (data->fd_outfile < 0)
-			exit_error(errno, "Error openning file", data);
+		{
+			// exit_error(errno, "Error openning file", data);
+			error_do_next_iter(errno, "Error openning file", data);
+			return (false);
+		}
 		redirect = redirect->next;
 	}
+	return (true);
 }

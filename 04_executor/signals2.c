@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 13:37:46 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/01 22:15:36 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/02 10:28:05 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,4 +150,3 @@ void	minishell_interactive(t_data *data)
 }
 
 */
-

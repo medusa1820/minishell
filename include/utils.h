@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 18:02:13 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/18 16:11:06 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/02 12:03:27 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void				free_2d_str_func(char **str);
 
 void				exit_error_cmd_notfound(int exit_code, char *error_msg, \
 											t_pipe *data);
+void				error_do_next_iter(int exit_code, char *error_msg, \
+										t_pipe *data);
 
 // free_ast.c
 
