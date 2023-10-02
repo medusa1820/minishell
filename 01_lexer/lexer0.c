@@ -6,7 +6,7 @@
 /*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/01 19:33:37 by nnabaeei         ###   ########.fr       */
+/*   Updated: 2023/10/02 13:03:37 by nnabaeei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,118 +305,101 @@ void	init_token(t_token *token)
 /*
 while characters in token value
 	if c == '$' && c + 1 == ('?' || '_' || alpha)
-		while (c != (alphanumeric || '_'))
+		len = 2
+		while (c + len != (alphanumeric || '_'))
 			len++;
 		var = from first char + len
 		get value from var
 		if val == NULL -> val is empty
 		insert val into var location while keeping everything aroung var (copy before var to new, append val, append rest after var - free old save new)
 */
+// $abcde_
+int	changing_var_value(char **str, char *value, int start, int len)
+{
+	char	*new;
+	char	*left;
+	char	*right;
+	int		size;
 
-//ls -la |  < main.c << E < make cat >> out | $USER
+	left = ft_substr(*str, 0, start);
+	right = ft_strdup(*str + start + len);
+	if (!left || !right)		
+		return (free(left), free(right), start + len - 1);
+	if (!value)
+		value = "";
+	size = ft_strlen(left) + ft_strlen(right) + ft_strlen(value) + 1;
+	new = ft_calloc(size, sizeof(char));
+	if (!new)
+		return (free(left), free(right), start + len - 1);
+	ft_strlcpy(new, left, size);
+	ft_strlcat(new, value, size);
+	ft_strlcat(new, right, size);
+	free(*str);
+	*str = new;
+	return (free(left), free(right), start + ft_strlen(value) - 1);
+}
+char	*get_env_var(t_minishell *sh, char *var)
+{
+	t_envp_ll	*tmp;
+
+	if (var == NULL)
+		return (NULL);
+	tmp = sh->envp_ll;
+	while (tmp)
+	{
+		if (!ft_strncmp(tmp->var, var, ft_strlen(tmp->var)))
+				return (ft_strdup(tmp->value)); 
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+
+void expand(t_minishell *sh, char **str)
+{
+	int		i;
+	int 	j;
+	char	*var;
+	char	*value;
+
+	i = -1;
+	while ((*str)[++i])
+	{
+		if ((*str)[i] == '$')
+		{
+			value = NULL;
+			j = i + 2;
+			if ((*str)[i + 1] == '?')
+				value = ft_itoa(42);// put the the correct exit code here
+			else if ((*str)[i + 1] == '_' || ft_isalpha((*str)[i + 1]))
+			{
+				while ((*str)[j] == '_' || ft_isalnum((*str)[j]))
+					j++;
+				var = ft_substr(*str, i + 1, j - i);
+				value = get_env_var(sh, var);
+				free(var);
+			}
+			i = changing_var_value(str, value, i, j - i);
+			free(value);
+		}
+	}
+}
+
 void	expandor(t_minishell *sh)
 {
-	char		*tmp_str;
-	char		*iter_str;
-	char		**vars;
-	int			k;
-	t_envp_ll	*tmp;
-	int i;
+	int	i;
 
 	i = 0;
-	k = 0;
 	while (i < sh->token_len)
 	{
-		tmp = sh->envp_ll;
-		if (sh->tokens[i].value[0] == '\0')
-			;
-		else
-		{
-			// printf(" We have this stupid : %d and val:%s\n", sh->token_len, tmp->var);
-			iter_str = ft_strdup(sh->tokens[i].value + 1);
-			if (ft_strchr(iter_str, '$'))
-			{
-				vars = ft_split(iter_str, '$');
-				k = 0;
-				while (vars[k])
-				{
-					tmp = sh->envp_ll;
-					printf("We are in %s and tmp = %p\n", vars[k], tmp);
-					while (tmp)
-					{
-						// printf("%d%d%d%d%d%d%d%d\n",k ,k ,k, k, k, k, k, k);
-						// printf("We are comparing : %s with %s\n", vars[k], tmp->var);
-						if (((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) || (sh->tokens[i].type == 	TOKEN_WORD)) || sh->tokens[i].value[0] == '$')
-						{
-							if (!ft_strncmp(tmp->var, vars[k], ft_strlen(tmp->var)))
-							{
-								tmp_str = sh->tokens[i].value;
-								if (k == 0)
-								{
-									sh->tokens[i].value = ft_strdup(tmp->value);
-									free(tmp_str);
-								}
-								else
-								{
-									printf("The previous value is : %s\n", sh->tokens[i].value);
-									sh->tokens[i].value = ft_strjoin(sh->tokens[i].value, tmp->value);
-									printf("The new value is : %s\n", sh->tokens[i].value);
-								}
-								break;
-							}
-							else if (sh->tokens[i].value[1] == '?')
-							{
-								tmp_str = sh->tokens[i].value;
-								sh->tokens[i].value = ft_itoa(i);
-								free(tmp_str);	
-								break;
-							}
-						}
-						tmp = tmp->next;
-					}
-					k++;
-				}
-			}
-			else
-			{
-				while (tmp)
-				{
-					// printf("We are comparing : %s with %s\n", iter_str, tmp->var);
-					if (((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) || (sh->tokens[i].type == TOKEN_WORD)) && sh->tokens[i].value[0] == '$')
-					{
-						
-						if (!ft_strncmp(tmp->var, iter_str, ft_strlen(tmp->var)))
-						{
-							tmp_str = sh->tokens[i].value;
-							sh->tokens[i].value = ft_strdup(tmp->value); 
-							free(tmp_str);
-							break;
-						}
-						else if (sh->tokens[i].value[1] == '?')
-						{
-							tmp_str = sh->tokens[i].value;
-							sh->tokens[i].value = ft_itoa(i);
-							free(tmp_str);	
-							break;
-						}
-					}
-					tmp = tmp->next;
-				}
-				free(iter_str);
-				
-			}
-		}
+		if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) || (sh->tokens[i].type == TOKEN_WORD))
+			expand(sh, &sh->tokens[i].value);
 		i++;
 	}
-	i = -1;
-	while (++i < sh->token_len)
-	{
-		if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) | \
-		(sh->tokens[i].type == TOKEN_SINGLE_QUOTE))
-				sh->tokens[i].type = TOKEN_WORD;
-	}
-
 }
+
+
+//ls -la |  < main.c << E < make cat >> out | $USER
+	
 
 void erase_token(t_minishell *sh, int index)
 {
@@ -445,9 +428,9 @@ void erase_token(t_minishell *sh, int index)
 // remove all space tokens
 void	remove_empty_tokens(t_minishell *sh)
 {
-	int	i = -1;
-	char	*tmp_token;
+	int	i;
 
+	i = -1;
 	while (++i < sh->token_len)
 	{
 		if ((sh->tokens[i].value[0] == '\0') && (sh->tokens[i].type == TOKEN_DOUBLE_QUOTE || sh->tokens[i].type == TOKEN_SINGLE_QUOTE || sh->tokens[i].type == TOKEN_WORD))
@@ -457,6 +440,12 @@ void	remove_empty_tokens(t_minishell *sh)
 				erase_token(sh, i);
 		}
 	}
+}
+void	joining_tokens(t_minishell *sh)
+{
+	int		i;
+	char	*tmp_token;
+
 	i = 0;
 	while (i < sh->token_len - 1)
 	{
@@ -477,7 +466,18 @@ void	remove_empty_tokens(t_minishell *sh)
 			erase_token(sh, i);
 	}
 }
+void	trimming_tokens_type(t_minishell *sh)
+{
+	int	i;
 
+	i = -1;
+	while (++i < sh->token_len)
+	{
+		if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) | \
+		(sh->tokens[i].type == TOKEN_SINGLE_QUOTE))
+				sh->tokens[i].type = TOKEN_WORD;
+	}
+}
 t_lexer_state	tokenize(t_minishell *sh, const char *line)
 {
 	int			ret;
@@ -494,10 +494,12 @@ t_lexer_state	tokenize(t_minishell *sh, const char *line)
 	sh->free_lexer_token_len = sh->token_len;
 	if (ret == LEXER_SUCCESS)
 	{
+		// print_tokenss(sh);
 		check_assignment(&(sh->tokens), sh->token_len);
-		print_tokenss(sh);
 		remove_empty_tokens(sh);
 		expandor(sh);
+		trimming_tokens_type(sh);
+		joining_tokens(sh);
 	}
 	return (ret);
 }
