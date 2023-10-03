@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 19:15:24 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/02 11:47:36 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/03 16:52:03 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void		free_envp_local(char **array);
 
 // pipe_data.c
 
-void		init_pipe_data(t_pipe *data);
+void		init_pipe_data(t_pipe *data, t_minishell *shell_data);
+// void		init_pipe_data(t_pipe *data);
 
 #endif

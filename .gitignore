@@ -3,3 +3,10 @@ tester_minishell/
 
 # Ignore vscode settings
 .vscode
+
+# Ignore files
+in_file0
+in_file1
+out_file0
+out_file1
+out_file2

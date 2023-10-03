@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 18:14:36 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/27 19:17:26 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/03 17:25:38 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,12 @@
 
 // main.c
 
-int			main(int argc, char **argv, char **envp);
+// int			main(int argc, char **argv, char **envp);
+int				main(int argc, char **argv);
 // int			main(void);
+void		run_minishell_interactive(t_pipe *data, t_minishell *shell_data);
+void		run_minishell_non_interactive(t_pipe *data, \
+											t_minishell *shell_data);
+
 
 #endif
