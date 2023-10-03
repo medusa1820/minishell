@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/28 19:49:14 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/03 22:21:35 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,12 @@ typedef enum e_token_type
 	TOKEN_REDIRECT,
 	TOKEN_PIPE,
 	TOKEN_WORD,
+	TOKEN_SPACE,
 	TOKEN_UNCLOSED_Q,
 	TOKEN_ASSIGNMENT,
 	TOKEN_END,
 }	t_token_type;
+
 
 typedef struct s_token
 {
