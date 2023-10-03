@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:15:35 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/03 17:42:33 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/03 22:08:22 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,60 +41,55 @@ void	run_minishell_interactive(t_pipe *data, t_minishell *shell_data)
 	while (1)
 	{
 		set_signals_interactive();
-		printf("Exit code0: %d\n", data->exit_code);
+		// printf("Exit code0: %d\n", data->exit_code);
 		line = readline(RED "minishell> " RESET);
 		set_signals_noninteractive();
-		if (line != NULL)
-		{
-			if (line[0] != '\0')
-			{
-				add_history(line);
-				if (!tokenize(shell_data, line))
-				{
-					shell_data->ast_root = parse_pipeline(shell_data);
-					if (shell_data->ast_root)
-					{
-						free_tokens(shell_data);
-						print_ast_tree0(shell_data->ast_root, 0);
-						i = 0;
-						if (shell_data->ast_root->type == AST_NODE_CMD)
-						{
-							piper(data, &i);
-							forker_no_pipe(data, shell_data->envp_local, shell_data->ast_root);
-							free_ast(&shell_data->ast_root);
-						}
-						else
-						{
-							data->nr_of_cmd_nodes = 0;
-							execute_cmds(shell_data->ast_root, &i, data, shell_data->envp_local);
-							free_ast(&shell_data->ast_root);
-						}
-					}
-					else
-					{
-						printf("PARSER FAILED\n");
-						free_tokens(shell_data);
-						free_ast(&shell_data->ast_root);
-					}
-				}
-				else
-				{
-					printf("LEXER FAILED\n");
-					free_tokens(shell_data);
-				}
-				free(line);
-				ft_waiting(data);
-				printf("Exit code1: %d\n", data->exit_code);
-			}
-		}
-		else
+		if (line == NULL || *line == EOF)
 		{
 			exit_for_signals(data);
-			printf("Ctrl + D pressed, exit code is %d", data->exit_code);
-			break ;
+			// printf("Ctrl + D pressed, exit code is %d", data->exit_code);
+			return ;
+		}
+		else if (line[0] != '\0')
+		{
+			add_history(line);
+			if (tokenize(shell_data, line) != LEXER_SUCCESS)
+			{
+				// printf("LEXER FAILED\n");
+				free_tokens(shell_data);
+				data->exit_code = 1;
+				return ;
+			}
+			shell_data->ast_root = parse_pipeline(shell_data);
+			if (!shell_data->ast_root)
+			{
+				// printf("PARSER FAILED\n");
+				free_tokens(shell_data);
+				free_ast(&shell_data->ast_root);
+				data->exit_code = 1;
+				return ;
+			}
+			free_tokens(shell_data);
+			// print_ast_tree0(shell_data->ast_root, 0);
+			i = 0;
+			if (shell_data->ast_root->type == AST_NODE_CMD)
+			{
+				piper(data, &i);
+				forker_no_pipe(data, shell_data->envp_local, shell_data->ast_root);
+				free_ast(&shell_data->ast_root);
+			}
+			else
+			{
+				data->nr_of_cmd_nodes = 0;
+				execute_cmds(shell_data->ast_root, &i, data, shell_data->envp_local);
+				free_ast(&shell_data->ast_root);
+			}
+			free(line);
+			ft_waiting(data);
+			// printf("Exit code1: %d\n", data->exit_code);
 		}
 		exit_for_signals(data);
-		printf("Exit code2: %d\n", data->exit_code);
+		// printf("Exit code2: %d\n", data->exit_code);
 	}
 }
 
@@ -121,8 +116,60 @@ if (argc >= 2)
 
 void	run_minishell_non_interactive(t_pipe *data, t_minishell *shell_data)
 {
-	(void)data;
-	(void)shell_data;
+	char			*line;
+	int				i;
+	char			*line_bla;
+
+	while (1)
+	{
+		line_bla = get_next_line(fileno(stdin));
+		line = ft_strtrim(line_bla, "\n");
+		free(line_bla);
+		if (line == NULL || *line == EOF)
+		{
+			// printf("Ctrl + D pressed, exit code is %d", data->exit_code);
+			return ;
+		}
+		else if (line[0] != '\0')
+		{
+			add_history(line);
+			if (tokenize(shell_data, line) != LEXER_SUCCESS)
+			{
+				// printf("LEXER FAILED\n");
+				free_tokens(shell_data);
+				data->exit_code = 1;
+				return ;
+			}
+			if (!parse_pipeline(shell_data))
+			{
+				// printf("PARSER FAILED\n");
+				free_tokens(shell_data);
+				free_ast(&shell_data->ast_root);
+				data->exit_code = 1;
+				return ;
+			}
+			free_tokens(shell_data);
+			// print_ast_tree0(shell_data->ast_root, 0);
+			i = 0;
+			if (shell_data->ast_root->type == AST_NODE_CMD)
+			{
+				piper(data, &i);
+				forker_no_pipe(data, shell_data->envp_local, shell_data->ast_root);
+				free_ast(&shell_data->ast_root);
+			}
+			else
+			{
+				data->nr_of_cmd_nodes = 0;
+				execute_cmds(shell_data->ast_root, &i, data, shell_data->envp_local);
+				free_ast(&shell_data->ast_root);
+			}
+			free(line);
+			ft_waiting(data);
+			// printf("Exit code1: %d\n", data->exit_code);
+		}
+		exit_for_signals(data);
+		// printf("Exit code2: %d\n", data->exit_code);
+	}
 }
 
 
