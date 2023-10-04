@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser0.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/02 11:41:38 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/04 12:38:22 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// bool	init_shell(t_minishell *shell, t_pipe *data)
 bool	init_shell(t_minishell *shell)
 {
 	shell->ast_root = NULL;
@@ -23,7 +24,10 @@ bool	init_shell(t_minishell *shell)
 	shell->cmd_count = 0;
 	shell->index = 0;
 	shell->cmd_index = 0;
+	shell->space_flag = false;
 	shell->line = NULL;
+	shell->data = NULL;
+	// shell->exit_code_dummy = data->exit_code;¿
 	init_envp_linked_list(shell);
 	envp_ll_to_envp_local(shell);
 	return (true);
@@ -210,38 +214,44 @@ char **ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
 	freeing_cmd(ptr);
 	return (new_ptr);
 }
-
+// HI "HI" ""HI "H"I
 t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 {
 	t_parser_state	ret;
 
+	// while (sh->space_flag && (sh->tokens[sh->head].value = '\0'))
+	// {
+	// 	sh->head++;
+	// 	sh->token_len--;	
+	// }
 	sh->cmd_count = sh->head - 1;
 	ret = PARSER_FAILURE;
 	if (sh->head < sh->seg_end && sh->tokens[sh->head].type != TOKEN_WORD)
 		return (ret);
 	while (++sh->cmd_count < sh->seg_end && \
 			sh->tokens[sh->cmd_count].type == TOKEN_WORD)
-		sh->index++;
-	if (sh->index)
 	{
-		(*content)->cmd = ft_realloc_strings((*content)->cmd, \
-					count_strings((*content)->cmd), sh->index);
-		sh->index = count_strings((*content)->cmd);
-		while (sh->head < sh->seg_end && sh->tokens[sh->head].type == TOKEN_WORD)
-		{
-			(*content)->cmd[sh->index] = ft_strdup(sh->tokens[sh->head].value);
-			(*content)->cmd[sh->index + 1] = NULL;
-			if (!(*content)->cmd[sh->index++])
-				return (PARSER_FAILURE);
-			free(sh->tokens[sh->head].value);
-			sh->tokens[sh->head++].value = NULL;
-			sh->token_len--;
-			ret = PARSER_SUCCESS;
-		}
+		// if ((sh->tokens[sh->head].value = '\0'))
+		sh->index++;
+	}
+	(*content)->cmd = ft_realloc_strings((*content)->cmd, \
+				count_strings((*content)->cmd), sh->index);
+	sh->index = count_strings((*content)->cmd);
+	while (sh->head < sh->seg_end && sh->tokens[sh->head].type == TOKEN_WORD)
+	{
+		(*content)->cmd[sh->index] = ft_strdup(sh->tokens[sh->head].value);
+		(*content)->cmd[sh->index + 1] = NULL;
+		if (!(*content)->cmd[sh->index++])
+			return (PARSER_FAILURE);
+		free(sh->tokens[sh->head].value);
+		sh->tokens[sh->head++].value = NULL;
+		sh->token_len--;
+		ret = PARSER_SUCCESS;
 	}
 	sh->index = 0;
 	return (ret);
 }
+
 
 t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
 {
@@ -446,6 +456,9 @@ void	freeing_assignment(t_assignment *ptr)
 	free(ptr);
 	ptr = NULL;
 }
+
+
+// HI "HI" ""HI "H"I
 
 int	free_ast(t_ast_node **node_ptr)
 {

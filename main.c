@@ -24,13 +24,14 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	init_shell(&shell_data);
 	init_pipe_data(&data, &shell_data);
+	init_shell(&shell_data);
+	shell_data.data = &data;
 	while (1)
 	{
 		ms_terminal_settings_change();
 		set_signals_interactive();
-		printf("Exit code0: %d\n", data.exit_code);
+		// printf("Exit code0: %d\n", data.exit_code);
 		line = readline(RED "minishell> " RESET);
 		ms_terminal_settings_restore();
 		set_signals_noninteractive();
@@ -45,7 +46,7 @@ int	main(int argc, char **argv, char **envp)
 					if (shell_data.ast_root)
 					{
 						free_tokens(&shell_data);
-						print_ast_tree0(shell_data.ast_root, 0);
+						// print_ast_tree0(shell_data.ast_root, 0);
 						i = 0;
 						if (shell_data.ast_root->type == AST_NODE_CMD)
 						{
@@ -62,29 +63,29 @@ int	main(int argc, char **argv, char **envp)
 					}
 					else
 					{
-						printf("PARSER FAILED\n");
+						// printf("PARSER FAILED\n");
 						free_tokens(&shell_data);
 						free_ast(&shell_data.ast_root);
 					}
 				}
 				else
 				{
-					printf("LEXER FAILED\n");
+					// printf("LEXER FAILED\n");
 					free_tokens(&shell_data);
 				}
 				free(line);
 				ft_waiting(&data);
-				printf("Exit code1: %d\n", data.exit_code);
+				// printf("Exit code1: %d\n", data.exit_code);
 			}
 		}
 		else
 		{
 			exit_for_signals(&data);
-			printf("Ctrl + D pressed, exit code is %d", data.exit_code);
+			// printf("Ctrl + D pressed, exit code is %d", data.exit_code);
 			break ;
 		}
 		exit_for_signals(&data);
-		printf("Exit code2: %d\n", data.exit_code);
+		// printf("Exit code2: %d\n", data.exit_code);
 	}
 	free_envp_ll(shell_data.envp_ll);
 	free_envp_local(shell_data.envp_local);

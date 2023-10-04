@@ -22,8 +22,8 @@
 
 // main.c
 
-// int			main(int argc, char **argv, char **envp);
-int			main(int argc, char **argv);
+int			main(int argc, char **argv, char **envp);
+// int			main(int argc, char **argv);
 // int			main(void);
 void		run_minishell_interactive(t_pipe *data, t_minishell *shell_data);
 void		run_minishell_non_interactive(t_pipe *data, \

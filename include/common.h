@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/03 22:21:35 by musenov          ###   ########.fr       */
+/*   Updated: 2023/09/30 17:58:33 by nnabaeei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_envp_ll
 typedef struct s_ast_node	t_ast_node;
 typedef struct s_token		t_token;
 typedef struct s_lexer		t_lexer;
+typedef struct s_pipe		t_pipe;
 
 typedef struct s_minishell
 {
@@ -63,9 +64,12 @@ typedef struct s_minishell
 	int					cmd_count;
 	int					index;
 	int					cmd_index;
+	bool				space_flag;
 	t_ast_node			*ast_root;
 	t_envp_ll			*envp_ll;
 	char				**envp_local;
+	int					*exit_code_dummy;
+	t_pipe				*data;
 }	t_minishell;
 
 typedef struct s_wait
@@ -96,7 +100,6 @@ typedef enum e_token_type
 	TOKEN_ASSIGNMENT,
 	TOKEN_END,
 }	t_token_type;
-
 
 typedef struct s_token
 {

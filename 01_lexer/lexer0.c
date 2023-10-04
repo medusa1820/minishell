@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer0.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/02 13:03:37 by nnabaeei         ###   ########.fr       */
+/*   Updated: 2023/10/04 12:41:00 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -369,7 +369,11 @@ void expand(t_minishell *sh, char **str)
 			value = NULL;
 			j = i + 2;
 			if ((*str)[i + 1] == '?')
-				value = ft_itoa(42);// put the the correct exit code here
+			{
+				// value = ft_itoa(42);// put the the correct exit code here
+				value = ft_itoa(sh->data->exit_code);// put the the correct exit code here
+				// printf("exit code: %d\n", sh->data->exit_code);
+			}
 			else if ((*str)[i + 1] == '_' || ft_isalpha((*str)[i + 1]))
 			{
 				while ((*str)[j] == '_' || ft_isalnum((*str)[j]))
