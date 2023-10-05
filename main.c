@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 20:46:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/01 18:23:51 by nnabaeei         ###   ########.fr       */
+/*   Updated: 2023/10/04 15:43:35 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)envp;
 	init_shell(&shell_data);
 	data.shell_data = &shell_data;
+	shell_data.data = &data;
 	line = readline(RED "minishell> " RESET);
 	while (line)
 	{
@@ -42,7 +43,7 @@ int	main(int argc, char **argv, char **envp)
 				if (shell_data.ast_root)
 				{
 					free_tokens(&shell_data);
-					print_ast_node(shell_data.ast_root, 1, 'x');
+					// print_ast_node(shell_data.ast_root, 1, 'x');
 					// printf("\n");
 					// print_ast_tree0(shell_data.ast_root, 0);
 					i = 0;

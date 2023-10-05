@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/30 17:58:33 by nnabaeei         ###   ########.fr       */
+/*   Updated: 2023/10/04 15:23:05 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_envp_ll
 typedef struct s_ast_node	t_ast_node;
 typedef struct s_token		t_token;
 typedef struct s_lexer		t_lexer;
+typedef	struct s_pipe		t_pipe;
 
 typedef struct s_minishell
 {
@@ -66,6 +67,7 @@ typedef struct s_minishell
 	bool				space_flag;
 	t_ast_node			*ast_root;
 	t_envp_ll			*envp_ll;
+	t_pipe				*data;
 	char				**envp_local;
 }	t_minishell;
 

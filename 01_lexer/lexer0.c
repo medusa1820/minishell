@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer0.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/02 13:03:37 by nnabaeei         ###   ########.fr       */
+/*   Updated: 2023/10/04 15:22:02 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,9 +196,9 @@ t_lexer_state	tokenize_pipe_and_redirector(const char **current, t_token *token)
 }
 t_lexer_state	tokenize_space(const char **current, t_token *token)
 {
-	int	len;
+	// int	len;
 
-	len = 0;
+	// len = 0;
 	token->type = TOKEN_SPACE;
 	token->value = ft_strdup("\0");
 	while ((ft_strchr(WHITESPACE, **current)) && \
@@ -369,7 +369,7 @@ void expand(t_minishell *sh, char **str)
 			value = NULL;
 			j = i + 2;
 			if ((*str)[i + 1] == '?')
-				value = ft_itoa(42);// put the the correct exit code here
+				value = ft_itoa(sh->data->exit_code);// put the the correct exit code here
 			else if ((*str)[i + 1] == '_' || ft_isalpha((*str)[i + 1]))
 			{
 				while ((*str)[j] == '_' || ft_isalnum((*str)[j]))

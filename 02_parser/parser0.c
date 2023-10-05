@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser0.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnabaeei <nnabaeei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/01 11:50:27 by nnabaeei         ###   ########.fr       */
+/*   Updated: 2023/10/04 15:21:09 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ bool	init_shell(t_minishell *shell)
 	shell->cmd_index = 0;
 	shell->space_flag = false;
 	shell->line = NULL;
+	shell->data = NULL;
 	init_envp_linked_list(shell);
 	envp_ll_to_envp_local(shell);
 	return (true);
