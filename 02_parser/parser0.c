@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser0.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/04 12:38:22 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/06 21:02:32 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ bool	init_shell(t_minishell *shell)
 	shell->space_flag = false;
 	shell->line = NULL;
 	shell->data = NULL;
-	// shell->exit_code_dummy = data->exit_code;¿
+	// shell->exit_code_dummy = data->exit_code;
 	init_envp_linked_list(shell);
 	envp_ll_to_envp_local(shell);
 	return (true);

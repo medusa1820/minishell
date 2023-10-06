@@ -4,10 +4,10 @@ CC					:=	gcc
 
 CFLAGS				:=	-Wall -Werror -Wextra
 CFLAGS				+=	-g
-CFLAGS				+=	-fsanitize=address
+# CFLAGS				+=	-fsanitize=address
 
 LDFLAGS				:=	-g
-LDFLAGS				+=	-fsanitize=address
+# LDFLAGS				+=	-fsanitize=address
 
 MINISHELL_SRCS		=	./main2.c \
 						# ./main1.c
@@ -52,11 +52,11 @@ ALL_SRCS			:=	$(MINISHELL_SRCS) \
 HEADERS				:=	-I ./include
 HEADERS				+=	-I ./05_utils
 HEADERS				+=	-I $(shell brew --prefix readline)/include
-HEADERS				+=	-I ../LeakSanitizer
+# HEADERS				+=	-I ../LeakSanitizer
 
 LDFLAGS				+=	-L ./lib/ft_printf -lft_ft_printf
 LDFLAGS				+=	-lreadline -L $(shell brew --prefix readline)/lib
-LDFLAGS				+=	-L ../LeakSanitizer -llsan -lstdc++ -Wno-gnu-include-next
+# LDFLAGS				+=	-L ../LeakSanitizer -llsan -lstdc++ -Wno-gnu-include-next
 
 LIBFT_FT_PRINTF		:=	lib/ft_printf/libft_ft_printf.a
 LIBFT_FT_PRINTF_DIR	:=	./lib/ft_printf

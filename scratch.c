@@ -210,3 +210,30 @@ int	main(int argc, char **argv, char **envp)
 	free_envp_local(shell_data.envp_local);
 	return (exit_code);
 }
+
+
+
+// htsang and sawang main()
+
+
+int	main(int argc, char **argv)
+{
+	t_ms_exit_code	exit_code;
+
+	if (argc >= 2)
+	{
+		exit_code = ms_non_interactive_mode_from_path(argv[1]);
+	}
+	else if (isatty(STDIN_FILENO))
+	{
+		ms_terminal_settings_change();
+		ms_signal_handlers_interactive_set();
+		exit_code = ms_interactive_mode("minishell$ ");
+		ms_terminal_settings_restore();
+	}
+	else
+		exit_code = ms_non_interactive_mode();
+	return (exit_code);
+}
+
+

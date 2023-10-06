@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:15:35 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/03 22:08:22 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/06 20:37:07 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,15 @@ int	main(int argc, char **argv)
 		return (0);
 	init_shell(&shell_data);
 	init_pipe_data(&data, &shell_data);
-	ms_terminal_settings_change();
+	// ms_terminal_settings_change();
 	if (isatty(STDIN_FILENO))
+	{
+		ms_terminal_settings_change();
 		run_minishell_interactive(&data, &shell_data);
+		ms_terminal_settings_restore();
+	}
 	else
 		run_minishell_non_interactive(&data, &shell_data);
-	ms_terminal_settings_restore();
 	free_envp_ll(shell_data.envp_ll);
 	free_envp_local(shell_data.envp_local);
 	return (data.exit_code);
@@ -46,8 +49,9 @@ void	run_minishell_interactive(t_pipe *data, t_minishell *shell_data)
 		set_signals_noninteractive();
 		if (line == NULL || *line == EOF)
 		{
-			exit_for_signals(data);
+			// exit_for_signals(data);
 			// printf("Ctrl + D pressed, exit code is %d", data->exit_code);
+			
 			return ;
 		}
 		else if (line[0] != '\0')

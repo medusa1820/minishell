@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main2.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
+/*   Updated: 2023/10/06 21:05:55 by musenov          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 extern char	**environ;
@@ -30,8 +42,10 @@ int	main(int argc, char **argv, char **envp)
 	// 	line = ft_strtrim(line, "\n");
 	// 	free(line_bla);
 	// }
+	ms_terminal_settings_change();
 	while (1)
 	{
+		set_signals_interactive();
 		if (isatty(fileno(stdin)))
 			line = readline("minishell> ");
 		else
@@ -41,8 +55,14 @@ int	main(int argc, char **argv, char **envp)
 			line = ft_strtrim(line_bla, "\n"); // line = ft_strtrim(line, "\n");
 			free(line_bla);
 		}
+		set_signals_noninteractive();
 		if (line == NULL || *line == EOF)
-			return (1);
+		{
+			free_envp_ll(shell_data.envp_ll);
+			free_envp_local(shell_data.envp_local);
+			free_tokens(&shell_data);
+			return (data.exit_code);
+		}
 		if (line[0] != '\0')
 		{
 			add_history(line);
@@ -86,14 +106,14 @@ int	main(int argc, char **argv, char **envp)
 			}
 		}
 		wait_pid = 0;
-		exit_code = 0;
+		// exit_code = 0;
 		while (wait_pid != -1)
 		{
 			wait_pid = waitpid(-1, &status, 0);
 			if (wait_pid == data.pid)
 			{
 				if (WIFEXITED(status))
-				exit_code = WEXITSTATUS(status);
+				data.exit_code = WEXITSTATUS(status);
 			}
 		}
 		free(line); // Free the memory allocated by readline
@@ -101,6 +121,7 @@ int	main(int argc, char **argv, char **envp)
 		// print_envp_local(shell_data.envp_local);
 		// line = readline(RED "minishell> " RESET);
 	}
+	ms_terminal_settings_restore();
 	free_envp_ll(shell_data.envp_ll);
 	free_envp_local(shell_data.envp_local);
 	return (exit_code);
