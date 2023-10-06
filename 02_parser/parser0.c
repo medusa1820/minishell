@@ -6,14 +6,14 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/06 21:02:32 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/06 23:48:22 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // bool	init_shell(t_minishell *shell, t_pipe *data)
-bool	init_shell(t_minishell *shell)
+bool	init_shell(t_minishell *shell, t_pipe *data)
 {
 	shell->ast_root = NULL;
 	shell->tokens = NULL;
@@ -26,7 +26,7 @@ bool	init_shell(t_minishell *shell)
 	shell->cmd_index = 0;
 	shell->space_flag = false;
 	shell->line = NULL;
-	shell->data = NULL;
+	shell->data = data;
 	// shell->exit_code_dummy = data->exit_code;
 	init_envp_linked_list(shell);
 	envp_ll_to_envp_local(shell);

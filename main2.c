@@ -6,61 +6,46 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/06 21:05:55 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/07 00:38:04 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern char	**environ;
-
-int	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv)
 {
 	char		*line;
 	t_minishell	shell_data;
-	int			i;
 	t_pipe		data;
-	int			status;
-	int			exit_code;
-	pid_t		wait_pid;
+	int			i;
+	char		*line_bla;
 
-	(void)argc;
 	(void)argv;
-	(void)envp;
-    init_pipe_data(&data, &shell_data);
-	init_shell(&shell_data);
-	shell_data.data = &data;
-	// init_shell(&shell_data);
-	// data.shell_data = &shell_data;
-	// line = readline(RED "minishell> " RESET);
-	// if (isatty(fileno(stdin)))
-	// 	line = readline("minishell> ");
-	// else
-	// {
-	// 	char *line_bla;
-	// 	line_bla = get_next_line(fileno(stdin));
-	// 	line = ft_strtrim(line, "\n");
-	// 	free(line_bla);
-	// }
+	if (argc != 1)
+		return (0);
+	init_pipe_data(&data, &shell_data);
+	init_shell(&shell_data, &data);
 	ms_terminal_settings_change();
 	while (1)
 	{
-		set_signals_interactive();
+		set_signals_interactive(&data);
 		if (isatty(fileno(stdin)))
 			line = readline("minishell> ");
 		else
 		{
-			char *line_bla;
 			line_bla = get_next_line(fileno(stdin));
-			line = ft_strtrim(line_bla, "\n"); // line = ft_strtrim(line, "\n");
+			line = ft_strtrim(line_bla, "\n");
 			free(line_bla);
 		}
-		set_signals_noninteractive();
+		exit_code_signals(&data);
+		set_signals_noninteractive(&data);
+		exit_code_signals(&data);
 		if (line == NULL || *line == EOF)
 		{
 			free_envp_ll(shell_data.envp_ll);
 			free_envp_local(shell_data.envp_local);
 			free_tokens(&shell_data);
+			exit_code_signals(&data);
 			return (data.exit_code);
 		}
 		if (line[0] != '\0')
@@ -68,16 +53,11 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 			if (tokenize(&shell_data, line) == LEXER_SUCCESS)
 			{
-				// print_tokens(shell_data);
 				shell_data.ast_root = parse_pipeline(&shell_data);
 				if (shell_data.ast_root)
 				{
 					free_tokens(&shell_data);
-					// print_ast_node(shell_data.ast_root, 1, 'x');
-					// printf("\n");
-					// print_ast_tree0(shell_data.ast_root, 0);
 					i = 0;
-					// printf("\n");
 					if (shell_data.ast_root->type == AST_NODE_CMD)
 					{
 						piper(&data, &i);
@@ -89,7 +69,6 @@ int	main(int argc, char **argv, char **envp)
 						data.nr_of_cmd_nodes = 0;
 						execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local);
 						free_ast(&shell_data.ast_root);
-						// printf("You entered: %s\n", line);
 					}
 				}
 				else
@@ -105,24 +84,11 @@ int	main(int argc, char **argv, char **envp)
 				free_tokens(&shell_data);
 			}
 		}
-		wait_pid = 0;
-		// exit_code = 0;
-		while (wait_pid != -1)
-		{
-			wait_pid = waitpid(-1, &status, 0);
-			if (wait_pid == data.pid)
-			{
-				if (WIFEXITED(status))
-				data.exit_code = WEXITSTATUS(status);
-			}
-		}
-		free(line); // Free the memory allocated by readline
-		// print_envp_ll(shell_data.envp_ll);
-		// print_envp_local(shell_data.envp_local);
-		// line = readline(RED "minishell> " RESET);
+		ft_waiting(&data);
+		free(line);
 	}
 	ms_terminal_settings_restore();
-	free_envp_ll(shell_data.envp_ll);
-	free_envp_local(shell_data.envp_local);
-	return (exit_code);
+	// free_envp_ll(shell_data.envp_ll);
+	// free_envp_local(shell_data.envp_local);
+	return (data.exit_code);
 }

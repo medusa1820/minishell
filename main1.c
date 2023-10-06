@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:15:35 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/06 20:37:07 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/06 23:22:37 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ void	run_minishell_interactive(t_pipe *data, t_minishell *shell_data)
 	while (1)
 	{
 		set_signals_interactive();
-		// printf("Exit code0: %d\n", data->exit_code);
 		line = readline(RED "minishell> " RESET);
 		set_signals_noninteractive();
 		if (line == NULL || *line == EOF)
 		{
-			// exit_for_signals(data);
-			// printf("Ctrl + D pressed, exit code is %d", data->exit_code);
-			
+			free_envp_ll(shell_data->envp_ll);
+			free_envp_local(shell_data->envp_local);
+			free_tokens(shell_data);
+			// return (data->exit_code);
 			return ;
 		}
 		else if (line[0] != '\0')
@@ -90,10 +90,8 @@ void	run_minishell_interactive(t_pipe *data, t_minishell *shell_data)
 			}
 			free(line);
 			ft_waiting(data);
-			// printf("Exit code1: %d\n", data->exit_code);
 		}
 		exit_for_signals(data);
-		// printf("Exit code2: %d\n", data->exit_code);
 	}
 }
 
@@ -115,9 +113,6 @@ if (argc >= 2)
 		exit_code = ms_non_interactive_mode();
 */
 
-
-
-
 void	run_minishell_non_interactive(t_pipe *data, t_minishell *shell_data)
 {
 	char			*line;
@@ -126,12 +121,18 @@ void	run_minishell_non_interactive(t_pipe *data, t_minishell *shell_data)
 
 	while (1)
 	{
+		set_signals_interactive();
+		// char *line_bla;
 		line_bla = get_next_line(fileno(stdin));
-		line = ft_strtrim(line_bla, "\n");
+		line = ft_strtrim(line_bla, "\n"); // line = ft_strtrim(line, "\n");
 		free(line_bla);
+		set_signals_noninteractive();
 		if (line == NULL || *line == EOF)
 		{
-			// printf("Ctrl + D pressed, exit code is %d", data->exit_code);
+			free_envp_ll(shell_data->envp_ll);
+			free_envp_local(shell_data->envp_local);
+			free_tokens(shell_data);
+			// return (data->exit_code);
 			return ;
 		}
 		else if (line[0] != '\0')
@@ -144,7 +145,8 @@ void	run_minishell_non_interactive(t_pipe *data, t_minishell *shell_data)
 				data->exit_code = 1;
 				return ;
 			}
-			if (!parse_pipeline(shell_data))
+			shell_data->ast_root = parse_pipeline(shell_data);
+			if (!shell_data->ast_root)
 			{
 				// printf("PARSER FAILED\n");
 				free_tokens(shell_data);
@@ -169,15 +171,10 @@ void	run_minishell_non_interactive(t_pipe *data, t_minishell *shell_data)
 			}
 			free(line);
 			ft_waiting(data);
-			// printf("Exit code1: %d\n", data->exit_code);
 		}
 		exit_for_signals(data);
-		// printf("Exit code2: %d\n", data->exit_code);
 	}
 }
-
-
-
 
 /*
 static int	ms_interactive_mode(char *prompt)
