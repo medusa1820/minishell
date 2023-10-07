@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/04 15:22:02 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/05 15:32:50 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -354,10 +354,9 @@ char	*get_env_var(t_minishell *sh, char *var)
 	return (NULL);
 }
 
-void expand(t_minishell *sh, char **str)
+void expand(t_minishell *sh, char **str, int j)
 {
 	int		i;
-	int 	j;
 	char	*var;
 	char	*value;
 
@@ -387,12 +386,14 @@ void expand(t_minishell *sh, char **str)
 void	expandor(t_minishell *sh)
 {
 	int	i;
+	int	j;
 
 	i = 0;
+	j = 0;
 	while (i < sh->token_len)
 	{
 		if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) || (sh->tokens[i].type == TOKEN_WORD))
-			expand(sh, &sh->tokens[i].value);
+			expand(sh, &sh->tokens[i].value, j);
 		i++;
 	}
 }
