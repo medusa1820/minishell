@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 19:37:58 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/28 20:58:17 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/02 21:07:45 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,18 @@ void	exit_error(int exit_code, char *error_msg, t_pipe *data)
 	free_all(data);
 	free_envp_ll(data->shell_data->envp_ll);
 	free_envp_local(data->shell_data->envp_local);
+	free_ast(&data->shell_data->ast_root);
 	exit(exit_code);
+}
+
+void	error_do_next_iter(int exit_code, char *error_msg, t_pipe *data)
+{
+	perror(error_msg);
+	// perror(exit_code);
+	(void)exit_code;
+	free_all(data);
+	free_ast(&data->shell_data->ast_root);
+	data->exit_code = 1;
 }
 
 void	free_all(t_pipe *data)

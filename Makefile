@@ -9,12 +9,14 @@ CFLAGS				+=	-fsanitize=address
 LDFLAGS				:=	-g
 LDFLAGS				+=	-fsanitize=address
 
-MINISHELL_SRCS		=	./main.c
+MINISHELL_SRCS		=	./main2.c \
+						# ./main1.c
 
 DATA_INIT_SRCS		=	./00_data_init/envp_ll_init.c \
 						./00_data_init/envp_ll_utils.c \
 						./00_data_init/envp_local_init.c \
-						./00_data_init/envp_local_utils.c
+						./00_data_init/envp_local_utils.c \
+						./00_data_init/pipe_data.c
 
 LEXER_SRCS			=	./01_lexer/lexer0.c
 
@@ -28,7 +30,10 @@ EXECUTOR_SRCS		=	./04_executor/execute_ast0.c \
 						./04_executor/child_process_utils0.c \
 						./04_executor/child_process_utils1.c \
 						./04_executor/child_process_utils2.c \
-						./04_executor/exit_code_handler0.c
+						./04_executor/exit_code_handler0.c \
+						./04_executor/signals0.c \
+						./04_executor/signals1.c \
+						./04_executor/signals2.c
 
 UTILS_SRCS			=	./05_utils/create_ast.c \
 						./05_utils/print_ast.c \
@@ -36,7 +41,7 @@ UTILS_SRCS			=	./05_utils/create_ast.c \
 						./05_utils/exit_utils0.c \
 						./05_utils/exit_utils1.c \
 						./05_utils/get_next_line.c
-\
+
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(DATA_INIT_SRCS) \
 						$(LEXER_SRCS) \

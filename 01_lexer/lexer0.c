@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/05 15:32:50 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/08 17:43:14 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,11 @@ void	free_tokens(t_minishell *sh)
 	int	i;
 
 	i = -1;
-	while (++i < (*sh).token_len)
+	while (++i < (*sh).free_lexer_token_len)
+	{
 		free((*sh).tokens[i].value);
+		(*sh).tokens[i].value = NULL;
+	}
 	free((*sh).tokens);
 	(*sh).tokens = NULL;
 	(*sh).token_len = 0;
@@ -363,7 +366,7 @@ void expand(t_minishell *sh, char **str, int j)
 	i = -1;
 	while ((*str)[++i])
 	{
-		if ((*str)[i] == '$')
+		if ((*str)[i] == '$' && (*str)[i + 1])
 		{
 			value = NULL;
 			j = i + 2;
@@ -496,11 +499,14 @@ t_lexer_state	tokenize(t_minishell *sh, const char *line)
 	if (ret == LEXER_SUCCESS)
 	{
 		// print_tokenss(sh);
+		// printf("--------\n");
 		check_assignment(&(sh->tokens), sh->token_len);
 		remove_empty_tokens(sh);
 		expandor(sh);
 		trimming_tokens_type(sh);
 		joining_tokens(sh);
+		sh->free_lexer_token_len = sh->token_len;
+		// print_tokenss(sh);
 	}
 	return (ret);
 }

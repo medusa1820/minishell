@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 15:48:07 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/09/14 10:47:16 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/06 23:48:36 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void		freeing_cmd(char **cmd);
 void		print_ast(t_ast_node *root);
 t_ast_node	*parse_pipeline(t_minishell *sh);
 void		print_ast_node(t_ast_node *node, int level, char x);
-bool		init_shell(t_minishell *shell);
+bool		init_shell(t_minishell *shell, t_pipe *data);
 void		free_content(t_ast_node_content *content);
 
 #endif
