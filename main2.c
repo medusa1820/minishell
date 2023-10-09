@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/08 21:39:46 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/09 13:41:41 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	main(int argc, char **argv)
 			if (tokenize(&shell_data, line) == LEXER_SUCCESS)
 			{
 				shell_data.ast_root = parse_pipeline(&shell_data);
+				// print_ast_tree0(shell_data.ast_root, 0);
 				if (shell_data.ast_root)
 				{
 					free_tokens(&shell_data);
@@ -67,7 +68,12 @@ int	main(int argc, char **argv)
 					else
 					{
 						data.nr_of_cmd_nodes = 0;
-						execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local);
+						// execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local);
+						if(!execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local))
+						{
+							free_ast(&shell_data.ast_root);
+							continue ;
+						}
 						free_ast(&shell_data.ast_root);
 					}
 				}
