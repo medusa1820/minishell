@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/25 18:18:39 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/09 17:05:12 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	last_pipe(t_pipe *data, char **envp, int *i)
 		close_pipe0_fds(data);
 		close_pipe1_fds(data);
 		if (execve(data->cmd_path, data->cmd_split, envp) == -1)
-			exit_error(errno, "Couldn't execute execve() middle", data);
+			exit_error(errno, "Couldn't execute execve() last", data);
 	}
 	close_pipe0_fds(data);
 	close_pipe1_fds(data);

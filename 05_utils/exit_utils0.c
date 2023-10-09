@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 19:37:58 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/09 13:03:36 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/09 16:32:58 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	error_do_next_iter(int exit_code, char *error_msg, t_pipe *data)
 	perror(error_msg);
 	// perror(exit_code);
 	(void)exit_code;
-	free_all(data);
-	free_ast(&data->shell_data->ast_root);
+	// free_all(data);
+	// free_ast(&data->shell_data->ast_root);
 	data->exit_code = 1;
 }
 

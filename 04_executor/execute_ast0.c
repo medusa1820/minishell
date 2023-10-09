@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/07 00:00:51 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/09 17:18:20 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,14 @@ bool	execute_cmds(t_ast_node *head, int *i, t_pipe *data, char **envp)
 		return (false);
 	if (head->type == AST_NODE_PIPE)
 	{
+	/*
 		if (execute_cmds(head->left, i, data, envp))
 			return (piper(data, i) && forker(data, i, envp, head->right));
 		else
 			return (false);
+	*/
+		execute_cmds(head->left, i, data, envp);
+		return (piper(data, i) && forker(data, i, envp, head->right));
 	}
 	else
 		return (piper(data, i) && forker(data, i, envp, head));
