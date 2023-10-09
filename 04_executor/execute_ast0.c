@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/09 17:18:20 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/09 17:37:03 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,15 @@ here_doc will propagate to child processes
 bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *node)
 {
 	if (!handle_in_redirections(data, node))
+	{
+		(*i)++;
 		return (false);
+	}
 	if (!handle_out_redirections(data, node))
+	{
+		(*i)++;
 		return (false);
+	}
 	data->pid = fork();
 	if (data->pid == -1)
 		return (false);
