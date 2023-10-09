@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 17:42:55 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/07 00:30:56 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/08 21:36:41 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,12 +111,14 @@ int					ms_terminal_settings_restore(void);
 // signals2.c
 
 void				set_signals_interactive(t_pipe *data);
+// void				set_signals_interactive();
 void				set_signals_interactive_here_doc();
 void				ignore_sigquit(void);
 void				signal_reset_prompt(int signo);
 void				exit_code_signals(t_pipe *data);
 void				signal_reset_prompt_here_doc(int signo);
 void				set_signals_noninteractive(t_pipe *data);
+// void				set_signals_noninteractive();
 void				signal_print_newline(int signal);
 
 #endif

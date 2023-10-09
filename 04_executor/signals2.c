@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 13:37:46 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/07 00:30:46 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/08 21:37:19 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 */
 
 void	set_signals_interactive(t_pipe *data)
+// void	set_signals_interactive()
 {
 	struct sigaction	act;
 
@@ -112,7 +113,9 @@ void	signal_reset_prompt_here_doc(int signo)
 *	should not react to SIGINT and SIGQUIT because only the running process (cat)
 *	needs to react to those signals.
 */
+
 void	set_signals_noninteractive(t_pipe *data)
+// void	set_signals_noninteractive()
 {
 	struct sigaction	act;
 

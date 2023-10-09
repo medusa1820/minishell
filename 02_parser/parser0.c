@@ -6,14 +6,14 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/06 23:48:22 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/09 12:05:00 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// bool	init_shell(t_minishell *shell, t_pipe *data)
 bool	init_shell(t_minishell *shell, t_pipe *data)
+// bool	init_shell(t_minishell *shell)
 {
 	shell->ast_root = NULL;
 	shell->tokens = NULL;
@@ -465,7 +465,7 @@ int	free_ast(t_ast_node **node_ptr)
 	// exit(1);
 	if (!(*node_ptr))
 	{
-		printf("hi\n");
+		// printf("hi\n");
 		return (1);
 	}
 	if ((*node_ptr)->type == AST_NODE_CMD)
