@@ -232,7 +232,7 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 		// if ((sh->tokens[sh->head].value = '\0'))
 		sh->index++;
 	}
-	printf("index:%d\n", sh->index);
+	// printf("index:%d\n", sh->index);
 	if (sh->index)
 	{
 		(*content)->cmd = ft_realloc_strings((*content)->cmd, \
