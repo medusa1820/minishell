@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   parser0.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 12:05:00 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/08 17:30:53 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 bool	init_shell(t_minishell *shell, t_pipe *data)
-// bool	init_shell(t_minishell *shell)
 {
 	shell->ast_root = NULL;
 	shell->tokens = NULL;
-	shell->free_lexer_token_len = 0;
 	shell->token_len = 0;
+	shell->free_lexer_token_len = 0;
 	shell->seg_end = 0;
 	shell->head = 0;
 	shell->cmd_count = 0;
@@ -27,7 +26,6 @@ bool	init_shell(t_minishell *shell, t_pipe *data)
 	shell->space_flag = false;
 	shell->line = NULL;
 	shell->data = data;
-	// shell->exit_code_dummy = data->exit_code;
 	init_envp_linked_list(shell);
 	envp_ll_to_envp_local(shell);
 	return (true);
@@ -234,19 +232,23 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 		// if ((sh->tokens[sh->head].value = '\0'))
 		sh->index++;
 	}
-	(*content)->cmd = ft_realloc_strings((*content)->cmd, \
-				count_strings((*content)->cmd), sh->index);
-	sh->index = count_strings((*content)->cmd);
-	while (sh->head < sh->seg_end && sh->tokens[sh->head].type == TOKEN_WORD)
+	// printf("index:%d\n", sh->index);
+	if (sh->index)
 	{
-		(*content)->cmd[sh->index] = ft_strdup(sh->tokens[sh->head].value);
-		(*content)->cmd[sh->index + 1] = NULL;
-		if (!(*content)->cmd[sh->index++])
-			return (PARSER_FAILURE);
-		free(sh->tokens[sh->head].value);
-		sh->tokens[sh->head++].value = NULL;
-		sh->token_len--;
-		ret = PARSER_SUCCESS;
+		(*content)->cmd = ft_realloc_strings((*content)->cmd, \
+				count_strings((*content)->cmd), sh->index);
+		sh->index = count_strings((*content)->cmd);
+		while (sh->head < sh->seg_end && sh->tokens[sh->head].type == TOKEN_WORD)
+		{
+			(*content)->cmd[sh->index] = ft_strdup(sh->tokens[sh->head].value);
+			(*content)->cmd[sh->index + 1] = NULL;
+			if (!(*content)->cmd[sh->index++])
+				return (PARSER_FAILURE);
+			free(sh->tokens[sh->head].value);
+			sh->tokens[sh->head++].value = NULL;
+			sh->token_len--;
+			ret = PARSER_SUCCESS;
+		}
 	}
 	sh->index = 0;
 	return (ret);
@@ -403,6 +405,8 @@ t_ast_node *parse_pipeline(t_minishell *sh)
 		left = parse_pipeline(sh);
 		return (create_pipe_node(left, right));
 	}
+	else if(right == NULL)
+		return (NULL);
 	return (right);
 }
 
@@ -465,7 +469,6 @@ int	free_ast(t_ast_node **node_ptr)
 	// exit(1);
 	if (!(*node_ptr))
 	{
-		// printf("hi\n");
 		return (1);
 	}
 	if ((*node_ptr)->type == AST_NODE_CMD)

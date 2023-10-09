@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/04 12:41:00 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/08 17:43:14 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,11 @@ void	free_tokens(t_minishell *sh)
 	int	i;
 
 	i = -1;
-	while (++i < (*sh).token_len)
+	while (++i < (*sh).free_lexer_token_len)
+	{
 		free((*sh).tokens[i].value);
+		(*sh).tokens[i].value = NULL;
+	}
 	free((*sh).tokens);
 	(*sh).tokens = NULL;
 	(*sh).token_len = 0;
@@ -196,9 +199,9 @@ t_lexer_state	tokenize_pipe_and_redirector(const char **current, t_token *token)
 }
 t_lexer_state	tokenize_space(const char **current, t_token *token)
 {
-	int	len;
+	// int	len;
 
-	len = 0;
+	// len = 0;
 	token->type = TOKEN_SPACE;
 	token->value = ft_strdup("\0");
 	while ((ft_strchr(WHITESPACE, **current)) && \
@@ -354,26 +357,21 @@ char	*get_env_var(t_minishell *sh, char *var)
 	return (NULL);
 }
 
-void expand(t_minishell *sh, char **str)
+void expand(t_minishell *sh, char **str, int j)
 {
 	int		i;
-	int 	j;
 	char	*var;
 	char	*value;
 
 	i = -1;
 	while ((*str)[++i])
 	{
-		if ((*str)[i] == '$')
+		if ((*str)[i] == '$' && (*str)[i + 1])
 		{
 			value = NULL;
 			j = i + 2;
 			if ((*str)[i + 1] == '?')
-			{
-				// value = ft_itoa(42);// put the the correct exit code here
 				value = ft_itoa(sh->data->exit_code);// put the the correct exit code here
-				// printf("exit code: %d\n", sh->data->exit_code);
-			}
 			else if ((*str)[i + 1] == '_' || ft_isalpha((*str)[i + 1]))
 			{
 				while ((*str)[j] == '_' || ft_isalnum((*str)[j]))
@@ -391,12 +389,14 @@ void expand(t_minishell *sh, char **str)
 void	expandor(t_minishell *sh)
 {
 	int	i;
+	int	j;
 
 	i = 0;
+	j = 0;
 	while (i < sh->token_len)
 	{
 		if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) || (sh->tokens[i].type == TOKEN_WORD))
-			expand(sh, &sh->tokens[i].value);
+			expand(sh, &sh->tokens[i].value, j);
 		i++;
 	}
 }
@@ -499,11 +499,14 @@ t_lexer_state	tokenize(t_minishell *sh, const char *line)
 	if (ret == LEXER_SUCCESS)
 	{
 		// print_tokenss(sh);
+		// printf("--------\n");
 		check_assignment(&(sh->tokens), sh->token_len);
 		remove_empty_tokens(sh);
 		expandor(sh);
 		trimming_tokens_type(sh);
 		joining_tokens(sh);
+		sh->free_lexer_token_len = sh->token_len;
+		// print_tokenss(sh);
 	}
 	return (ret);
 }
