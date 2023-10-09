@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/08 13:12:35 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/09 15:12:08 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,20 +63,20 @@ int	main(int argc, char **argv)
 					{
 						piper(&data, &i);
 						forker_no_pipe(&data, shell_data.envp_local, shell_data.ast_root);
-						free_ast(&shell_data.ast_root);
+						free_ast(shell_data.ast_root);
 					}
 					else
 					{
 						data.nr_of_cmd_nodes = 0;
 						execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local);
-						free_ast(&shell_data.ast_root);
+						free_ast(shell_data.ast_root);
 					}
 				}
 				else
 				{
 					printf("PARSER FAILED\n");
 					free_tokens(&shell_data);
-					free_ast(&shell_data.ast_root);
+					free_ast(shell_data.ast_root);
 				}
 			}
 			else
