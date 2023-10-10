@@ -6,11 +6,23 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:39:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 15:12:22 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/10 13:58:43 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	print_error(char *type, int fd, char *msg)
+{
+	ft_putstr_fd("minishell: ", fd);
+	if(type)
+	{
+		ft_putstr_fd(type, fd);
+		ft_putstr_fd(": ", fd);
+	}
+	ft_putstr_fd(msg, fd);
+	// perror(msg);
+}
 
 void	finding_segment_head(t_minishell *sh)
 {
@@ -54,7 +66,7 @@ t_ast_node	*parsing(t_minishell *sh, char *line)
 		sh->ast_root = parse_pipeline(sh);
 		if (!sh->ast_root)
 		{
-			printf("PARSER FAILED\n");
+			// printf("PARSER FAILED\n");
 			free_tokens(sh);
 			free_ast(sh->ast_root);
 			return (NULL);

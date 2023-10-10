@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_node_content.c                               :+:      :+:    :+:   */
+/*   creat_node_content.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:31:59 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 13:35:48 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/09 15:51:38 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 		// if ((sh->tokens[sh->head].value = '\0'))
 		sh->index++;
 	}
-	printf("index:%d\n", sh->index);
 	if (sh->index)
 	{
 		(*content)->cmd = ft_realloc_strings((*content)->cmd, \

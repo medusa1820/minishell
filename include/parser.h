@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 15:48:07 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 15:11:24 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/10 13:58:01 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int				free_ast(t_ast_node	*node);
 
 // parsing.c
 
+void			print_error(char *type, int fd, char *msg);
 void			finding_segment_head(t_minishell *sh);
 bool			init_shell(t_minishell *shell, t_pipe *data);
 t_ast_node		*parsing(t_minishell *sh, char *line);

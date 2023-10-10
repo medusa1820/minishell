@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 19:37:58 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/09 15:36:55 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/09 15:52:59 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	exit_error(int exit_code, char *error_msg, t_pipe *data)
 	free_all(data);
 	free_envp_ll(data->shell_data->envp_ll);
 	free_envp_local(data->shell_data->envp_local);
-	free_ast(data->shell_data->ast_root);
+	// free_ast(data->shell_data->ast_root);
 	exit(exit_code);
 }
 

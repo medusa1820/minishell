@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/09 15:12:08 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/09 15:46:35 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,15 @@ int	main(int argc, char **argv)
 		if (line[0] != '\0')
 		{
 			add_history(line);
-			if (tokenize(&shell_data, line) == LEXER_SUCCESS)
-			{
-				shell_data.ast_root = parse_pipeline(&shell_data);
-				if (shell_data.ast_root)
-				{
-					print_ast_node(shell_data.ast_root, 1, 'x');
-					free_tokens(&shell_data);
+			// if (tokenize(&shell_data, line) == LEXER_SUCCESS)
+			// {
+				shell_data.ast_root = parsing(&shell_data, line);
+				// if (shell_data.ast_root)
+				// {
+				// 	print_ast_node(shell_data.ast_root, 1, 'x');
+				// 	free_tokens(&shell_data);
 					i = 0;
-					if (shell_data.ast_root->type == AST_NODE_CMD)
+					if (shell_data.ast_root && shell_data.ast_root->type == AST_NODE_CMD)
 					{
 						piper(&data, &i);
 						forker_no_pipe(&data, shell_data.envp_local, shell_data.ast_root);
@@ -71,19 +71,19 @@ int	main(int argc, char **argv)
 						execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local);
 						free_ast(shell_data.ast_root);
 					}
-				}
-				else
-				{
-					printf("PARSER FAILED\n");
-					free_tokens(&shell_data);
-					free_ast(shell_data.ast_root);
-				}
-			}
-			else
-			{
-				printf("LEXER FAILED\n");
-				free_tokens(&shell_data);
-			}
+			// 	}
+			// 	else
+			// 	{
+			// 		printf("PARSER FAILED\n");
+			// 		free_tokens(&shell_data);
+			// 		free_ast(shell_data.ast_root);
+			// 	}
+			// }
+			// else
+			// {
+			// 	printf("LEXER FAILED\n");
+			// 	free_tokens(&shell_data);
+			// }
 		}
 		ft_waiting(&data);
 		free(line);

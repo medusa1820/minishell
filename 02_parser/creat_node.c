@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 14:15:21 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/10 13:56:41 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ t_parser_state	parse_command_content(t_ast_node_content **content, t_minishell *
 {
 	t_parser_state	ret;
 
-	if (sh->token_len >= 0 && sh->tokens[sh->token_len - 1].type == TOKEN_PIPE)
+	// dprintf(2,"token_len:%d token_Type:\n", sh->token_len);
+	if (sh->token_len == 0 || (sh->token_len > 0 && \
+		sh->tokens[sh->token_len - 1].type == TOKEN_PIPE))
 		return (free(*content),*content = NULL, PARSER_SYNTAX_ERROR);
 	finding_segment_head(sh);
 	while (sh->head < sh->seg_end) //&& sh->tokens[sh->head].type != TOKEN_PIPE)
@@ -91,7 +93,10 @@ t_ast_node *parse_command(t_minishell *sh)
 	content->cmd = NULL;
 	ret = parse_command_content(&content, sh);
 	if (ret)
+	{
+		print_error(NULL, 2, "syntax error near unexpected token");
 		free_content(content);
+	}
 	if (content == NULL || ret)
 		return (free(content), NULL);  // Return NULL if command content is empty (due to PIPE)
 	return (create_command_node(content));
@@ -112,6 +117,10 @@ t_ast_node *parse_pipeline(t_minishell *sh)
 		return (create_pipe_node(left, right));
 	}
 	else if(right == NULL)
+	{
+		perror("bash: syntax error near unexpected token `|'");
+		strerror(errno);
 		return (NULL);
+	}
 	return (right);
 }
