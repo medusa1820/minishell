@@ -42,20 +42,26 @@ UTILS_SRCS			=	./05_utils/create_ast.c \
 						./05_utils/exit_utils1.c \
 						./05_utils/get_next_line.c
 
+BUILTINS_SRCS		=	./06_builtins/builtin_calls.c \
+						./06_builtins/builtin_utils.c \
+						./06_builtins/echo.c \
+
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(DATA_INIT_SRCS) \
 						$(LEXER_SRCS) \
 						$(PARSER_SRCS) \
 						$(EXECUTOR_SRCS) \
-						$(UTILS_SRCS)
+						$(UTILS_SRCS) \
+						$(BUILTINS_SRCS)
 
 HEADERS				:=	-I ./include
 HEADERS				+=	-I ./05_utils
-HEADERS				+=	-I $(shell brew --prefix readline)/include
+HEADERS				+=	-I $(shell brew --prefix readline)/include # comment this for use in Debian
 # HEADERS				+=	-I ../LeakSanitizer
 
 LDFLAGS				+=	-L ./lib/ft_printf -lft_ft_printf
 LDFLAGS				+=	-lreadline -L $(shell brew --prefix readline)/lib
+# LDFLAGS				+=	-lreadline # for Debian
 # LDFLAGS				+=	-L ../LeakSanitizer -llsan -lstdc++ -Wno-gnu-include-next
 
 LIBFT_FT_PRINTF		:=	lib/ft_printf/libft_ft_printf.a

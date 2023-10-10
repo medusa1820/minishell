@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 17:42:55 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/08 21:36:41 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/10 17:43:41 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ to other parts of the code once the signal handler returns.
 */
 
 // volatile t_ms_exit_code	g_exit_code;
-
-volatile int	g_sig_nbr;
 
 // execute_ast0.c
 

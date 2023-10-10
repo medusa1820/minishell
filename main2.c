@@ -6,11 +6,13 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/09 18:29:55 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/10 17:51:41 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+volatile int	g_sig_nbr;
 
 int	main(int argc, char **argv)
 {
