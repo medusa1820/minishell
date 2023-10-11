@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 19:17:58 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/28 15:37:22 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/11 18:21:41 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_envp_ll	*create_new_node(char *var, char *value)
 		return (NULL);
 	new_node->var = ft_strdup(var);
 	new_node->value = ft_strdup(value);
-	new_node->var_internal = false;
+	new_node->env_var = true;
 	new_node->next = NULL;
 	return (new_node);
 }

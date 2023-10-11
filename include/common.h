@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/07 00:26:31 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/11 18:21:48 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,22 @@
 
 /*
 	Data structure for environment variables
+
+	typedef struct s_var_list
+	{
+		char		*key;
+		char		*value;
+		bool		env_flag;
+		t_var_list	*next;
+	}	t_var_list;
+
 */
 
 typedef struct s_envp_ll
 {
 	char				*var;
 	char				*value;
-	bool				var_internal;
+	bool				env_var;
 	struct s_envp_ll	*next;
 }	t_envp_ll;
 

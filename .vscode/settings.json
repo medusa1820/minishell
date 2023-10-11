@@ -1,9 +1,28 @@
 {
     "files.associations": {
-        "array": "c",
+        "__bit_reference": "c",
+        "__functional_base": "c",
+        "__node_handle": "c",
+        "algorithm": "c",
+        "bitset": "c",
+        "chrono": "c",
+        "__memory": "c",
+        "functional": "c",
         "iterator": "c",
-        "string": "c",
-        "string_view": "c",
-        "vector": "c"
+        "limits": "c",
+        "memory": "c",
+        "optional": "c",
+        "ratio": "c",
+        "system_error": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "vector": "c",
+        "data_init.h": "c",
+        "lexer.h": "c",
+        "common.h": "c",
+        "expander.h": "c",
+        "executor.h": "c",
+        "builtins.h": "c",
+        "limits.h": "c"
     }
 }

@@ -45,6 +45,7 @@ UTILS_SRCS			=	./05_utils/create_ast.c \
 BUILTINS_SRCS		=	./06_builtins/builtin_calls.c \
 						./06_builtins/builtin_utils.c \
 						./06_builtins/echo.c \
+						./06_builtins/export.c \
 
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(DATA_INIT_SRCS) \
@@ -55,7 +56,7 @@ ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(BUILTINS_SRCS)
 
 HEADERS				:=	-I ./include
-HEADERS				+=	-I ./05_utils
+# HEADERS				+=	-I ./05_utils
 HEADERS				+=	-I $(shell brew --prefix readline)/include # comment this for use in Debian
 # HEADERS				+=	-I ../LeakSanitizer
 
