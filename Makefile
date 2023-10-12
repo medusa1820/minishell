@@ -48,6 +48,7 @@ BUILTINS_SRCS		=	./06_builtins/builtin_calls.c \
 						./06_builtins/unset.c \
 						./06_builtins/env.c \
 						./06_builtins/pwd.c \
+						./06_builtins/cd.c \
 						./06_builtins/builtin_utils.c \
 
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
