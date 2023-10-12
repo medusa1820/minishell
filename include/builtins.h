@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/12 18:13:48 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/12 18:54:33 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,14 @@ t_envp_ll		*get_previous(t_envp_ll *var_head, t_envp_ll *found_node);
 void			free_single_var_node(t_envp_ll *node);
 void			remove_found_node(t_envp_ll *var_head, t_envp_ll *found_node);
 int				unset_bltn(t_envp_ll *var_head, char **cmd);
+
+// env.c
+
+int				env_bltn(t_envp_ll *var_list, char **cmd);
+
+// pwd.c
+
+int				pwd_bltn(void);
 
 // builtin_utils.c
 

@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/12 17:39:14 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/12 18:45:04 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,15 @@ void	first_pipe(t_pipe *data, char **envp)
 {
 	if (data->pid == 0)
 	{
-		find_cmd_path(data, envp);
 		first_pipe_in_out(data);
+		if (data->cmd_split && is_builtin(data->cmd_split[0]))
+		{
+			data->exit_code = execute_bltn(data->shell_data, data->cmd_split);
+			close_pipe0_fds(data);
+			exit(data->exit_code);
+		}
+		else
+			find_cmd_path(data, envp);
 		close_pipe0_fds(data);
 		if (execve(data->cmd_path, data->cmd_split, envp) == -1)
 			exit_error(errno, "Couldn't execute execve() first", data);
@@ -44,8 +51,16 @@ void	middle_pipe(t_pipe *data, char **envp, int *i)
 {
 	if (data->pid == 0)
 	{
-		find_cmd_path(data, envp);
 		middle_pipe_in_out(data, i);
+		if (data->cmd_split && is_builtin(data->cmd_split[0]))
+		{
+			data->exit_code = execute_bltn(data->shell_data, data->cmd_split);
+			close_pipe0_fds(data);
+			close_pipe1_fds(data);
+			exit(data->exit_code);
+		}
+		else
+			find_cmd_path(data, envp);
 		close_pipe0_fds(data);
 		close_pipe1_fds(data);
 		if (execve(data->cmd_path, data->cmd_split, envp) == -1)
@@ -61,8 +76,16 @@ void	last_pipe(t_pipe *data, char **envp, int *i)
 {
 	if (data->pid == 0)
 	{
-		find_cmd_path(data, envp);
 		last_pipe_in_out(data, i);
+		if (data->cmd_split && is_builtin(data->cmd_split[0]))
+		{
+			data->exit_code = execute_bltn(data->shell_data, data->cmd_split);
+			close_pipe0_fds(data);
+			close_pipe1_fds(data);
+			exit(data->exit_code);
+		}
+		else
+			find_cmd_path(data, envp);
 		close_pipe0_fds(data);
 		close_pipe1_fds(data);
 		if (execve(data->cmd_path, data->cmd_split, envp) == -1)
