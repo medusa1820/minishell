@@ -6,13 +6,13 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 12:42:41 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/12 14:29:11 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/12 18:11:40 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	export_no_args(t_envp_ll *var_head)
+void	export_no_args(t_envp_ll *var_head)
 {
 	t_envp_ll	*current;
 
@@ -36,7 +36,7 @@ static void	export_no_args(t_envp_ll *var_head)
 	return ;
 }
 
-static int	is_valid_identifier(char *cmd)
+int	is_valid_identifier(char *cmd)
 {
 	int	i;
 
@@ -58,7 +58,7 @@ static int	is_valid_identifier(char *cmd)
 	return (1);
 }
 
-static int	export_one(t_envp_ll *var_head, char *cmd)
+int	export_one(t_envp_ll *var_head, char *cmd)
 {
 	t_envp_ll	*node_found;
 

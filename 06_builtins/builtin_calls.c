@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:37:13 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/11 18:36:53 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/12 18:14:00 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	execute_bltn(t_minishell *shell, char **cmd)
 	// 	return (builtin_pwd());
 	if (ft_strncmp(cmd[0], "export", 7) == 0)
 		return (export_bltn(shell->envp_ll, cmd));
-	// if (ft_strncmp(cmd[0], "unset", 6) == 0)
-	// 	return (builtin_unset(ms_data, cmd));
+	if (ft_strncmp(cmd[0], "unset", 6) == 0)
+		return (unset_bltn(shell->envp_ll, cmd));
 	return (0);
 }

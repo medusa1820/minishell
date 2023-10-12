@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:27:01 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/12 16:34:54 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/12 17:38:42 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,9 @@ bool	forker_no_pipe(t_pipe *data, char **envp, t_ast_node *node)
 		return (false);
 	data->cmd_split = node->content->cmd;
 	if (data->cmd_split && is_builtin(data->cmd_split[0]))
-	// if (is_builtin(data->cmd_split[0]))
-	// if (data->cmd_split)
 	{
-		// if (is_builtin(data->cmd_split[0]))
-		// {
-			data->exit_code = execute_bltn(data->shell_data, data->cmd_split);
-			return (true);
-		// }
+		data->exit_code = execute_bltn(data->shell_data, data->cmd_split);
+		return (true);
 	}
 	data->pid = fork();
 	if (data->pid == -1)

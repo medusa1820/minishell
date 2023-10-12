@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/12 11:07:32 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/12 18:13:48 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,17 @@ int				builtin_echo_strjoin(char **cmd, int cnt, int option_n);
 // export.c
 
 int				export_bltn(t_envp_ll *var_head, char **cmd);
-// static void		export_no_args(t_envp_ll *var_head);
-// void			export_no_args(t_envp_ll *var_head);
-// static int		is_valid_identifier(char *cmd);
-// int				is_valid_identifier(char *cmd);
-// static int		export_one(t_envp_ll *var_head, char *cmd);
-// int				export_one(t_envp_ll *var_head, char *cmd);
+void			export_no_args(t_envp_ll *var_head);
+int				is_valid_identifier(char *cmd);
+int				export_one(t_envp_ll *var_head, char *cmd);
+
+// unset.c
+
+int				unset_is_valid_identifier(char *cmd);
+t_envp_ll		*get_previous(t_envp_ll *var_head, t_envp_ll *found_node);
+void			free_single_var_node(t_envp_ll *node);
+void			remove_found_node(t_envp_ll *var_head, t_envp_ll *found_node);
+int				unset_bltn(t_envp_ll *var_head, char **cmd);
 
 // builtin_utils.c
 
