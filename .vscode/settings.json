@@ -23,6 +23,7 @@
         "expander.h": "c",
         "executor.h": "c",
         "builtins.h": "c",
-        "limits.h": "c"
+        "limits.h": "c",
+        "minishell.h": "c"
     }
 }

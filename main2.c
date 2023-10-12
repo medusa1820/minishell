@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/10 17:51:41 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/12 16:21:03 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ int	main(int argc, char **argv)
 			{
 				shell_data.ast_root = parse_pipeline(&shell_data);
 				// print_ast_tree0(shell_data.ast_root, 0);
+				// print_envp_ll(shell_data.envp_ll);
+				// print_envp_local(shell_data.envp_local);
 				if (shell_data.ast_root)
 				{
 					free_tokens(&shell_data);

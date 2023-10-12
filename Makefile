@@ -43,9 +43,9 @@ UTILS_SRCS			=	./05_utils/create_ast.c \
 						./05_utils/get_next_line.c
 
 BUILTINS_SRCS		=	./06_builtins/builtin_calls.c \
-						./06_builtins/builtin_utils.c \
 						./06_builtins/echo.c \
 						./06_builtins/export.c \
+						./06_builtins/builtin_utils.c \
 
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(DATA_INIT_SRCS) \

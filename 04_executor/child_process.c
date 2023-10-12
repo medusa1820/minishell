@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/10 18:46:42 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/12 16:36:03 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ void	no_pipe(t_pipe *data, char **envp)
 {
 	if (data->pid == 0)
 	{
-		if (is_builtin(data->cmd_split[0]))
-		{
-			data->exit_code = execute_bltn(data->shell_data, data->cmd_split);
-			exit(data->exit_code);
-		}
-		else
-		{
+		// if (is_builtin(data->cmd_split[0]))
+		// {
+		// 	data->exit_code = execute_bltn(data->shell_data, data->cmd_split);
+		// 	exit(data->exit_code);
+		// }
+		// else
+		// {
 			find_cmd_path(data, envp);
 			if (data_has_infile(data))
 				dup2_fd_infile_std_in(data);
@@ -31,7 +31,7 @@ void	no_pipe(t_pipe *data, char **envp)
 			close_pipe0_fds(data);
 			if (execve(data->cmd_path, data->cmd_split, envp) == -1)
 				exit_error(errno, "Couldn't execute execve() first", data);
-		}
+		// }
 	}
 	close_pipe0_fds(data);
 }

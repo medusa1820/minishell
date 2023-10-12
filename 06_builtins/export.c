@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 12:42:41 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/11 18:35:37 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/12 14:29:11 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,10 @@ int	export_bltn(t_envp_ll *var_head, char **cmd)
 	return_value = 0;
 	arg_count = get_arg_count(cmd);
 	if (arg_count == 1)
-		return (export_no_args(var_head), return_value);
+	{
+		export_no_args(var_head);
+		return (return_value);
+	}
 	while (cmd && *(cmd + index))
 	{
 		if (is_valid_identifier(*(cmd + index)))

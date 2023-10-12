@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/11 19:01:23 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/12 11:07:32 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,22 @@
 
 bool			is_builtin(char *cmd);
 int				execute_bltn(t_minishell *shell, char **cmd);
+
+// echo.c
+
+int				echo_bltn(char **cmd);
+int				check_option_n(char **arg);
+int				builtin_echo_strjoin(char **cmd, int cnt, int option_n);
+
+// export.c
+
+int				export_bltn(t_envp_ll *var_head, char **cmd);
+// static void		export_no_args(t_envp_ll *var_head);
+// void			export_no_args(t_envp_ll *var_head);
+// static int		is_valid_identifier(char *cmd);
+// int				is_valid_identifier(char *cmd);
+// static int		export_one(t_envp_ll *var_head, char *cmd);
+// int				export_one(t_envp_ll *var_head, char *cmd);
 
 // builtin_utils.c
 
@@ -34,20 +50,9 @@ int				modify_var_list_node(t_envp_ll *matching_node, char *cmd);
 int				add_to_var_list(t_envp_ll *var_list, char *str, int flag);
 // static int		ft_sub_len(char const *start, char c);
 int				ft_sub_len(char const *start, char c);
-
-// echo.c
-
-int				check_option_n(char **arg);
-int				builtin_echo_strjoin(char **cmd, int cnt, int option_n);
-int				echo_bltn(char **cmd);
-
-// export.c
-
-// static void		export_no_args(t_envp_ll *var_head);
-// static int		is_valid_identifier(char *cmd);
-// static int		export_one(t_envp_ll *var_head, char *cmd);
-int				export_bltn(t_envp_ll *var_head, char **cmd);
-
-
+// static int		full_assign(t_envp_ll *new, char *word, char *delim_pt);
+int				full_assign(t_envp_ll *new, char *word, char *delim_pt);
+void			ft_lstadd_back_ms(t_envp_ll **var_list, t_envp_ll *new);
+char			*ft_strdup_pt(const char *start, char *delimiter);
 
 #endif

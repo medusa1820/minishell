@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 15:01:07 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/11 19:01:42 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/12 10:20:05 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,4 +140,65 @@ int	ft_sub_len(char const *start, char c)
 	while (*(start + len) != 0 && *(start + len) != c)
 		len++;
 	return (len);
+}
+
+// static int	full_assign(t_envp_ll *new, char *word, char *delim_pt)
+int	full_assign(t_envp_ll *new, char *word, char *delim_pt)
+{
+	new->var = ft_strdup_pt(word, delim_pt);
+	if (!new->var)
+	{
+		free(new);
+		return (internal_error_printer("Malloc failed"), EXIT_FAILURE);
+	}
+	new->value = ft_strdup(delim_pt + 1);
+	if (!new->value)
+	{
+		free(new->var);
+		free(new);
+		return (internal_error_printer("Malloc failed"), EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+void	ft_lstadd_back_ms(t_envp_ll **var_list, t_envp_ll *new)
+{
+	t_envp_ll	*last;
+
+	if (*var_list == 0)
+	{
+		*var_list = new;
+		return ;
+	}
+	last = *var_list;
+	while (last->next != NULL)
+		last = last->next;
+	last->next = new;
+	return ;
+}
+
+/* char	*ft_strndup_pt(const char *start, char *delimiter)
+Returns a pointer to a null-terminated byte string, which contains 
+copies of at most size bytes from the string pointed to by str */
+char	*ft_strdup_pt(const char *start, char *delimiter)
+{
+	int		i;
+	int		len;
+	char	*dst;
+
+	i = 0;
+	len = 0;
+	if (!start || !delimiter || delimiter < start)
+		return (NULL);
+	while (start + len != delimiter && *(start + len) != '\0')
+		len++;
+	dst = ft_calloc(1, (len + 1) * sizeof(char));
+	if (!dst)
+		return (NULL);
+	while (i < len)
+	{
+		dst[i] = start[i];
+		i++;
+	}
+	return (dst);
 }

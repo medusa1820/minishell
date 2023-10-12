@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 19:15:24 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/03 16:52:03 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/12 10:56:45 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ t_envp_ll	*create_new_node(char *var, char *value);
 
 void		print_envp_ll(t_envp_ll *head);
 void		free_envp_ll(t_envp_ll *head);
-
 
 // envp_local_init.c
 
