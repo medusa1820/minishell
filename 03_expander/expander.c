@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 22:09:29 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/09 13:19:49 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/13 15:48:37 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,10 @@ while characters in token value
 		var = from first char + len
 		get value from var
 		if val == NULL -> val is empty
-		insert val into var location while keeping everything aroung var (copy before var to new, append val, append rest after var - free old save new)
+		insert val into var location while keeping everything aroung var 
+		(copy before var to new, append val, append rest after var - free old save new)
 */
-void expand(t_minishell *sh, char **str, int j)
+void	expand(t_minishell *sh, char **str, int j)
 {
 	int		i;
 	char	*var;
@@ -73,7 +74,7 @@ void expand(t_minishell *sh, char **str, int j)
 	i = -1;
 	while ((*str)[++i])
 	{
-		if ((*str)[i] == '$' && (*str)[i + 1])
+		if ((*str)[i] == '$')// && (*str)[i + 1])
 		{
 			value = NULL;
 			j = i + 2;
@@ -98,13 +99,23 @@ void	expander(t_minishell *sh)
 {
 	int	i;
 	int	j;
+	int	direct;
 
 	i = 0;
 	j = 0;
+	direct = -1;
 	while (i < sh->token_len)
 	{
-		if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) || (sh->tokens[i].type == TOKEN_WORD))
+		if (sh->tokens[i].type == TOKEN_REDIRECT)
+			direct = i;
+		if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) || \
+			(sh->tokens[i].type == TOKEN_WORD))
+		{
+			if (direct >= 0 && !ft_strncmp(sh->tokens[direct].value, "<<", 2))
+				continue;
 			expand(sh, &sh->tokens[i].value, j);
+			direct = -1;
+		}
 		i++;
 	}
 }

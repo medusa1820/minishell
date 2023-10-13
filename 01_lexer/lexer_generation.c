@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 13:20:25 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/13 12:20:20 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,19 @@ t_lexer_state	tokenize(t_minishell *sh, const char *line)
 	sh->free_lexer_token_len = sh->token_len;
 	if (ret == LEXER_SUCCESS)
 	{
-		// print_tokenss(sh);
-		// printf("--------\n");
 		check_assignment(&(sh->tokens), sh->token_len);
 		remove_empty_tokens(sh);
+		print_tokenss(sh);
+		printf("before expand--------\n");
 		expander(sh);
+		print_tokenss(sh);
+		printf("before triming--------\n");
 		trimming_tokens_type(sh);
+		print_tokenss(sh);
+		printf("before joining--------\n");
 		joining_tokens(sh);
 		sh->free_lexer_token_len = sh->token_len;
-		// print_tokenss(sh);
+		print_tokenss(sh);
 	}
 	return (ret);
 }

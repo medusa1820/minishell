@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:39:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/10 13:58:43 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/12 16:49:06 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 
 void	print_error(char *type, int fd, char *msg)
 {
-	ft_putstr_fd("minishell: ", fd);
-	if(type)
+	ft_putstr_fd("minishell> ", fd);
+	if (type)
 	{
 		ft_putstr_fd(type, fd);
 		ft_putstr_fd(": ", fd);
 	}
 	ft_putstr_fd(msg, fd);
+	ft_putstr_fd("\n", fd);
 	// perror(msg);
 }
 
