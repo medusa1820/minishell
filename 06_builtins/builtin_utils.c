@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 15:01:07 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/12 19:08:47 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/13 12:27:45 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,3 +285,61 @@ int	ft_strcmp(const char *s1, const char *s2)
 		return (0);
 	return (1);
 }
+
+////////////////////////////// exit //////////////////////////////
+
+int	atoi_negative(char *c)
+{
+	if (*c == '-')
+		return (-1);
+	else
+		return (1);
+}
+
+int	is_int_min(long long int neg_pos, \
+		long long int intvalue, char c, long long int *data)
+{
+	if (neg_pos == -1 && intvalue * -10 - (c - '0') == LLONG_MIN)
+	{
+		*data = INT_MIN;
+		return (1);
+	}
+	return (0);
+}
+
+int	ft_atoi_secure(const char *str, long long int *data)
+{
+	long long int		intvalue;
+	long long int		neg_pos;
+	char				*chr;
+
+	intvalue = 0;
+	neg_pos = 1;
+	chr = (char *)str;
+	while (chr && (*chr == ' ' || *chr == '\t'))
+		chr++;
+	if (chr && (*chr == '-' || *chr == '+') && *(chr + 1) != '\0')
+		neg_pos = atoi_negative(chr++);
+	while (chr && *chr != '\0')
+	{
+		if (!(*chr >= '0' && *chr <= '9'))
+			return (EXIT_FAILURE);
+		if (is_int_min(neg_pos, intvalue, *chr, data))
+			return (EXIT_SUCCESS);
+		if (intvalue > (LLONG_MAX - (*chr - '0')) / 10)
+			return (EXIT_FAILURE);
+		intvalue = intvalue * 10 + (*chr - '0');
+		chr++;
+	}
+	*data = (int)(intvalue * neg_pos);
+	return (EXIT_SUCCESS);
+}
+
+// void	restore_redirect(int stdin_save, int stdout_save)
+// {
+// 	dup2(stdin_save, STDIN_FILENO);
+// 	close(stdin_save);
+// 	dup2(stdout_save, STDOUT_FILENO);
+// 	close(stdout_save);
+// 	return ;
+// }

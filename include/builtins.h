@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/12 19:08:55 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/13 12:22:54 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ int				cd_with_path(t_envp_ll *var_head, char **cmd, char *pwd);
 int				execute_cd(t_envp_ll *var_head, char **cmd);
 int				cd_bltn(t_envp_ll *var_head, char **cmd);
 
+// exit.c
+
+void			free_on_exit(t_minishell *shell);
+int				exit_bltn(t_minishell *shell, char **cmd);
 
 // builtin_utils.c
 
@@ -80,5 +84,11 @@ int				change_value_for_key(t_envp_ll *var_head, char *key, \
 									char *new_value);
 bool			check_if_in_var_list(t_envp_ll *var_head, char *key);
 int				ft_strcmp(const char *s1, const char *s2);
+// exit
+int				atoi_negative(char *c);
+int				is_int_min(long long int neg_pos, long long int intvalue, \
+							char c, long long int *data);
+int				ft_atoi_secure(const char *str, long long int *data);
+void			restore_redirect(int stdin_save, int stdout_save);
 
 #endif
