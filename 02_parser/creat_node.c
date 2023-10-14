@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   creat_node.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/10 13:56:41 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/14 18:25:34 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ t_ast_node *parse_command(t_minishell *sh)
 	ret = parse_command_content(&content, sh);
 	if (ret)
 	{
-		print_error(NULL, 2, "syntax error near unexpected token");
+		print_error(NULL, 2, "syntax error near unexpected token\n");
 		free_content(content);
 	}
 	if (content == NULL || ret)
