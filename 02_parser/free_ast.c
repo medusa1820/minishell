@@ -1,0 +1,111 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_ast.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/09 13:27:58 by nnavidd           #+#    #+#             */
+/*   Updated: 2023/10/09 15:37:26 by nnavidd          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parser.h"
+
+void	free_content(t_ast_node_content *content)
+{
+	if (content == NULL)
+		return ;
+	if (content->assignments)
+		freeing_assignment(content->assignments);
+	if (content->stdin_redirect)
+		freeing_redirection(content->stdin_redirect);
+	if (content->stdout_redirect)
+		freeing_redirection(content->stdout_redirect);
+	if (content->cmd)
+		freeing_cmd(content->cmd);
+		
+}
+
+void	freeing_cmd(char **cmd)
+{
+	int i;
+
+	if (cmd == NULL)
+		return ;
+	i = 0;
+	while (cmd[i] != NULL)
+	{
+		free(cmd[i]);
+		cmd[i] = NULL;
+		i++;
+	}
+	free(cmd);
+	cmd = NULL;
+}
+
+void	freeing_redirection(t_redirect *ptr)
+{
+	t_redirect	*temp;
+
+	while (ptr != NULL)
+	{
+		temp = ptr;
+		ptr = ptr->next;
+		free(temp->word);
+		temp->word = NULL;
+		free(temp);
+		temp = NULL;
+	}
+	free(ptr);
+	ptr = NULL;
+}
+
+void	freeing_assignment(t_assignment *ptr)
+{
+	t_assignment	*temp;
+
+	while (ptr != NULL)
+	{
+		temp = ptr;
+		ptr = ptr->next;
+		free(temp->word);
+		temp->word = NULL;
+		free(temp);
+		temp = NULL;
+	}
+	free(ptr);
+	ptr = NULL;
+}
+// HI "HI" ""HI "H"I
+
+int	free_ast(t_ast_node *node_ptr)
+{
+	if (!node_ptr)
+		return (1);
+	if ((*node_ptr).type == AST_NODE_CMD)
+	{
+		if ((*node_ptr).content)
+		{
+			if ((*node_ptr).content->cmd)
+				freeing_cmd((*node_ptr).content->cmd);
+			if ((*node_ptr).content->stdin_redirect)
+				freeing_redirection((*node_ptr).content->stdin_redirect);
+			if ((*node_ptr).content->stdout_redirect)
+				freeing_redirection((*node_ptr).content->stdout_redirect);
+			if ((*node_ptr).content->assignments)
+				freeing_assignment((*node_ptr).content->assignments);
+		}
+		free((*node_ptr).content); // (*node_ptr)->content = NULL;
+	}
+	else if ((*node_ptr).type == AST_NODE_PIPE)
+	{
+		free_ast((*node_ptr).left);
+		free_ast((*node_ptr).right);
+		(*node_ptr).left = NULL;
+		(*node_ptr).right = NULL;
+	}
+	return (free(node_ptr), node_ptr = NULL, 0);
+}
+
+

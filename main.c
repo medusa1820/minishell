@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main2.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/13 15:04:52 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/14 14:23:32 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,21 +53,23 @@ int	main(int argc, char **argv)
 		if (line[0] != '\0')
 		{
 			add_history(line);
-			if (tokenize(&shell_data, line) == LEXER_SUCCESS)
-			{
-				shell_data.ast_root = parse_pipeline(&shell_data);
+			// if (tokenize(&shell_data, line) == LEXER_SUCCESS)
+			// {
+				// shell_data.ast_root = parse_pipeline(&shell_data);
+				shell_data.ast_root = parsing(&shell_data, line);
 				// print_ast_tree0(shell_data.ast_root, 0);
 				// print_envp_ll(shell_data.envp_ll);
 				// print_envp_local(shell_data.envp_local);
-				if (shell_data.ast_root)
-				{
-					free_tokens(&shell_data);
+				// if (shell_data.ast_root)
+				// {
+				// 	free_tokens(&shell_data);
 					i = 0;
-					if (shell_data.ast_root->type == AST_NODE_CMD)
+					if (shell_data.ast_root && shell_data.ast_root->type == AST_NODE_CMD)
 					{
 						piper(&data, &i);
 						forker_no_pipe(&data, shell_data.envp_local, shell_data.ast_root);
-						free_ast(&shell_data.ast_root);
+						// free_ast(&shell_data.ast_root);
+						free_ast(shell_data.ast_root);
 					}
 					else
 					{
@@ -75,24 +77,26 @@ int	main(int argc, char **argv)
 						// execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local);
 						if(!execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local))
 						{
-							free_ast(&shell_data.ast_root);
+							// free_ast(&shell_data.ast_root);
+							free_ast(shell_data.ast_root);
 							continue ;
 						}
-						free_ast(&shell_data.ast_root);
+						// free_ast(&shell_data.ast_root);
+						free_ast(shell_data.ast_root);
 					}
-				}
-				else
-				{
-					printf("PARSER FAILED\n");
-					free_tokens(&shell_data);
-					free_ast(&shell_data.ast_root);
-				}
-			}
-			else
-			{
-				printf("LEXER FAILED\n");
-				free_tokens(&shell_data);
-			}
+			// 	}
+			// 	else
+			// 	{
+			// 		printf("PARSER FAILED\n");
+			// 		free_tokens(&shell_data);
+			// 		free_ast(&shell_data.ast_root);
+			// 	}
+			// }
+			// else
+			// {
+			// 	printf("LEXER FAILED\n");
+			// 	free_tokens(&shell_data);
+			// }
 		}
 		ft_waiting(&data);
 		free(line);
