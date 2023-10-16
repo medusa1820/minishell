@@ -72,11 +72,17 @@ t_lexer_state	tokenize(t_minishell *sh, const char *line)
 	if (ret == LEXER_SUCCESS)
 	{
 		// print_tokenss(sh);
-		// printf("--------\n");
+		// printf("before remove empty--------\n");
 		check_assignment(&(sh->tokens), sh->token_len);
 		remove_empty_tokens(sh);
+		// print_tokenss(sh);
+		// printf("before expander--------\n");
 		expander(sh);
+		// print_tokenss(sh);
+		// printf("before triminig--------\n");
 		trimming_tokens_type(sh);
+		// print_tokenss(sh);
+		// printf("before joining--------\n");
 		joining_tokens(sh);
 		sh->free_lexer_token_len = sh->token_len;
 		// print_tokenss(sh);

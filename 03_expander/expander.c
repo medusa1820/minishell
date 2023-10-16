@@ -73,7 +73,7 @@ void expand(t_minishell *sh, char **str, int j)
 	i = -1;
 	while ((*str)[++i])
 	{
-		if ((*str)[i] == '$' && (*str)[i + 1])
+		if ((*str)[i] == '$' && ((*str)[i + 1] && (*str)[i + 1] != ' '))
 		{
 			value = NULL;
 			j = i + 2;
@@ -98,13 +98,29 @@ void	expander(t_minishell *sh)
 {
 	int	i;
 	int	j;
+	int	direct;
 
 	i = 0;
 	j = 0;
+	direct = -1;
 	while (i < sh->token_len)
 	{
-		if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) || (sh->tokens[i].type == TOKEN_WORD))
+			if(!ft_strncmp(sh->tokens[i].value, "<<\0", 3))
+				direct = i;
+			// printf("size:%ld second char:%c next token type:%d\n", ft_strlen(sh->tokens[i].value), sh->tokens[i].value[1], sh->tokens[i + 1].type);
+			// printf("i:%d len:%d\n", i, sh->token_len);
+		if (((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) || (sh->tokens[i].type == TOKEN_WORD)) && direct < 0)
 			expand(sh, &sh->tokens[i].value, j);
+		// printf("token2:%s\n",sh->tokens[i].value);
+		if (i + 1 < sh->token_len)
+		{
+			// printf("token2:%s\n",sh->tokens[i].value);
+			if((sh->tokens[i].value[0] == '$' && sh->tokens[i].value[1] == '\0') &&\
+			(sh->tokens[i + 1].type == TOKEN_SINGLE_QUOTE || \
+			sh->tokens[i + 1].type == TOKEN_DOUBLE_QUOTE) && \
+			(sh->tokens[i + 1].value[0] != '$' && sh->tokens[i + 1].value[1] != '\0'))
+				erase_token(sh, i);
+		}
 		i++;
 	}
 }
