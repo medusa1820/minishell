@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:27:01 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/15 16:30:50 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/15 20:38:47 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	here_doc_open(t_pipe *data, char *word)
 		exit_error(errno, "Error creating temporary here_doc_file", data);
 	set_signals_interactive_here_doc();
 	ms_terminal_settings_change();
-	// ft_putstr_fd("here_doc> ", STDOUT_FILENO);
+	ft_putstr_fd("here_doc> ", STDOUT_FILENO);
 	buffer = get_next_line(STDIN_FILENO);
 	// set_signals_noninteractive();
 	while (buffer)
@@ -60,7 +60,7 @@ void	here_doc_open(t_pipe *data, char *word)
 			ft_putstr_fd(buffer, fd_here_doc);
 		free(buffer);
 		// set_signals_interactive();
-		// ft_putstr_fd("here_doc> ", STDOUT_FILENO);
+		ft_putstr_fd("here_doc> ", STDOUT_FILENO);
 		buffer = get_next_line(STDIN_FILENO);
 		// set_signals_noninteractive();
 	}

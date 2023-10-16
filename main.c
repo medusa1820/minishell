@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/14 18:35:37 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/16 10:18:33 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	main(int argc, char **argv)
 		{
 			add_history(line);
 			shell_data.ast_root = parsing(&shell_data, line);
-			// print_ast_tree0(shell_data.ast_root, 1);
+			print_ast_tree0(shell_data.ast_root, 1);
 			i = 0;
 			if (shell_data.ast_root && shell_data.ast_root->type == AST_NODE_CMD)
 			{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:39:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/14 18:38:24 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/12 16:49:06 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 
 void	print_error(char *type, int fd, char *msg)
 {
-	ft_putstr_fd("minishell: ", fd);
-	if(type)
+	ft_putstr_fd("minishell> ", fd);
+	if (type)
 	{
 		ft_putstr_fd(type, fd);
 		ft_putstr_fd(": ", fd);
 	}
 	ft_putstr_fd(msg, fd);
+	ft_putstr_fd("\n", fd);
 	// perror(msg);
 }
 
@@ -69,8 +70,7 @@ t_ast_node	*parsing(t_minishell *sh, char *line)
 			// printf("PARSER FAILED\n");
 			free_tokens(sh);
 			free_ast(sh->ast_root);
-			// return (NULL);
-			exit (2); // meder suggests
+			return (NULL);
 		}
 		return (sh->ast_root);
 	}

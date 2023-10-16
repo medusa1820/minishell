@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:31:59 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 15:51:38 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/12 16:46:43 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_parser_state	parse_redirection(t_ast_node_content **content, t_minishell *sh)
 	return (PARSER_SUCCESS);
 }
 
-t_parser_state parse_assignment(t_ast_node_content **content, t_minishell *sh)
+t_parser_state	parse_assignment(t_ast_node_content **content, t_minishell *sh)
 {
 	t_assignment	*new_assignment;
 	t_assignment	*last_assignment;

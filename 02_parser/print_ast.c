@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 14:38:37 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 15:15:35 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/12 16:49:26 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ void	print_stdout_redirect(t_redirect *stdout_redirect, int level)
 	printf("\n");
 }
 
-void print_ast_node(t_ast_node *node, int level, char x)
+void	print_ast_node(t_ast_node *node, int level, char x)
 {
 	if (x == 'x')
 		printf("\n***************** AST ****************\n");
 	if (node == NULL)
-		return;
+		return ;
 	for (int i = 0; i < level; i++)
 		printf("  ");
 	if (x == 'l')

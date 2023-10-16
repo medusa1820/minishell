@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 10:48:59 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 12:51:36 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/12 16:43:10 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ t_lexer_state	double_quote_handling(const char **current, t_token *token)
 	return (LEXER_SUCCESS);
 }
 
-t_lexer_state	tokenize_pipe_and_redirector(const char **current, t_token *token)
+t_lexer_state	tokenize_pipe_and_redirector(const char **current, \
+													t_token *token)
 {
 	token->type = TOKEN_REDIRECT;
 	if ((**current == '<' && *(*current + 1) == '<') \
