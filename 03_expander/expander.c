@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 22:09:29 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/13 15:48:37 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/16 12:29:18 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,16 +94,41 @@ void	expand(t_minishell *sh, char **str, int j)
 	}
 }
 
-//ls -la |  < main.c << E < make cat >> out | $USER
+// // ls -la |  < main.c << E < make cat >> out | $USER
+// void	expander(t_minishell *sh)
+// {
+// 	int	i;
+// 	int	j;
+// 	int	direct;
+
+// 	i = 0;
+// 	j = 0;
+// 	direct = -1;
+// 	while (i < sh->token_len)
+// 	{
+// 		if (sh->tokens[i].type == TOKEN_REDIRECT)
+// 			direct = i;
+// 		if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) || \
+// 			(sh->tokens[i].type == TOKEN_WORD))
+// 		{
+// 			if (direct >= 0 && !ft_strncmp(sh->tokens[direct].value, "<<", 2))
+// 				continue;
+// 			expand(sh, &sh->tokens[i].value, j);
+// 			direct = -1;
+// 		}
+// 		i++;
+// 	}
+// }
+
 void	expander(t_minishell *sh)
 {
-	int	i;
-	int	j;
-	int	direct;
+	int		i;
+	int		j;
+	int		direct;
 
 	i = 0;
 	j = 0;
-	direct = -1;
+	direct = 0;
 	while (i < sh->token_len)
 	{
 		if (sh->tokens[i].type == TOKEN_REDIRECT)
@@ -111,9 +136,8 @@ void	expander(t_minishell *sh)
 		if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) || \
 			(sh->tokens[i].type == TOKEN_WORD))
 		{
-			if (direct >= 0 && !ft_strncmp(sh->tokens[direct].value, "<<", 2))
-				continue;
-			expand(sh, &sh->tokens[i].value, j);
+			if (direct >= 0 && ft_strncmp(sh->tokens[direct].value, "<<\0", 3) != 0)
+				expand(sh, &sh->tokens[i].value, j);
 			direct = -1;
 		}
 		i++;
