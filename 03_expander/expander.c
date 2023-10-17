@@ -94,6 +94,9 @@ void expand(t_minishell *sh, char **str, int j)
 }
 
 //ls -la |  < main.c << E < make cat >> out | $USER
+// TOKEN_DOUBLE_QUOTE = 2
+// TOKEN_WORD = 5
+// TOKEN_SINGLE_QUOTE = 1
 void	expander(t_minishell *sh)
 {
 	int	i;
@@ -115,10 +118,11 @@ void	expander(t_minishell *sh)
 		if (i + 1 < sh->token_len)
 		{
 			// printf("token2:%s\n",sh->tokens[i].value);
-			if((sh->tokens[i].value[0] == '$' && sh->tokens[i].value[1] == '\0') &&\
+			if((sh->tokens[i].value[0] == '$' && sh->tokens[i].value[1] == '\0'\
+			&& sh->tokens[i].type == TOKEN_WORD) &&\
 			(sh->tokens[i + 1].type == TOKEN_SINGLE_QUOTE || \
-			sh->tokens[i + 1].type == TOKEN_DOUBLE_QUOTE) && \
-			(sh->tokens[i + 1].value[0] != '$' && sh->tokens[i + 1].value[1] != '\0'))
+			sh->tokens[i + 1].type == TOKEN_DOUBLE_QUOTE)) //&& 
+			// (sh->tokens[i + 1].value[0] != '$' && sh->tokens[i + 1].value[1] != '\0'))
 				erase_token(sh, i);
 		}
 		i++;
