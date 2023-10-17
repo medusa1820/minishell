@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/14 18:35:37 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/17 18:33:12 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	main(int argc, char **argv)
 	while (1)
 	{
 		set_signals_interactive(&data);
+		// line = readline("minishell> ");
 		if (isatty(fileno(stdin)))
 			line = readline("minishell> ");
 		else

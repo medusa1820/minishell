@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/13 12:22:54 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/17 19:33:20 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,22 @@ int				cd_to_home(t_envp_ll *var_head, char *pwd);
 int				cd_with_path(t_envp_ll *var_head, char **cmd, char *pwd);
 int				execute_cd(t_envp_ll *var_head, char **cmd);
 int				cd_bltn(t_envp_ll *var_head, char **cmd);
+
+// cd_new.c
+
+// char			*find_value_recursive(t_envp_ll *head, const char *key);
+// char			*get_value_for_key(t_envp_ll *var_head, const char *key);
+// int				set_value_recursive(t_envp_ll *head, char *key, char *value);
+// int				change_value_for_key(t_envp_ll *var_head, char *key, char *new_value);
+// bool			check_value_recursive(t_envp_ll *head, char *key);
+// bool			check_if_in_var_list(t_envp_ll *var_head, char *key);
+// int				ft_strcmp(const char *s1, const char *s2);
+// int				handle_cd_errors(char *pwd, char *path);
+// int				cd_to_oldpwd(t_envp_ll *var_head, char *pwd);
+// int				cd_to_home(t_envp_ll *var_head, char *pwd);
+// int				cd_with_path(t_envp_ll *var_head, char **cmd, char *pwd);
+// int				execute_cd(t_envp_ll *var_head, char **cmd);
+// int				cd_bltn(t_envp_ll *var_head, char **cmd);
 
 // exit.c
 
