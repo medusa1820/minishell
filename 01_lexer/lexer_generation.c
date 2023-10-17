@@ -16,7 +16,7 @@ void	init_token(t_token *token)
 {
 	token->type = TOKEN_EMPTY;
 	token->value = NULL;
-	token->flag = false;
+	token->flag = -1;
 }
 
 t_lexer_state	feed_tokens_array(t_minishell *sh, t_token *token)

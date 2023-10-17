@@ -36,8 +36,22 @@ int	changing_var_value(char **str, char *value, int start, int len)
 	*str = new;
 	return (free(left), free(right), start + ft_strlen(value) - 1);
 }
+int ft_navid_strcmp(const char *src, const char *dst)
+{
+    char	*tmpsrc;
+    char	*tmpdst;
 
-char	*get_env_var(t_minishell *sh, char *var)
+	tmpsrc = (char *)src;
+	tmpdst = (char *)dst;
+    while (*tmpsrc && *tmpdst && *tmpsrc == *tmpdst)
+	{
+        tmpsrc++;
+		tmpdst++;
+    }
+    return (ft_strlen(tmpdst) + ft_strlen(tmpsrc));
+}
+
+char	*get_env_var(t_minishell *sh, char *var, bool heredoc)
 {
 	t_envp_ll	*tmp;
 
@@ -46,9 +60,18 @@ char	*get_env_var(t_minishell *sh, char *var)
 	tmp = sh->envp_ll;
 	while (tmp)
 	{
-		if (!ft_strncmp(tmp->var, var, ft_strlen(tmp->var)))
+		if (!heredoc && !ft_strncmp(tmp->var, var, ft_strlen(tmp->var)))
+		{
+			// printf("not heredoc\n");
 				return (ft_strdup(tmp->value)); 
+		}
+		if (heredoc && ft_strcmp(tmp->var, var))
+		{
+			// printf("heredoc\n");
+				return (ft_strdup(tmp->value)); 
+		}
 		tmp = tmp->next;
+			// printf("hd:%d var:%s env_var:%s com:%d\n", heredoc, var, tmp->var, ft_navid_strcmp(tmp->var, var));
 	}
 	return (NULL);
 }
@@ -64,7 +87,7 @@ while characters in token value
 		if val == NULL -> val is empty
 		insert val into var location while keeping everything aroung var (copy before var to new, append val, append rest after var - free old save new)
 */
-void expand(t_minishell *sh, char **str, int j)
+void expand(t_minishell *sh, char **str, int j, bool heredoc)
 {
 	int		i;
 	char	*var;
@@ -84,7 +107,7 @@ void expand(t_minishell *sh, char **str, int j)
 				while ((*str)[j] == '_' || ft_isalnum((*str)[j]))
 					j++;
 				var = ft_substr(*str, i + 1, j - i);
-				value = get_env_var(sh, var);
+				value = get_env_var(sh, var, heredoc);
 				free(var);
 			}
 			i = changing_var_value(str, value, i, j - i);
@@ -113,7 +136,7 @@ void	expander(t_minishell *sh)
 			// printf("size:%ld second char:%c next token type:%d\n", ft_strlen(sh->tokens[i].value), sh->tokens[i].value[1], sh->tokens[i + 1].type);
 			// printf("i:%d len:%d\n", i, sh->token_len);
 		if (((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) || (sh->tokens[i].type == TOKEN_WORD)) && direct < 0)
-			expand(sh, &sh->tokens[i].value, j);
+			expand(sh, &sh->tokens[i].value, j, false);
 		// printf("token2:%s\n",sh->tokens[i].value);
 		if (i + 1 < sh->token_len)
 		{

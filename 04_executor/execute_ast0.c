@@ -113,7 +113,7 @@ bool	handle_in_redirections(t_pipe *data, t_ast_node *node)
 		}
 		else if (redirect->type == REDIRECT_HERE_DOC)
 		{
-			here_doc_open(data, redirect->word);
+			here_doc_open(data, redirect->word, redirect->word_type);
 			data->fd_infile = open("here_doc_file", O_RDONLY);
 			if (unlink("here_doc_file") == -1)
 				exit_error(errno, "Error deleting here_doc temp file", data);

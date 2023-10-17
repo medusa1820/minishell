@@ -34,7 +34,7 @@ bool	forker_no_pipe(t_pipe *data, char **envp, t_ast_node *node)
 	}
 }
 
-void	here_doc_open(t_pipe *data, char *word)
+void	here_doc_open(t_pipe *data, char *word, int	word_type)
 {
 	char	*buffer;
 	int		fd_here_doc;
@@ -60,7 +60,12 @@ void	here_doc_open(t_pipe *data, char *word)
 		}
 		else
 		{
-			expand(data->shell_data, &buffer, j);//we only need this line and j variable to expand heredoc (what a amazing code ;))
+			// if (word_type == TOKEN_WORD)
+			// {
+				// printf("this:%s and the type:%d\n", buffer, word_type);
+				(void)word_type;
+				expand(data->shell_data, &buffer, j, true);
+			// }
 			ft_putstr_fd(buffer, fd_here_doc);
 		}
 		free(buffer);

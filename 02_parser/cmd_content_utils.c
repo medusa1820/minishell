@@ -14,18 +14,30 @@
 
 t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, t_minishell *sh)
 {
+	int	ret;
 	int	tmp_head;
 	int	tmp_seg_end;
 
+	ret = PARSER_FAILURE;
 	tmp_head = sh->head;
 	tmp_seg_end = sh->seg_end;
 	while (tmp_head < tmp_seg_end && sh->tokens[tmp_head].type != TOKEN_REDIRECT)
 	{
 		if (sh->tokens[tmp_head].type == TOKEN_ASSIGNMENT)
-			sh->tokens[tmp_head].type = TOKEN_WORD;
+		{
+			ret = parse_assignment(content, sh);
+			if (ret == PARSER_FAILURE)
+				break ;
+		}
+		else if (sh->tokens[tmp_head].type == TOKEN_WORD)
+		{
+			ret = parse_cmd_word(content, sh);
+			if(ret == PARSER_FAILURE)
+				break ;
+		}
 		tmp_head++;
 	}
-	return (parse_cmd_word(content, sh));
+	return (ret);
 }
 
 size_t count_strings(char* strings[])

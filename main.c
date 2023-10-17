@@ -52,6 +52,7 @@ int	main(int argc, char **argv)
 			add_history(line);
 			shell_data.ast_root = parsing(&shell_data, line);
 			// print_ast_tree0(shell_data.ast_root, 1);
+			// print_ast_node(shell_data.ast_root, 1,'X');
 			i = 0;
 			if (shell_data.ast_root && shell_data.ast_root->type == AST_NODE_CMD)
 			{

@@ -114,7 +114,7 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
-	bool			flag;
+	int				flag;
 }	t_token;
 
 /////////////////// parser.h
@@ -150,6 +150,7 @@ typedef struct s_redirect
 	t_redirect_type		type;
 	char				*word;
 	struct s_redirect	*next;
+	int					word_type;
 }	t_redirect;
 
 typedef struct s_ast_node_content

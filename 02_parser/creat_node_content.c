@@ -24,7 +24,8 @@ t_parser_state	parse_redirection(t_ast_node_content **content, t_minishell *sh)
 		return (perror("Memory allocation error"), PARSER_FAILURE);
 	type = redirect_type(sh->tokens[sh->head].value); // Set the type of redirection
 	new_redirection->type = type;
-	new_redirection->word = ft_strdup(sh->tokens[sh->head + 1].value); // put next head in value of this node
+	new_redirection->word = ft_strdup(sh->tokens[sh->head + 1].value);// put next head in value of this node
+	new_redirection->word_type = sh->tokens[sh->head + 1].flag; 
 	free(sh->tokens[sh->head + 1].value);
 	sh->tokens[sh->head + 1].value = NULL;
 	new_redirection->next = NULL;

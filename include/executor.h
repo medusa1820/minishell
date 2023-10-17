@@ -58,7 +58,7 @@ bool				handle_out_redirections(t_pipe *data, t_ast_node *node);
 // execute_ast1.c
 
 bool				forker_no_pipe(t_pipe *data, char **envp, t_ast_node *head);
-void				here_doc_open(t_pipe *data, char *word);
+void				here_doc_open(t_pipe *data, char *word, int wrod_type);
 
 // child_process.c
 
