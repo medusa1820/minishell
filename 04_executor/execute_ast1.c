@@ -38,7 +38,9 @@ void	here_doc_open(t_pipe *data, char *word)
 {
 	char	*buffer;
 	int		fd_here_doc;
+	int		j;
 
+	j = 0;
 	fd_here_doc = open("here_doc_file", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_here_doc < 0)
 		exit_error(errno, "Error creating temporary here_doc_file", data);
@@ -57,7 +59,10 @@ void	here_doc_open(t_pipe *data, char *word)
 			break ;
 		}
 		else
+		{
+			expand(data->shell_data, &buffer, j);//we only need this line and j variable to expand heredoc (what a amazing code ;))
 			ft_putstr_fd(buffer, fd_here_doc);
+		}
 		free(buffer);
 		// set_signals_interactive();
 		// ft_putstr_fd("here_doc> ", STDOUT_FILENO);
