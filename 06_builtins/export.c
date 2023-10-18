@@ -21,13 +21,13 @@ void	export_no_args(t_envp_ll *var_head)
 	{
 		if (current->env_var == true)
 		{
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
-			ft_putstr_fd(current->var, STDOUT_FILENO);
+			ft_putstr_fd("declare -x ", STDERR_FILENO);
+			ft_putstr_fd(current->var, STDERR_FILENO);
 			if (current->value != NULL)
 			{
-				ft_putstr_fd("=\"", STDOUT_FILENO);
-				ft_putstr_fd(current->value, STDOUT_FILENO);
-				ft_putchar_fd('\"', STDOUT_FILENO);
+				ft_putstr_fd("=\"", STDERR_FILENO);
+				ft_putstr_fd(current->value, STDERR_FILENO);
+				ft_putchar_fd('\"', STDERR_FILENO);
 			}
 			ft_putchar_fd('\n', STDERR_FILENO);
 		}
@@ -85,7 +85,7 @@ int	export_bltn(t_envp_ll *var_head, char **cmd)
 	arg_count = get_arg_count(cmd);
 	if (arg_count == 1)
 	{
-		export_no_args(var_head);
+		// export_no_args(var_head);
 		return (return_value);
 	}
 	while (cmd && *(cmd + index))

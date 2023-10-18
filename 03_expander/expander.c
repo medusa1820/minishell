@@ -65,12 +65,12 @@ char	*get_env_var(t_minishell *sh, char *var, bool heredoc)
 		var[ft_strlen(var) - 1] == ' ' || var[ft_strlen(var) - 1] == '$') && \
 		!ft_strncmp(tmp->var, var, ft_strlen(tmp->var)))
 				return (ft_strdup(tmp->value)); 
-		if (!heredoc && !ft_strncmp(tmp->var, var, ft_strlen(var)))
-		{
-			// printf("not heredoc\n");
-				return (ft_strdup(tmp->value)); 
-		}
-		if (heredoc && ft_strcmp(tmp->var, var))
+		// if (!heredoc && !ft_strncmp(tmp->var, var, ft_strlen(var)))
+		// {
+		// 	// printf("not heredoc\n");
+		// 		return (ft_strdup(tmp->value)); 
+		// }
+		if (ft_strcmp(tmp->var, var))
 		{
 			// printf("heredoc\n");
 				return (ft_strdup(tmp->value)); 
