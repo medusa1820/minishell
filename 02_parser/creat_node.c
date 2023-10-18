@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/14 18:25:34 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/18 14:54:46 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,8 @@ t_ast_node *parse_pipeline(t_minishell *sh)
 	}
 	else if(right == NULL)
 	{
-		perror("bash: syntax error near unexpected token `|'");
-		strerror(errno);
+		// perror("bash: syntax error near unexpected token `|'");
+		// strerror(errno);
 		return (NULL);
 	}
 	return (right);

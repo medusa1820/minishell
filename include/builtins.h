@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/18 12:26:45 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/18 18:24:45 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void			free_p(char	*p);
 void			internal_error_printer(char *msg);
 // export
 int				get_arg_count(char **cmd);
-void			error_printer(char *cmd, char *arg, char *msg);
+void			print_error_bltn(char *cmd, char *arg, char *msg);
 t_envp_ll		*get_var_list_node(t_envp_ll *var_head, char *str);
 int				modify_var_list_node(t_envp_ll *matching_node, char *cmd);
 int				add_to_var_list(t_envp_ll *var_list, char *str, int flag);

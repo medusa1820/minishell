@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 12:42:41 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/12 18:11:40 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/18 18:26:19 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ int	is_valid_identifier(char *cmd)
 	i = 1;
 	if (!ft_isalpha(cmd[0]) && cmd[0] != '_')
 	{
-		error_printer("export", cmd, "not a valid identifier");
+		print_error_bltn("export", cmd, "not a valid identifier");
 		return (0);
 	}
 	while (cmd[i] != '\0' && cmd[i] != '=')
 	{
 		if (!ft_isalnum(cmd[i]) && cmd[i] != '_')
 		{
-			error_printer("export", cmd, "not a valid identifier");
+			print_error_bltn("export", cmd, "not a valid identifier");
 			return (0);
 		}
 		i++;

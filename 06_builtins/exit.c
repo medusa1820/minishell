@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 11:51:09 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/14 14:29:23 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/18 18:28:25 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@ int	exit_bltn(t_minishell *shell, char **cmd)
 	{
 		if (cmd[1][0] == '\0' || ft_atoi_secure(cmd[1], &exit_local) != 0)
 		{
-			error_printer("exit", cmd[1], "numeric argument required");
+			print_error_bltn("exit", cmd[1], "numeric argument required");
 			exit_local = 255;
 		}
 	}
 	if (arg_count > 2 && exit_local != 255)
 	{
-		error_printer("exit", NULL, "too many arguments");
+		print_error_bltn("exit", NULL, "too many arguments");
 		return (1);
 	}
 	if (exit_local < 0 || exit_local > 255)

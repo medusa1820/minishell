@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 15:01:07 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/13 12:27:45 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/18 18:25:34 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	get_arg_count(char **cmd)
 	return (arg_count);
 }
 
+/*
 void	error_printer(char *cmd, char *arg, char *msg)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
@@ -71,6 +72,20 @@ void	error_printer(char *cmd, char *arg, char *msg)
 	}
 	ft_putendl_fd(msg, STDERR_FILENO);
 }
+*/
+
+void	print_error_bltn(char *cmd, char *arg, char *msg)
+{
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd(" ", STDERR_FILENO);
+	if (arg && *arg)
+	{
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+	}
+	ft_putendl_fd(msg, STDERR_FILENO);
+}
+
 
 t_envp_ll	*get_var_list_node(t_envp_ll *var_head, char *str)
 {

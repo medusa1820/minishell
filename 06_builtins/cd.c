@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 19:00:12 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/12 19:02:35 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/18 18:28:14 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ int	cd_to_oldpwd(t_envp_ll *var_head, char *pwd)
 	oldpwd = get_value_for_key(var_head, "OLDPWD");
 	if (oldpwd == NULL)
 		return (free(pwd), \
-		error_printer("cd", NULL, "OLDPWD not set"), EXIT_FAILURE);
+		print_error_bltn("cd", NULL, "OLDPWD not set"), EXIT_FAILURE);
 	if (oldpwd[0] == '\0')
 		return (free(pwd), EXIT_SUCCESS);
 	if (chdir(oldpwd) == -1)
 		return (free(pwd), \
-		error_printer("cd", NULL, strerror(errno)), EXIT_FAILURE);
+		print_error_bltn("cd", NULL, strerror(errno)), EXIT_FAILURE);
 	oldpwd = ft_strdup(oldpwd);
 	if (oldpwd == NULL)
 		return (free(pwd), \
@@ -46,16 +46,16 @@ int	cd_to_home(t_envp_ll *var_head, char *pwd)
 	home = get_value_for_key(var_head, "HOME");
 	if (home == NULL)
 		return (free(pwd), \
-		error_printer("cd", NULL, "HOME not set"), EXIT_FAILURE);
+		print_error_bltn("cd", NULL, "HOME not set"), EXIT_FAILURE);
 	if (home[0] == '\0')
 		return (free(pwd), EXIT_SUCCESS);
 	if (chdir(home) == -1)
 	{
 		free(pwd);
 		if (errno == ENOENT)
-			return (error_printer("cd", home, strerror(errno)), EXIT_FAILURE);
+			return (print_error_bltn("cd", home, strerror(errno)), EXIT_FAILURE);
 		else
-			return (error_printer("cd", NULL, strerror(errno)), EXIT_FAILURE);
+			return (print_error_bltn("cd", NULL, strerror(errno)), EXIT_FAILURE);
 	}
 	if (change_value_for_key(var_head, "OLDPWD", pwd))
 		return (free(pwd), \
@@ -72,9 +72,9 @@ int	cd_with_path(t_envp_ll *var_head, char **cmd, char *pwd)
 	{
 		free(pwd);
 		if (errno == ENOENT)
-			return (error_printer("cd", cmd[1], strerror(errno)), EXIT_FAILURE);
+			return (print_error_bltn("cd", cmd[1], strerror(errno)), EXIT_FAILURE);
 		else
-			return (error_printer("cd", NULL, strerror(errno)), EXIT_FAILURE);
+			return (print_error_bltn("cd", NULL, strerror(errno)), EXIT_FAILURE);
 	}
 	if (change_value_for_key(var_head, "OLDPWD", pwd))
 		return (free(pwd), \
@@ -82,7 +82,7 @@ int	cd_with_path(t_envp_ll *var_head, char **cmd, char *pwd)
 	free(pwd);
 	pwd = getcwd(NULL, PATH_MAX);
 	if (pwd == NULL)
-		return (error_printer("cd", NULL, strerror(errno)), EXIT_FAILURE);
+		return (print_error_bltn("cd", NULL, strerror(errno)), EXIT_FAILURE);
 	if (change_value_for_key(var_head, "PWD", pwd))
 		return (free(pwd), \
 		internal_error_printer("Malloc failed"), EXIT_FAILURE);
@@ -95,7 +95,7 @@ int	execute_cd(t_envp_ll *var_head, char **cmd)
 
 	pwd = getcwd(NULL, PATH_MAX);
 	if (pwd == NULL)
-		return (error_printer("cd", NULL, strerror(errno)), EXIT_FAILURE);
+		return (print_error_bltn("cd", NULL, strerror(errno)), EXIT_FAILURE);
 	if (cmd[1] == NULL || (cmd[1][0] == '~' && cmd[1][1] == '\0'))
 		return (cd_to_home(var_head, pwd));
 	else if (cmd[1][0] == '-' && cmd[1][1] == '\0')
