@@ -58,14 +58,19 @@ char	*get_env_var(t_minishell *sh, char *var, bool heredoc)
 	if (var == NULL)
 		return (NULL);
 	tmp = sh->envp_ll;
+		// printf("first:%c last:%c\n", var[0], var[ft_strlen(var) - 1]);
 	while (tmp)
 	{
-		if (!heredoc && !ft_strncmp(tmp->var, var, ft_strlen(tmp->var)))
-		{
-			// printf("not heredoc\n");
+		if (!heredoc && (var[ft_strlen(var) - 1] == '\'' || \
+		var[ft_strlen(var) - 1] == ' ' || var[ft_strlen(var) - 1] == '$') && \
+		!ft_strncmp(tmp->var, var, ft_strlen(tmp->var)))
 				return (ft_strdup(tmp->value)); 
-		}
-		if (heredoc && ft_strcmp(tmp->var, var))
+		// if (!heredoc && !ft_strncmp(tmp->var, var, ft_strlen(var)))
+		// {
+		// 	// printf("not heredoc\n");
+		// 		return (ft_strdup(tmp->value)); 
+		// }
+		if (ft_strcmp(tmp->var, var))
 		{
 			// printf("heredoc\n");
 				return (ft_strdup(tmp->value)); 
