@@ -39,6 +39,36 @@ void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 	return (new_ptr);
 }
 
+// void	check_assignment(t_token **tokens, int token_count)
+// {
+// 	int			i;
+// 	int			j;
+// 	const char	*word;
+
+// 	i = -1;
+// 	while (++i < token_count)
+// 	{
+// 		if ((*tokens)[i].type == TOKEN_WORD || 
+// 			(*tokens)[i].type == TOKEN_SINGLE_QUOTE
+// 			|| (*tokens)[i].type == TOKEN_DOUBLE_QUOTE)
+// 		{
+// 			word = (*tokens)[i].value;
+// 			if (!ft_isalpha(*word) && *word != '_' && *word != '=' &&
+// 				ft_strchr(word, '=') && ft_strchr(word, '=') != word)
+// 				continue ;
+// 			j = -1;
+// 			printf("hiiiiiiii\n");
+// 			while (word[++j] != '=')
+// 			{
+// 				if (!ft_isalnum(word[j]) && word[j] != '_')
+// 					break ;
+// 			}
+// 			if (word[j] == '=' && (*tokens)[i].type != TOKEN_ASSIGNMENT)
+// 				(*tokens)[i].type = TOKEN_ASSIGNMENT;
+// 		}
+// 	}
+// }
+
 void	check_assignment(t_token **tokens, int token_count)
 {
 	int			i;
@@ -48,14 +78,13 @@ void	check_assignment(t_token **tokens, int token_count)
 	i = -1;
 	while (++i < token_count)
 	{
-		if ((*tokens)[i].type == TOKEN_WORD || \
+		word = (*tokens)[i].value;
+		if (((*tokens)[i].type == TOKEN_WORD || \
 			(*tokens)[i].type == TOKEN_SINGLE_QUOTE
-			|| (*tokens)[i].type == TOKEN_DOUBLE_QUOTE)
+			|| (*tokens)[i].type == TOKEN_DOUBLE_QUOTE) && ( \
+			ft_isalpha(*word) && *word != '_' && *word != '=' && \
+			ft_strchr(word, '=') && ft_strchr(word, '=') != word))
 		{
-			word = (*tokens)[i].value;
-			if (!ft_isalpha(*word) && *word != '_' && \
-				ft_strchr(word, '=') && ft_strchr(word, '=') != word)
-				continue ;
 			j = -1;
 			while (word[++j] != '=')
 			{
