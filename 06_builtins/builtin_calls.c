@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:37:13 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/13 11:59:09 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/18 10:56:34 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ bool	is_builtin(char *cmd)
 
 int	execute_bltn(t_minishell *shell, char **cmd)
 {
-	(void)shell;
+	// (void)shell;
 	if (ft_strncmp(cmd[0], "echo", 5) == 0)
 		return (echo_bltn(cmd));
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)

@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/09 17:37:03 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/18 13:07:33 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ here_doc will propagate to child processes
 
 */
 
+
+
+
+/*
+
 bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *node)
 {
 	if (!handle_in_redirections(data, node))
@@ -95,6 +100,93 @@ bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *node)
 		(*i)++;
 		return (true);
 	}
+}
+
+*/
+
+bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *node)
+{
+	if (!handle_in_redirections(data, node))
+	{
+		(*i)++;
+		return (false);
+	}
+	if (!handle_out_redirections(data, node))
+	{
+		(*i)++;
+		return (false);
+	}
+	data->pid = fork();
+	if (data->pid == -1)
+		return (false);
+	else
+	{
+		// data->cmd_split = node->content->cmd;
+		data->node = node;
+		export_preps(data);
+		if (*i == 0)
+			first_pipe(data, envp);
+		else if (*i == data->nr_of_cmd_nodes - 1)
+			last_pipe(data, envp, i);
+		else
+			middle_pipe(data, envp, i);
+		(*i)++;
+		return (true);
+	}
+}
+
+void	export_preps(t_pipe *data)
+{
+	int				count_assgnmnts;
+	int				count_cmd_strings;
+	int				i;
+	t_assignment	*assignment_iter;
+
+	if (data->node->content->cmd && \
+		ft_strncmp(data->node->content->cmd[0], "export", 7) == 0)
+	// if (ft_strcmp(data->node->content->cmd[0], "export"))
+	{
+		count_assgnmnts = 0;
+		count_assgnmnts = count_nmbr_assignments(data->node);
+		if (count_assgnmnts == 0)
+		{
+			data->cmd_split = data->node->content->cmd;
+		}
+		else
+		{
+			count_cmd_strings = 1 + count_assgnmnts + 1;
+			data->cmd_split = (char **) malloc (sizeof(char *) * \
+								count_cmd_strings);
+			data->cmd_split[0] = data->node->content->cmd[0];
+			i = 1;
+			assignment_iter = data->node->content->assignments;
+			while (i <= count_assgnmnts)
+			{
+				data->cmd_split[i] = ft_strdup(assignment_iter->word);
+				assignment_iter = assignment_iter->next;
+				i++;
+			}
+			data->cmd_split[i] = NULL;
+		}
+	}
+	else
+		data->cmd_split = data->node->content->cmd;
+	// print_ast_tree0(data->shell_data->ast_root, 1);
+}
+
+int	count_nmbr_assignments(t_ast_node *head)
+{
+	t_assignment	*assignment_iter;
+	int				count_assignments;
+
+	count_assignments = 0;
+	assignment_iter = head->content->assignments;
+	while (assignment_iter)
+	{
+		assignment_iter = assignment_iter->next;
+		count_assignments++;
+	}
+	return (count_assignments);
 }
 
 bool	handle_in_redirections(t_pipe *data, t_ast_node *node)

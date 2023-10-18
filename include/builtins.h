@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/13 12:22:54 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/18 12:26:45 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int				builtin_echo_strjoin(char **cmd, int cnt, int option_n);
 // export.c
 
 int				export_bltn(t_envp_ll *var_head, char **cmd);
+void			export_preps(t_pipe *data);
+int				count_nmbr_assignments(t_ast_node *head);
 void			export_no_args(t_envp_ll *var_head);
 int				is_valid_identifier(char *cmd);
 int				export_one(t_envp_ll *var_head, char *cmd);

@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/11 18:21:48 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/18 10:24:27 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,7 @@ typedef struct s_pipe
 	t_minishell		*shell_data;
 	int				exit_code;
 	bool			interactive_mode;
+	t_ast_node		*node;
 }	t_pipe;
 
 #endif

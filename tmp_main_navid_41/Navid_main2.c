@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/18 12:57:18 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/09 15:46:35 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-volatile int	g_sig_nbr;
 
 int	main(int argc, char **argv)
 {
@@ -39,43 +37,59 @@ int	main(int argc, char **argv)
 			line = ft_strtrim(line_bla, "\n");
 			free(line_bla);
 		}
+		exit_code_signals(&data);
 		set_signals_noninteractive(&data);
+		exit_code_signals(&data);
 		if (line == NULL || *line == EOF)
 		{
 			free_envp_ll(shell_data.envp_ll);
 			free_envp_local(shell_data.envp_local);
 			free_tokens(&shell_data);
+			exit_code_signals(&data);
 			return (data.exit_code);
 		}
 		if (line[0] != '\0')
 		{
 			add_history(line);
-			shell_data.ast_root = parsing(&shell_data, line);
-			// print_ast_tree0(shell_data.ast_root, 1);
-			// print_ast_node(shell_data.ast_root, 1,'X');
-			i = 0;
-			if (shell_data.ast_root && shell_data.ast_root->type == AST_NODE_CMD)
-			{
-				piper(&data, &i);
-				forker_no_pipe(&data, shell_data.envp_local, shell_data.ast_root);
-				free_ast(shell_data.ast_root);
-			}
-			else
-			{
-				data.nr_of_cmd_nodes = 0;
-				if(!execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local))
-				{
-					free_ast(shell_data.ast_root);
-					continue ;
-				}
-				free_ast(shell_data.ast_root);
-			}
+			// if (tokenize(&shell_data, line) == LEXER_SUCCESS)
+			// {
+				shell_data.ast_root = parsing(&shell_data, line);
+				// if (shell_data.ast_root)
+				// {
+				// 	print_ast_node(shell_data.ast_root, 1, 'x');
+				// 	free_tokens(&shell_data);
+					i = 0;
+					if (shell_data.ast_root && shell_data.ast_root->type == AST_NODE_CMD)
+					{
+						piper(&data, &i);
+						forker_no_pipe(&data, shell_data.envp_local, shell_data.ast_root);
+						free_ast(shell_data.ast_root);
+					}
+					else
+					{
+						data.nr_of_cmd_nodes = 0;
+						execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local);
+						free_ast(shell_data.ast_root);
+					}
+			// 	}
+			// 	else
+			// 	{
+			// 		printf("PARSER FAILED\n");
+			// 		free_tokens(&shell_data);
+			// 		free_ast(shell_data.ast_root);
+			// 	}
+			// }
+			// else
+			// {
+			// 	printf("LEXER FAILED\n");
+			// 	free_tokens(&shell_data);
+			// }
 		}
 		ft_waiting(&data);
 		free(line);
 	}
 	ms_terminal_settings_restore();
-	free_envp_ll(shell_data.envp_ll);
-	free_envp_local(shell_data.envp_local);
+	// free_envp_ll(shell_data.envp_ll);
+	// free_envp_local(shell_data.envp_local);
 	return (data.exit_code);
 }
