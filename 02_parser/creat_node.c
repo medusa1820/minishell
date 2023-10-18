@@ -94,7 +94,8 @@ t_ast_node *parse_command(t_minishell *sh)
 	ret = parse_command_content(&content, sh);
 	if (ret)
 	{
-		print_error(NULL, 2, "syntax error near unexpected token\n");
+		// print_error(NULL, 2, "syntax error near unexpected token\n");
+		print_error2(NULL, 2, "syntax error near unexpected token `", sh);
 		free_content(content);
 	}
 	if (content == NULL || ret)
@@ -118,8 +119,8 @@ t_ast_node *parse_pipeline(t_minishell *sh)
 	}
 	else if(right == NULL)
 	{
-		perror("bash: syntax error near unexpected token `|'");
-		strerror(errno);
+		// perror("bash: syntax error near unexpected token `|'");
+		// strerror(errno);
 		return (NULL);
 	}
 	return (right);

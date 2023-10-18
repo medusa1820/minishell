@@ -80,7 +80,11 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 	sh->cmd_count = sh->head - 1;
 	ret = PARSER_FAILURE;
 	if (sh->head < sh->seg_end && sh->tokens[sh->head].type != TOKEN_WORD)
+	{
+		// if (sh->tokens[sh->head].type)
+		// 	sh->tokens[sh->head].flag = -2; //////////////////////////////////////////
 		return (ret);
+	}
 	while (++sh->cmd_count < sh->seg_end && \
 			sh->tokens[sh->cmd_count].type == TOKEN_WORD)
 	{
@@ -105,6 +109,8 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 		}
 	}
 	sh->index = 0;
+	// if (sh->tokens[sh->head].type)
+	// 	sh->tokens[sh->head].flag = -2; //////////////////////////////////////////
 	return (ret);
 }
 
@@ -133,6 +139,8 @@ t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
 		else
 			break ;
 	}
+	// if (sh->tokens[sh->head].type)
+		sh->tokens[sh->head].flag = -2; //////////////////////////////////////////
 	return (ret);
 }
 
@@ -161,5 +169,7 @@ t_parser_state	parse_prefix_cmd(t_ast_node_content **content, t_minishell *sh)
 		else
 			break ;
 	}
+	// if (sh->tokens[sh->head].type)
+	// 	sh->tokens[sh->head].flag = -2; //////////////////////////////////////////
 	return (ret);
 }
