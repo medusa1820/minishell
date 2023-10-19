@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 18:53:45 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/18 18:29:22 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/19 19:43:31 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ int	pwd_bltn(void)
 {
 	char	*cwd;
 
-	cwd = NULL;
-	cwd = getcwd(cwd, PATH_MAX);
+	cwd = getcwd(NULL, PATH_MAX);
 	if (cwd)
 	{
 		ft_putendl_fd(cwd, STDOUT_FILENO);

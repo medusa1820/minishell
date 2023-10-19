@@ -1,7 +1,29 @@
 ========================== COMMANDS TO RUN THE TESTER ======================================
 
 
+
+
+
+
 bash ./tester.sh m
+
+
+
+
+
+
+mstest m >../msh_test_results/echo_test_0  
+
+
+
+
+
+
+diff ../msh_test_results/echo_test_0 ../msh_test_results/test_109 
+
+
+
+
 
 
 
