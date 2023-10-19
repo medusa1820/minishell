@@ -15,44 +15,38 @@
 
 void	printing_syntax_error(char *syntax, int syx_pos, char *nx_syx, t_minishell *sh, int fd)
 {
-	if(ft_strcmp(syntax, "<<\0") && ft_strcmp(nx_syx, "<<\0"))
+	if(syntax && ft_strcmp(syntax, "<<\0") && ft_strcmp(nx_syx, "<<\0"))
 	{
-		ft_putstr_fd(syntax, fd);
+		if (syx_pos + 2 < sh->seg_end && ft_strcmp(sh->tokens[syx_pos + 2].value, "<<\0"))
+			ft_putstr_fd(syntax, fd);
+		if (syx_pos + 2 < sh->seg_end && ft_strcmp(sh->tokens[syx_pos + 2].value, "<\0"))
+			write(fd, "<", 1);
 		write(fd, "<'\n", 3);
 		return ;
 	}
-	// printf("syx_pos:%d token_len:%d\n", syx_pos, sh->token_len);
-	if ((syx_pos >= 0 && syx_pos <= sh->token_len) && nx_syx)
+	if ((syx_pos >= 0 && syx_pos <= sh->seg_end) && nx_syx)
 	{
-		if(ft_strcmp(syntax, "<\0") && ft_strcmp(nx_syx, ">\0"))
+		if((ft_strcmp(syntax, "<\0") && ft_strcmp(nx_syx, ">\0")) || \
+		(ft_strcmp(syntax, "<<\0") && ft_strcmp(nx_syx, "<\0")))
 			ft_putstr_fd("newline", fd);
+		// else if (ft_strcmp(syntax, "<<\0") && ft_strcmp(nx_syx, "<<\0"))
+		// 	write(fd, "<'\n", 3);
 		else
 			ft_putstr_fd(nx_syx, fd);
-		// if(ft_strcmp(syntax, "<<\0") && ft_strcmp(nx_syx, "<<\0"))
-		// 	ft_putstr_fd("<<", fd);
-		// if(ft_strcmp(syntax, ">\0") && ft_strcmp(nx_syx, ">\0"))
-		// 	ft_putstr_fd(">", fd);
-
 	}
-	else if ((syx_pos >= 0 && syx_pos < sh->token_len) && !nx_syx)
+	else if (syntax && syx_pos < 0 && syx_pos < sh->seg_end && !ft_strcmp(nx_syx, "|\0"))
+		ft_putstr_fd(syntax, fd);
+	else if ((syx_pos >= 0 && syx_pos < sh->seg_end) && !nx_syx)
 		ft_putstr_fd("newline", fd);
-	// if(ft_strcmp(syntax, "<<\0") && ft_strcmp(nx_syx, "<<\0"))
-	// 	ft_putstr_fd("newline", fd);
-	// if(ft_strcmp(syntax, "<<\0") && ft_strcmp(nx_syx, "<<\0"))
-	// 	ft_putstr_fd("newline", fd);
-	else if (syx_pos < 0 || syx_pos >= sh->token_len)
-	{
-		// printf("hiiiii\n");
-		ft_putstr_fd("|", fd);
-	}
+	else
+		ft_putstr_fd("|", 2);
 	write(fd, "'\n", 2);
-
 }
 
 void	find_syntax_error(t_minishell *sh, int fd)
 {
 	int		i;
-	char	*syntax;
+	char 	*syntax;
 	char	*next_token;
 	int		syntax_position;
 
@@ -60,15 +54,18 @@ void	find_syntax_error(t_minishell *sh, int fd)
 	next_token = NULL;
 	syntax = NULL;
 	syntax_position = -1;
-	while (++i < sh->token_len)
+	while (++i < sh->seg_end)
 	{
 		if (sh->tokens[i].flag == -2)
 			syntax_position = i;
 	}
+	// printf("syntax position:%d token_len:%d seg_end:%d", syntax_position, sh->token_len, sh->seg_end);
 	if (syntax_position >= 0)
+	{
 		syntax = sh->tokens[syntax_position].value;
-	if(syntax_position + 1 <= sh->token_len)
-		next_token = sh->tokens[syntax_position + 1].value;
+		if(syntax_position + 1 < sh->seg_end) //check later if it needs to check change to <=
+			next_token = sh->tokens[syntax_position + 1].value;
+	}
 	printing_syntax_error(syntax, syntax_position, next_token, sh, fd);
 }
 
@@ -149,7 +146,8 @@ t_ast_node	*parsing(t_minishell *sh, char *line)
 	}
 	else
 	{
-		printf("LEXER FAILED\n");
+		sh->data->exit_code = 2;
+		// printf("LEXER FAILED\n");
 		free_tokens(sh);
 	}
 	return (NULL);

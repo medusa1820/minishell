@@ -54,6 +54,9 @@ void	remove_empty_tokens(t_minishell *sh)
 				sh->tokens[i + 1].type == TOKEN_SPACE))))
 				erase_token(sh, i);
 		}
+		if (sh->tokens[i].type == TOKEN_WORD &&\
+			ft_strcmp(sh->tokens[i].value, "~\0"))
+			ft_strlcpy(sh->tokens[i].value, "$HOME", 6);
 	}
 }
 

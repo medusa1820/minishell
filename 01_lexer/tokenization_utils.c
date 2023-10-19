@@ -102,6 +102,12 @@ t_lexer_state	token_unclosed(const char **current, t_token *token)
 	int	ret;
 
 	ret = UNCLOSED_QUOTE;
+	ft_putstr_fd("minishell> ", 2);
+	ft_putstr_fd("unexpected EOF while looking for matching ", 2);
+	if (token->type == TOKEN_DOUBLE_QUOTE)
+		write(2, "`\"\'\n", 4);
+	else if (token->type == TOKEN_SINGLE_QUOTE)
+		write(2, "`\'\'\n", 4);
 	token->type = TOKEN_UNCLOSED_Q;
 	// if (token->value)
 	// {

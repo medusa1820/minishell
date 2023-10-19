@@ -17,9 +17,9 @@ t_lexer_state	single_quote_handling(const char **current, t_token *token)
 	int	len;
 
 	len = 0;
+	token->type = TOKEN_SINGLE_QUOTE;
 	if ((*current)[1] == '\0')
 		return (token_unclosed(current, token), 1);
-	token->type = TOKEN_SINGLE_QUOTE;
 	token->value = ft_strdup("\0"); // Initialize the value to NULL before reallocating
 	(*current)++; 
 	while (**current != '\'' && **current != '\0')
@@ -45,9 +45,9 @@ t_lexer_state	double_quote_handling(const char **current, t_token *token)
 	int	len;
 
 	len = 0;
+	token->type = TOKEN_DOUBLE_QUOTE;
 	if ((*current)[1] == '\0')
 		return (token_unclosed(current, token));
-	token->type = TOKEN_DOUBLE_QUOTE;
 	token->value = ft_strdup("\0"); // Initialize the value to NULL before reallocating
 	(*current)++; // Move past the opening double quote
 	while (**current != '"' && **current != '\0')
