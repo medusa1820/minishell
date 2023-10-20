@@ -12,6 +12,76 @@
 
 #include "minishell.h"
 
+
+void	printing_syntax_error(char *syntax, int syx_pos, char *nx_syx, t_minishell *sh, int fd)
+{
+	if(syntax && ft_strcmp(syntax, "<<\0") && ft_strcmp(nx_syx, "<<\0"))
+	{
+		if (syx_pos + 2 < sh->seg_end && ft_strcmp(sh->tokens[syx_pos + 2].value, "<<\0"))
+			ft_putstr_fd(syntax, fd);
+		if (syx_pos + 2 < sh->seg_end && ft_strcmp(sh->tokens[syx_pos + 2].value, "<\0"))
+			write(fd, "<", 1);
+		write(fd, "<'\n", 3);
+		return ;
+	}
+	if ((syx_pos >= 0 && syx_pos <= sh->seg_end) && nx_syx)
+	{
+		if((ft_strcmp(syntax, "<\0") && ft_strcmp(nx_syx, ">\0")) || \
+		(ft_strcmp(syntax, "<<\0") && ft_strcmp(nx_syx, "<\0")))
+			ft_putstr_fd("newline", fd);
+		// else if (ft_strcmp(syntax, "<<\0") && ft_strcmp(nx_syx, "<<\0"))
+		// 	write(fd, "<'\n", 3);
+		else
+			ft_putstr_fd(nx_syx, fd);
+	}
+	else if (syntax && syx_pos < 0 && syx_pos < sh->seg_end && !ft_strcmp(nx_syx, "|\0"))
+		ft_putstr_fd(syntax, fd);
+	else if ((syx_pos >= 0 && syx_pos < sh->seg_end) && !nx_syx)
+		ft_putstr_fd("newline", fd);
+	else
+		ft_putstr_fd("|", 2);
+	write(fd, "'\n", 2);
+}
+
+void	find_syntax_error(t_minishell *sh, int fd)
+{
+	int		i;
+	char 	*syntax;
+	char	*next_token;
+	int		syntax_position;
+
+	i = -1;
+	next_token = NULL;
+	syntax = NULL;
+	syntax_position = -1;
+	while (++i < sh->seg_end)
+	{
+		if (sh->tokens[i].flag == -2)
+			syntax_position = i;
+	}
+	// printf("syntax position:%d token_len:%d seg_end:%d", syntax_position, sh->token_len, sh->seg_end);
+	if (syntax_position >= 0)
+	{
+		syntax = sh->tokens[syntax_position].value;
+		if(syntax_position + 1 < sh->seg_end) //check later if it needs to check change to <=
+			next_token = sh->tokens[syntax_position + 1].value;
+	}
+	printing_syntax_error(syntax, syntax_position, next_token, sh, fd);
+}
+
+void	print_error2(char *type, int fd, char *msg, t_minishell *sh)
+{
+	ft_putstr_fd("minishell: ", fd);
+	if(type)
+	{
+		ft_putstr_fd(type, fd);
+		ft_putstr_fd(": ", fd);
+	}
+	ft_putstr_fd(msg, fd);
+	find_syntax_error(sh, fd);
+	// perror(msg);
+}
+
 void	print_error(char *type, int fd, char *msg)
 {
 	ft_putstr_fd("minishell: ", fd);
@@ -70,13 +140,14 @@ t_ast_node	*parsing(t_minishell *sh, char *line)
 			free_tokens(sh);
 			free_ast(sh->ast_root);
 			// return (NULL);
-			exit (2); // meder suggests
+			// exit (2); // meder suggests
 		}
 		return (sh->ast_root);
 	}
 	else
 	{
-		printf("LEXER FAILED\n");
+		sh->data->exit_code = 2;
+		// printf("LEXER FAILED\n");
 		free_tokens(sh);
 	}
 	return (NULL);

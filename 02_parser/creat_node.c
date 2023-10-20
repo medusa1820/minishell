@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/18 14:54:46 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/14 18:25:34 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_parser_state	parse_command_content(t_ast_node_content **content, t_minishell *
 		}
 		else
 		{
-			if (parse_cmd_word(content, sh) == PARSER_FAILURE)
+			if (parse_cmd_word(content, sh) == PARSER_FAILURE && sh->head == sh->seg_end)
 				return (ret);
 		}
 		parse_sufix_cmd(content, sh);
@@ -94,7 +94,9 @@ t_ast_node *parse_command(t_minishell *sh)
 	ret = parse_command_content(&content, sh);
 	if (ret)
 	{
-		print_error(NULL, 2, "syntax error near unexpected token\n");
+		sh->data->exit_code = 2;
+		// print_error(NULL, 2, "syntax error near unexpected token\n");
+		print_error2(NULL, 2, "syntax error near unexpected token `", sh);
 		free_content(content);
 	}
 	if (content == NULL || ret)
@@ -114,6 +116,8 @@ t_ast_node *parse_pipeline(t_minishell *sh)
 		sh->tokens[sh->token_len - 1].value = NULL;
 		sh->token_len--;
 		left = parse_pipeline(sh);
+		if (left == NULL)
+			return (NULL);
 		return (create_pipe_node(left, right));
 	}
 	else if(right == NULL)
