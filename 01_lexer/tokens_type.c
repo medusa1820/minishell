@@ -36,7 +36,7 @@ t_lexer_state	single_quote_handling(const char **current, t_token *token)
 		// token->type = TOKEN_UNCLOSED_Q;
 		return (token_unclosed(current, token));
 	if (token->value[0] == '\0')
-		token->type = TOKEN_WORD;
+		token->flag = TOKEN_SINGLE_QUOTE;
 	return (LEXER_SUCCESS);
 }
 
@@ -64,7 +64,7 @@ t_lexer_state	double_quote_handling(const char **current, t_token *token)
 		// token->type = TOKEN_UNCLOSED_Q;
 		return (token_unclosed(current, token));
 	if (token->value[0] == '\0')
-		token->type = TOKEN_WORD;
+		token->type = TOKEN_DOUBLE_QUOTE;
 	return (LEXER_SUCCESS);
 }
 

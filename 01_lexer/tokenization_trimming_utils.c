@@ -44,6 +44,11 @@ void	remove_empty_tokens(t_minishell *sh)
 	i = -1;
 	while (++i < sh->token_len)
 	{
+		
+		if (sh->tokens[i].type == TOKEN_WORD && ( i + 1 < sh->token_len &&\
+			(sh->tokens[i + 1].type == TOKEN_DOUBLE_QUOTE || \
+			sh->tokens[i + 1].type == TOKEN_SINGLE_QUOTE)))
+				sh->tokens[i].flag = sh->tokens[i + 1].flag;
 		if ((sh->tokens[i].value[0] == '\0') && \
 		(sh->tokens[i].type == TOKEN_DOUBLE_QUOTE || \
 		sh->tokens[i].type == TOKEN_SINGLE_QUOTE || \
@@ -97,6 +102,7 @@ void	trimming_tokens_type(t_minishell *sh)
 	i = -1;
 	while (++i < sh->token_len)
 	{
+		// printf("token_flag:%d\n", sh->tokens[i].flag);
 		if (sh->tokens[i].type == TOKEN_PIPE)
 			sh->tokens[i].flag = TOKEN_PIPE;
 		if (sh->tokens[i].type == TOKEN_SINGLE_QUOTE)
@@ -107,10 +113,14 @@ void	trimming_tokens_type(t_minishell *sh)
 			sh->tokens[i].flag = TOKEN_REDIRECT;
 		if (sh->tokens[i].type == TOKEN_ASSIGNMENT)
 			sh->tokens[i].flag = TOKEN_ASSIGNMENT;
-		if (sh->tokens[i].type == TOKEN_WORD)
+		if (sh->tokens[i].type == TOKEN_WORD && sh->tokens[i].flag == -1)
 			sh->tokens[i].flag = TOKEN_WORD;
 		if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) | \
 		(sh->tokens[i].type == TOKEN_SINGLE_QUOTE))
 				sh->tokens[i].type = TOKEN_WORD;
 	}
 }
+		// if (sh->tokens[i].type == TOKEN_WORD && ( i + 1 < sh->token_len &&
+		// 	(sh->tokens[i + 1].type == TOKEN_DOUBLE_QUOTE || 
+		// 	sh->tokens[i + 1].type == TOKEN_SINGLE_QUOTE)))
+		// 		sh->tokens[i].flag = sh->tokens[i + 1].flag;

@@ -25,7 +25,7 @@ int	env_bltn(t_envp_ll *var_list, char **cmd)
 			"Arguments and options are not supported");
 		return (EXIT_SUCCESS);
 	}
-		// return (print_error_bltn(*cmd, *(cmd + 1), \
+		// return (print_error_bltn(*cmd, *(cmd + 1), 
 		// 	"Arguments and options are not supported"), 0);
 	while (current != NULL)
 	{

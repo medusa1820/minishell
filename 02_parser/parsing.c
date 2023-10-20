@@ -36,10 +36,11 @@ void	printing_syntax_error(char *syntax, int syx_pos, char *nx_syx, t_minishell 
 	}
 	else if (syntax && syx_pos < 0 && syx_pos < sh->seg_end && !ft_strcmp(nx_syx, "|\0"))
 		ft_putstr_fd(syntax, fd);
-	else if ((syx_pos >= 0 && syx_pos < sh->seg_end) && !nx_syx)
+	else if ((syx_pos >= 0 && syx_pos < sh->seg_end) && !nx_syx && syx_pos + 1 == sh->free_lexer_token_len)
 		ft_putstr_fd("newline", fd);
 	else
 		ft_putstr_fd("|", 2);
+	// printf("token_len:%d pos:%d free:%d\n", sh->token_len, syx_pos, sh->free_lexer_token_len);
 	write(fd, "'\n", 2);
 }
 

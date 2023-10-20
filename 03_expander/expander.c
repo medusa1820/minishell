@@ -63,7 +63,8 @@ char	*get_env_var(t_minishell *sh, char *var, bool heredoc)
 	{
 		if (!heredoc && (var[ft_strlen(var) - 1] == '\'' || \
 		var[ft_strlen(var) - 1] == ' ' || var[ft_strlen(var) - 1] == '$' || \
-		(var[ft_strlen(var) - 1] == '\n' && !ft_strncmp(tmp->var, var, ft_strlen(var) - 1))) &&\
+		var[ft_strlen(var) - 1] == '/' || (var[ft_strlen(var) - 1] == '\n' && \
+		!ft_strncmp(tmp->var, var, ft_strlen(var) - 1))) &&\
 		!ft_strncmp(tmp->var, var, ft_strlen(tmp->var)))
 				return (ft_strdup(tmp->value)); 
 		// if (!heredoc && !ft_strncmp(tmp->var, var, ft_strlen(var)))
@@ -102,7 +103,7 @@ void expand(t_minishell *sh, char **str, int j, bool heredoc)
 	i = -1;
 	while ((*str)[++i])
 	{
-		if ((*str)[i] == '$' && ((*str)[i + 1] && (*str)[i + 1] != ' '))
+		if ((*str)[i] == '$' && ((*str)[i + 1] && (*str)[i + 1] != ' ' && (*str)[i + 1] != '/'))
 		{
 			value = NULL;
 			j = i + 2;

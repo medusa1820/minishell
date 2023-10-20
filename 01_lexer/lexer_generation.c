@@ -62,10 +62,10 @@ t_lexer_state	tokenize(t_minishell *sh, const char *line)
 	const char	*current;
 
 	ret = LEXER_SUCCESS;
-	init_token(&token);
 	current = line;
 	while (*current != '\0' && ret == LEXER_SUCCESS)
 	{
+		init_token(&token);
 		ret = checking_tokenizer(&token, sh, &current);
 	}
 	sh->free_lexer_token_len = sh->token_len;
