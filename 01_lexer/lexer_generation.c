@@ -17,6 +17,7 @@ void	init_token(t_token *token)
 	token->type = TOKEN_EMPTY;
 	token->value = NULL;
 	token->flag = -1;
+	token->slash_number = 0;
 }
 
 t_lexer_state	feed_tokens_array(t_minishell *sh, t_token *token)
@@ -73,10 +74,10 @@ t_lexer_state	tokenize(t_minishell *sh, const char *line)
 	{
 		// print_tokenss(sh);
 		// printf("before remove empty--------\n");
-		check_assignment(&(sh->tokens), sh->token_len);
 		remove_empty_tokens(sh);
 		// print_tokenss(sh);
 		// printf("before expander--------\n");
+		check_assignment(&(sh->tokens), sh->token_len);
 		expander(sh);
 		// print_tokenss(sh);
 		// printf("before triminig--------\n");

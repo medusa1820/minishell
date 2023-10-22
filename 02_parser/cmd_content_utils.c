@@ -12,6 +12,34 @@
 
 #include "minishell.h"
 
+// t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, t_minishell *sh)
+// {
+// 	int	ret;
+// 	int	tmp_head;
+// 	int	tmp_seg_end;
+
+// 	ret = PARSER_FAILURE;
+// 	tmp_head = sh->head;
+// 	tmp_seg_end = sh->seg_end;
+// 	while (tmp_head < tmp_seg_end && sh->tokens[tmp_head].type != TOKEN_REDIRECT)
+// 	{
+// 		if (sh->tokens[tmp_head].type == TOKEN_ASSIGNMENT)
+// 		{
+// 			ret = parse_assignment(content, sh);
+// 			if (ret == PARSER_FAILURE)
+// 				break ;
+// 		}
+// 		else if (sh->tokens[tmp_head].type == TOKEN_WORD)
+// 		{
+// 			ret = parse_cmd_word(content, sh);
+// 			if(ret == PARSER_FAILURE)
+// 				break ;
+// 		}
+// 		tmp_head++;
+// 	}
+// 	return (ret);
+// }
+
 t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, t_minishell *sh)
 {
 	int	ret;
@@ -28,13 +56,14 @@ t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, t_minishel
 			ret = parse_assignment(content, sh);
 			if (ret == PARSER_FAILURE)
 				break ;
+			sh->head--;
+			sh->token_len++;
+			sh->tokens[tmp_head].type = TOKEN_WORD;
+			// printf("token:%s tmp_head:%d tmp_segend:%d sh_head:%d sh_segend:%d\n",sh->tokens[sh->head].value, *tmp_head, *tmp_seg_end, sh->head, sh->seg_end);
 		}
-		else if (sh->tokens[tmp_head].type == TOKEN_WORD)
-		{
-			ret = parse_cmd_word(content, sh);
-			if(ret == PARSER_FAILURE)
-				break ;
-		}
+		ret = parse_cmd_word(content, sh);
+		if (ret == PARSER_FAILURE)
+			break ;
 		tmp_head++;
 	}
 	return (ret);

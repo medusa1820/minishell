@@ -59,8 +59,8 @@ t_parser_state parse_assignment(t_ast_node_content **content, t_minishell *sh)
 	new_assignment->word = ft_strdup(sh->tokens[sh->head].value);
 	if (!new_assignment->word)
 		return (PARSER_FAILURE);
-	free(sh->tokens[sh->head].value);
-	sh->tokens[sh->head].value = NULL;
+	// free(sh->tokens[sh->head].value);
+	// sh->tokens[sh->head].value = NULL;
 	new_assignment->next = NULL;
 	if ((*content)->assignments == NULL)
 		(*content)->assignments = new_assignment;

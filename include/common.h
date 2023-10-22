@@ -115,6 +115,7 @@ typedef struct s_token
 	t_token_type	type;
 	char			*value;
 	int				flag;
+	int				slash_number;
 }	t_token;
 
 /////////////////// parser.h

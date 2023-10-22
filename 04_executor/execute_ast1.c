@@ -66,7 +66,7 @@ void	here_doc_open(t_pipe *data, char *word, int	word_type)
 			// {
 				// printf("this:%s and the type:%d\n", buffer, word_type);
 			if (word_type == TOKEN_WORD)
-				expand(data->shell_data, &buffer, j, false);
+				expand(data->shell_data, &buffer, j);
 				// (void)word_type;
 				// expand(data->shell_data, &buffer, j, true);
 			// }

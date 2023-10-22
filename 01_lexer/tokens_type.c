@@ -109,6 +109,27 @@ t_lexer_state	tokenize_space(const char **current, t_token *token)
 	return (LEXER_SUCCESS);
 }
 
+void	back_slash(const char **current, t_token *token)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (*(*current + i) == '\\')
+		i++;
+	if (!i)
+		return ;
+	token->slash_number = i;
+	if (i % 2 == 0)
+		count = i / 2;
+	else
+		count = (i - 1) / 2;
+	i -= count;
+	while ( i--)
+		(*current)++;
+}
+
 t_lexer_state	tokenize_word(const char **current, t_token *token)
 {
 	int	len;
@@ -121,6 +142,8 @@ t_lexer_state	tokenize_word(const char **current, t_token *token)
 	while (!(ft_strchr(WHITESPACE, **current)) && \
 	!(ft_strchr(OPERAND, **current) && **current != '\0'))
 	{
+		if (!token->slash_number)
+			back_slash(current, token);
 		len++;
 		token->value = ft_realloc(token->value, \
 						ft_strlen(token->value), len + 1);
