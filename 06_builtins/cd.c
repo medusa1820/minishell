@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 19:00:12 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/19 20:59:28 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/22 18:13:56 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,8 @@ char	*get_envp_ll_var_value(t_envp_ll *head, char *var)
 	temp = head;
 	while (temp)
 	{
-		if (ft_strncmp(temp->var, var, ft_strlen(var) + 1) == 0)
+		// if (ft_strncmp(temp->var, var, ft_strlen(var) + 1) == 0)
+		if (ft_strcmp((const char *) temp->var, var))
 			return (temp->value);
 		temp = temp->next;
 	}
@@ -132,51 +133,65 @@ char	*get_envp_ll_var_value(t_envp_ll *head, char *var)
 *	to the inode table entry being recycled. This is a fix to display
 *	"no such file or directory" error instead.
 */
+
 static	bool	chdir_errno_mod(char *path)
 {
 	if (errno == ESTALE)
 		errno = ENOENT;
+	// ft_printf("it was here\n");
 	print_error_bltn("cd", path, strerror(errno));
 	return (EXIT_FAILURE);
 }
 
-void	update_envp_ll_var_value(t_envp_ll *head, char *var, char* value)
+int	update_envp_ll_var_value(t_envp_ll *head, char *var, char* value)
 {
 	t_envp_ll	*temp;
 
 	temp = head;
 	while (temp)
 	{
-		if (ft_strncmp(temp->var, var, ft_strlen(var) + 1))
+		// if (ft_strncmp(temp->var, var, ft_strlen(var) + 1) == 0)
+		if (ft_strcmp((const char *) temp->var, var))
 		{
 			if (temp->value)
 				free(temp->value);
 			temp->value = ft_strdup(value);
+			if (temp->value == NULL)
+				return (EXIT_FAILURE);
 			break ;
 		}
 		temp = temp->next;
 	}
+	return (EXIT_SUCCESS);
 }
 
-int	cd_do(char *dir_path, t_envp_ll *envp_ll)
+int	cd_do(char *dir_path, t_envp_ll *envp_ll, bool dash_flag)
 {
 	char	*cwd;
 
+	cwd = NULL;
 	cwd = getcwd(NULL, PATH_MAX);
-	update_envp_ll_var_value(envp_ll, "OLDPWD", cwd);
+	if (update_envp_ll_var_value(envp_ll, "OLDPWD", cwd))
+		return (EXIT_FAILURE);
 	if (chdir(dir_path) != 0)
 		return (chdir_errno_mod(dir_path));
 	free(cwd);
 	cwd = getcwd(NULL, PATH_MAX);
-	update_envp_ll_var_value(envp_ll, "PWD", cwd);
+	if (update_envp_ll_var_value(envp_ll, "PWD", cwd))
+		return (EXIT_FAILURE);
+	if (dash_flag)
+		ft_putendl_fd(cwd, STDOUT_FILENO);
 	free(cwd);
 	return (EXIT_SUCCESS);
 }
 
-int	cd_bltn(t_envp_ll *envp_ll, char **cmd)
+int	cd_bltn1(t_envp_ll *envp_ll, char **cmd)
 {
 	char	*dir_path;
+	bool	dash_flag;
 
+	dash_flag = false;
+	dir_path = NULL;
 	if (!cmd[1] || ft_strncmp(cmd[1], "--", 3) == 0 || \
 		ft_strncmp(cmd[1], "~", 2) == 0)
 	{
@@ -186,20 +201,21 @@ int	cd_bltn(t_envp_ll *envp_ll, char **cmd)
 			print_error_bltn("cd", NULL, "HOME is not defined");
 			return (EXIT_FAILURE);
 		}
-		return (cd_do(dir_path, envp_ll));
+		return (cd_do(dir_path, envp_ll, dash_flag));
 	}
 	else if (ft_strncmp(cmd[1], "-", 2) == 0)
 	{
+		dash_flag = true;
 		dir_path = get_envp_ll_var_value(envp_ll, "OLDPWD");
 		if (!dir_path)
 		{
 			print_error_bltn("cd", "-", "OLDPWD is not defined");
 			return (EXIT_FAILURE);
 		}
-		return (cd_do(dir_path, envp_ll));
+		return (cd_do(dir_path, envp_ll, dash_flag));
 	}
 	else
-		return (cd_do(cmd[1], envp_ll));
+		return (cd_do(cmd[1], envp_ll, dash_flag));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -311,7 +327,8 @@ int	execute_cd(t_envp_ll *var_head, char **cmd)
 		return (cd_with_path(var_head, cmd, pwd));
 }
 
-/*
+
+
 
 int	cd_bltn(t_envp_ll *var_head, char **cmd)
 {
@@ -325,7 +342,7 @@ int	cd_bltn(t_envp_ll *var_head, char **cmd)
 		if (add_to_var_list(var_head, "OLDPWD", 0) != 0)
 			return (EXIT_FAILURE);
 	}
-	return (execute_cd(var_head, cmd));
+	// return (execute_cd(var_head, cmd));
+	return (cd_bltn1(var_head, cmd));
 }
 
-*/

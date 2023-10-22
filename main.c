@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/18 12:57:18 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/21 18:37:58 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,17 @@ int	main(int argc, char **argv)
 			if (shell_data.ast_root && shell_data.ast_root->type == AST_NODE_CMD)
 			{
 				piper(&data, &i);
-				forker_no_pipe(&data, shell_data.envp_local, shell_data.ast_root);
+				if (!forker_no_pipe(&data, shell_data.envp_local, shell_data.ast_root))
+				{
+					free_ast(shell_data.ast_root);
+					continue ;
+				}
 				free_ast(shell_data.ast_root);
 			}
 			else
 			{
 				data.nr_of_cmd_nodes = 0;
-				if(!execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local))
+				if (!execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local))
 				{
 					free_ast(shell_data.ast_root);
 					continue ;

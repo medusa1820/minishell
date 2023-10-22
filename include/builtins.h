@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/19 20:17:28 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/22 18:13:06 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ int				pwd_bltn(void);
 // int				cd_to_home(t_envp_ll *var_head, char *pwd);
 // int				cd_with_path(t_envp_ll *var_head, char **cmd, char *pwd);
 // int				execute_cd(t_envp_ll *var_head, char **cmd);
-// int				cd_bltn(t_envp_ll *var_head, char **cmd);
-int				cd_bltn(t_envp_ll *envp_ll, char **cmd);
-int				cd_do(char *dir_path, t_envp_ll *envp_ll);
-void			update_envp_ll_var_value(t_envp_ll *head, char *var, \
+int				cd_bltn(t_envp_ll *var_head, char **cmd);
+int				cd_bltn1(t_envp_ll *envp_ll, char **cmd);
+int				cd_do(char *dir_path, t_envp_ll *envp_ll, bool dash_flag);
+int				update_envp_ll_var_value(t_envp_ll *head, char *var, \
 										char *value);
 char			*get_envp_ll_var_value(t_envp_ll *head, char *var);
 

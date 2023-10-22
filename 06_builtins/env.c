@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 18:20:24 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/19 13:23:31 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/22 13:43:38 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ int	env_bltn(t_envp_ll *var_list, char **cmd)
 			"Arguments and options are not supported");
 		return (EXIT_SUCCESS);
 	}
-		// return (print_error_bltn(*cmd, *(cmd + 1), \
-		// 	"Arguments and options are not supported"), 0);
+	// return (print_error_bltn(*cmd, *(cmd + 1), "Arguments and options are not supported"), 0);
 	while (current != NULL)
 	{
 		if (current->env_var == 1)
