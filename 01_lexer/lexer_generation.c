@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_generation.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 13:20:25 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/10/23 14:40:40 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ t_lexer_state	tokenize(t_minishell *sh, const char *line)
 		remove_empty_tokens(sh);
 		// print_tokenss(sh);
 		// printf("before expander--------\n");
-		check_assignment(&(sh->tokens), sh->token_len);
 		expander(sh);
+		check_assignment(&(sh->tokens), sh->token_len);
 		// print_tokenss(sh);
 		// printf("before triminig--------\n");
 		trimming_tokens_type(sh);

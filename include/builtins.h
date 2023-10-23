@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/18 18:24:45 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/22 18:13:06 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@
 bool			is_builtin(char *cmd);
 int				execute_bltn(t_minishell *shell, char **cmd);
 
-// echo.c
+// echo.c +
 
+bool			check_n_option(char *cmd);
+void			echo_print_strs(char **cmd, bool *n_option);
 int				echo_bltn(char **cmd);
-int				check_option_n(char **arg);
-int				builtin_echo_strjoin(char **cmd, int cnt, int option_n);
+// int				builtin_echo_strjoin(char **cmd, int cnt, int option_n);
 
 // export.c
 
@@ -43,21 +44,27 @@ void			free_single_var_node(t_envp_ll *node);
 void			remove_found_node(t_envp_ll *var_head, t_envp_ll *found_node);
 int				unset_bltn(t_envp_ll *var_head, char **cmd);
 
-// env.c
+// env.c +
 
 int				env_bltn(t_envp_ll *var_list, char **cmd);
+// int					env_bltn(char **envp_local, char **cmd);
 
-// pwd.c
+// pwd.c +
 
 int				pwd_bltn(void);
 
 // cd.c
 
-int				cd_to_oldpwd(t_envp_ll *var_head, char *pwd);
-int				cd_to_home(t_envp_ll *var_head, char *pwd);
-int				cd_with_path(t_envp_ll *var_head, char **cmd, char *pwd);
-int				execute_cd(t_envp_ll *var_head, char **cmd);
+// int				cd_to_oldpwd(t_envp_ll *var_head, char *pwd);
+// int				cd_to_home(t_envp_ll *var_head, char *pwd);
+// int				cd_with_path(t_envp_ll *var_head, char **cmd, char *pwd);
+// int				execute_cd(t_envp_ll *var_head, char **cmd);
 int				cd_bltn(t_envp_ll *var_head, char **cmd);
+int				cd_bltn1(t_envp_ll *envp_ll, char **cmd);
+int				cd_do(char *dir_path, t_envp_ll *envp_ll, bool dash_flag);
+int				update_envp_ll_var_value(t_envp_ll *head, char *var, \
+										char *value);
+char			*get_envp_ll_var_value(t_envp_ll *head, char *var);
 
 // exit.c
 
@@ -66,7 +73,7 @@ int				exit_bltn(t_minishell *shell, char **cmd);
 
 // builtin_utils.c
 
-// echo
+// echo +
 char			*ft_strjoin_sym(const char *s1, const char *s2, char c);
 void			free_p(char	*p);
 void			internal_error_printer(char *msg);

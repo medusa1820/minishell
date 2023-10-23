@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 15:01:07 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/18 18:25:34 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/22 17:35:34 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,9 @@ void	error_printer(char *cmd, char *arg, char *msg)
 
 void	print_error_bltn(char *cmd, char *arg, char *msg)
 {
+	// ft_printf("it was here\n");
 	ft_putstr_fd(cmd, STDERR_FILENO);
-	ft_putstr_fd(" ", STDERR_FILENO);
+	ft_putchar_fd(' ', STDERR_FILENO);
 	if (arg && *arg)
 	{
 		ft_putstr_fd(arg, STDERR_FILENO);
@@ -85,7 +86,6 @@ void	print_error_bltn(char *cmd, char *arg, char *msg)
 	}
 	ft_putendl_fd(msg, STDERR_FILENO);
 }
-
 
 t_envp_ll	*get_var_list_node(t_envp_ll *var_head, char *str)
 {
@@ -192,9 +192,12 @@ void	ft_lstadd_back_ms(t_envp_ll **var_list, t_envp_ll *new)
 	return ;
 }
 
-/* char	*ft_strndup_pt(const char *start, char *delimiter)
-Returns a pointer to a null-terminated byte string, which contains 
-copies of at most size bytes from the string pointed to by str */
+/*
+	char	*ft_strndup_pt(const char *start, char *delimiter)
+	Returns a pointer to a null-terminated byte string, which contains 
+	copies of at most size bytes from the string pointed to by str
+*/
+
 char	*ft_strdup_pt(const char *start, char *delimiter)
 {
 	int		i;
