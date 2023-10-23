@@ -12,16 +12,17 @@
 
 #include "minishell.h"
 
-// t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, t_minishell *sh)
+// t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, 
+															// t_minishell *sh)
 // {
 // 	int	ret;
 // 	int	tmp_head;
-// 	int	tmp_seg_end;
+// 	int	tmp_segend;
 
 // 	ret = PARSER_FAILURE;
 // 	tmp_head = sh->head;
-// 	tmp_seg_end = sh->seg_end;
-// 	while (tmp_head < tmp_seg_end && sh->tokens[tmp_head].type != TOKEN_REDIRECT)
+// 	tmp_segend = sh->seg_end;
+// 	while (tmp_head < tmp_segend && sh->tokens[tmp_head].type != TOKEN_REDIRECT)
 // 	{
 // 		if (sh->tokens[tmp_head].type == TOKEN_ASSIGNMENT)
 // 		{
@@ -40,16 +41,17 @@
 // 	return (ret);
 // }
 
-t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, t_minishell *sh)
+t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, \
+																t_minishell *sh)
 {
 	int	ret;
 	int	tmp_head;
-	int	tmp_seg_end;
+	int	tmp_segend;
 
 	ret = PARSER_FAILURE;
 	tmp_head = sh->head;
-	tmp_seg_end = sh->seg_end;
-	while (tmp_head < tmp_seg_end && sh->tokens[tmp_head].type != TOKEN_REDIRECT)
+	tmp_segend = sh->seg_end;
+	while (tmp_head < tmp_segend && sh->tokens[tmp_head].type != TOKEN_REDIRECT)
 	{
 		if (sh->tokens[tmp_head].type == TOKEN_ASSIGNMENT)
 		{
@@ -59,7 +61,6 @@ t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, t_minishel
 			sh->head--;
 			sh->token_len++;
 			sh->tokens[tmp_head].type = TOKEN_WORD;
-			// printf("token:%s tmp_head:%d tmp_segend:%d sh_head:%d sh_segend:%d\n",sh->tokens[sh->head].value, *tmp_head, *tmp_seg_end, sh->head, sh->seg_end);
 		}
 		ret = parse_cmd_word(content, sh);
 		if (ret == PARSER_FAILURE)
@@ -69,18 +70,20 @@ t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, t_minishel
 	return (ret);
 }
 
-size_t count_strings(char* strings[])
+size_t	count_strings(char *strings[])
 {
-	size_t count = 0;
+	size_t	count;
+
+	count = 0;
 	if (strings != NULL)
 	{
 		while (strings[count] != NULL)
 			count++;
 	}
-	return count;
+	return (count);
 }
 
-char **ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
+char	**ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
 {
 	char	**new_ptr;
 	size_t	copy_count;
@@ -95,8 +98,8 @@ char **ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
 	}
 	new_ptr = ft_calloc(old_count + new_count + 2, sizeof(char *));
 	if (new_ptr == NULL)
-			return (freeing_cmd(ptr), NULL);
-	copy_count = old_count;// < new_count ? old_count : new_count;
+		return (freeing_cmd(ptr), NULL);
+	copy_count = old_count;
 	i = 0;
 	while (i < copy_count)
 	{

@@ -20,8 +20,8 @@ t_lexer_state	single_quote_handling(const char **current, t_token *token)
 	token->type = TOKEN_SINGLE_QUOTE;
 	if ((*current)[1] == '\0')
 		return (token_unclosed(current, token), 1);
-	token->value = ft_strdup("\0"); // Initialize the value to NULL before reallocating
-	(*current)++; 
+	token->value = ft_strdup("\0");
+	(*current)++;
 	while (**current != '\'' && **current != '\0')
 	{
 		len++;
@@ -33,7 +33,6 @@ t_lexer_state	single_quote_handling(const char **current, t_token *token)
 	if (**current == '\'')
 		(*current)++;
 	else
-		// token->type = TOKEN_UNCLOSED_Q;
 		return (token_unclosed(current, token));
 	if (token->value[0] == '\0')
 		token->flag = TOKEN_SINGLE_QUOTE;
@@ -48,8 +47,8 @@ t_lexer_state	double_quote_handling(const char **current, t_token *token)
 	token->type = TOKEN_DOUBLE_QUOTE;
 	if ((*current)[1] == '\0')
 		return (token_unclosed(current, token));
-	token->value = ft_strdup("\0"); // Initialize the value to NULL before reallocating
-	(*current)++; // Move past the opening double quote
+	token->value = ft_strdup("\0");
+	(*current)++;
 	while (**current != '"' && **current != '\0')
 	{
 		len++;
@@ -61,14 +60,14 @@ t_lexer_state	double_quote_handling(const char **current, t_token *token)
 	if (**current == '"')
 		(*current)++;
 	else
-		// token->type = TOKEN_UNCLOSED_Q;
 		return (token_unclosed(current, token));
 	if (token->value[0] == '\0')
 		token->type = TOKEN_DOUBLE_QUOTE;
 	return (LEXER_SUCCESS);
 }
 
-t_lexer_state	tokenize_pipe_and_redirector(const char **current, t_token *token)
+t_lexer_state	tokenize_pipe_and_redirector(const char **current,
+													t_token *token)
 {
 	token->type = TOKEN_REDIRECT;
 	if ((**current == '<' && *(*current + 1) == '<') \
@@ -96,9 +95,6 @@ t_lexer_state	tokenize_pipe_and_redirector(const char **current, t_token *token)
 
 t_lexer_state	tokenize_space(const char **current, t_token *token)
 {
-	// int	len;
-
-	// len = 0;
 	token->type = TOKEN_SPACE;
 	token->value = ft_strdup("\0");
 	while ((ft_strchr(WHITESPACE, **current)) && \
@@ -107,27 +103,6 @@ t_lexer_state	tokenize_space(const char **current, t_token *token)
 		(*current)++;
 	}
 	return (LEXER_SUCCESS);
-}
-
-void	back_slash(const char **current, t_token *token)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (*(*current + i) == '\\')
-		i++;
-	if (!i)
-		return ;
-	token->slash_number = i;
-	if (i % 2 == 0)
-		count = i / 2;
-	else
-		count = (i - 1) / 2;
-	i -= count;
-	while ( i--)
-		(*current)++;
 }
 
 t_lexer_state	tokenize_word(const char **current, t_token *token)
