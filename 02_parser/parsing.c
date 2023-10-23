@@ -141,7 +141,7 @@ t_ast_node	*parsing(t_minishell *sh, char *line)
 			free_tokens(sh);
 			free_ast(sh->ast_root);
 			// return (NULL);
-			// exit (2); // meder suggests
+			exit (2); // meder suggests
 		}
 		return (sh->ast_root);
 	}
