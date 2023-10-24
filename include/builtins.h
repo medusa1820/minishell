@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/24 11:11:40 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/24 12:19:35 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,18 @@ int				env_bltn(t_envp_ll *var_list, char **cmd);
 
 int				pwd_bltn(void);
 
-// cd.c
+// cd.c +
 
 // int				cd_to_oldpwd(t_envp_ll *var_head, char *pwd);
 // int				cd_to_home(t_envp_ll *var_head, char *pwd);
 // int				cd_with_path(t_envp_ll *var_head, char **cmd, char *pwd);
 // int				execute_cd(t_envp_ll *var_head, char **cmd);
-int				cd_bltn(t_envp_ll *var_head, char **cmd);
 // int				cd_bltn_execute(t_envp_ll *envp_ll, char **cmd);
-char			*cd_bltn_execute(t_envp_ll *envp_ll, char **cmd, bool *dash_flag);
-int				do_envp_ll_var_checks(t_envp_ll *head);
+int				cd_bltn(t_envp_ll *var_head, char **cmd);
+int				check_vars_in_envp_ll(t_envp_ll *head);
+char			*check_cd_types(t_envp_ll *envp_ll, char **cmd, \
+								bool *dash_flag);
 int				cd_do(char *dir_path, t_envp_ll *envp_ll, bool dash_flag);
-int				update_envp_ll_var_value(t_envp_ll *head, char *var, \
-										char *value);
-char			*get_envp_ll_var_value(t_envp_ll *head, char *var);
 
 // exit.c
 
@@ -89,11 +87,14 @@ int				ft_sub_len(char const *start, char c);
 int				full_assign(t_envp_ll *new, char *word, char *delim_pt);
 void			ft_lstadd_back_ms(t_envp_ll **var_list, t_envp_ll *new);
 char			*ft_strdup_pt(const char *start, char *delimiter);
+
 // cd
+
 // char			*get_value_for_key(t_envp_ll *var_head, const char *key);
 // int				change_value_for_key(t_envp_ll *var_head, char *key, char *new_value);
-bool			check_if_in_var_list(t_envp_ll *var_head, char *key);
+// bool			check_if_in_var_list(t_envp_ll *var_head, char *key);
 int				ft_strcmp(const char *s1, const char *s2);
+
 // exit
 int				atoi_negative(char *c);
 int				is_int_min(long long int neg_pos, long long int intvalue, \
@@ -103,6 +104,10 @@ void			restore_redirect(int stdin_save, int stdout_save);
 
 // builtin_utils1.c
 
+// cd
+int				update_envp_ll_var_value(t_envp_ll *head, char *var, \
+										char *value);
+char			*get_envp_ll_var_value(t_envp_ll *head, char *var);
 
 
 #endif

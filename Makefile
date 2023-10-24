@@ -60,6 +60,7 @@ BUILTINS_SRCS		=	./06_builtins/builtin_calls.c \
 						./06_builtins/cd.c \
 						./06_builtins/exit.c \
 						./06_builtins/builtin_utils.c \
+						./06_builtins/builtin_utils1.c \
 
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(DATA_INIT_SRCS) \
