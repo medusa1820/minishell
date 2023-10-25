@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/24 12:19:35 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/25 20:45:38 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,15 @@ int				cd_do(char *dir_path, t_envp_ll *envp_ll, bool dash_flag);
 
 // exit.c
 
-void			free_on_exit(t_minishell *shell);
 int				exit_bltn(t_minishell *shell, char **cmd);
+int				count_nbr_args(char **cmd);
+bool			has_non_numeric_args(char *cmd);
+bool			white_space(int c);
+// bool			ft_atoi_ll_int(const char *str, unsigned long long *result);
+bool			ft_atoi_ll_int(const char *str, long long int *result);
+bool			arg_out_of_range(int neg, unsigned long long num);
+void			free_before_exit(t_minishell *shell);
+// int				ft_atoi_modified(const char *str, long long int *result);
 
 // builtin_utils.c
 
@@ -101,6 +108,15 @@ int				is_int_min(long long int neg_pos, long long int intvalue, \
 							char c, long long int *data);
 int				ft_atoi_secure(const char *str, long long int *data);
 void			restore_redirect(int stdin_save, int stdout_save);
+
+
+
+
+
+
+
+
+
 
 // builtin_utils1.c
 

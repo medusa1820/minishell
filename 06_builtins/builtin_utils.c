@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 15:01:07 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/24 12:17:54 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/24 20:28:04 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void	error_printer(char *cmd, char *arg, char *msg)
 
 void	print_error_bltn(char *cmd, char *arg, char *msg)
 {
-	// ft_printf("it was here\n");
 	ft_putstr_fd(cmd, STDERR_FILENO);
 	ft_putchar_fd(' ', STDERR_FILENO);
 	if (arg && *arg)
