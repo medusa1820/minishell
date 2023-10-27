@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 11:51:09 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/25 22:06:27 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/26 10:10:05 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,37 +82,32 @@ bool	has_non_numeric_args(char *cmd)
 
 bool	white_space(int c)
 {
-	if ((c >= 9 && c <= 13) || c == ' ')
-		return (true);
-	return (false);
+	return ((c >= 9 && c <= 13) || c == ' ');
 }
 
 bool	ft_atoi_ll_int(const char *str, long long int *result)
 {
-	unsigned long long	num;
-	int					neg;
+	unsigned long long	output;
+	int					sign;
 	int					i;
 
-	num = 0;
-	neg = 1;
+	sign = 1;
 	i = 0;
 	while (str[i] && white_space(str[i]))
 		i++;
-	if (str[i] == '+')
+	if (*(str + i) == '-')
+		sign = -1;
+	if (*(str + i) == '-' || *(str + i) == '+')
 		i++;
-	else if (str[i] == '-')
-	{
-		neg *= -1;
-		i++;
-	}
+	output = 0;
 	while (str[i] && ft_isdigit(str[i]))
 	{
-		num = (num * 10) + (str[i] - '0');
-		if (arg_out_of_range(neg, num))
+		output = output * 10 + (str[i] - '0');
+		if (arg_out_of_range(sign, output))
 			return (true);
 		i++;
 	}
-	*result = num * neg;
+	*result = output * sign;
 	return (false);
 }
 
