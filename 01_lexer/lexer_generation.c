@@ -95,21 +95,21 @@ t_lexer_state	tokenize(t_minishell *sh, const char *line)
 // 	sh->free_lexer_token_len = sh->token_len;
 // 	if (ret == LEXER_SUCCESS)
 // 	{
-// 		// print_tokenss(sh);
-// 		// printf("before remove empty--------\n");
+// 		print_tokenss(sh);
+// 		printf("before remove empty--------\n");
 // 		remove_empty_tokens(sh);
-// 		// print_tokenss(sh);
-// 		// printf("before expander--------\n");
+// 		print_tokenss(sh);
+// 		printf("before expander--------\n");
 // 		expander(sh);
 // 		check_assignment(&(sh->tokens), sh->token_len);
-// 		// print_tokenss(sh);
-// 		// printf("before triminig--------\n");
+// 		print_tokenss(sh);
+// 		printf("before triminig--------\n");
 // 		trimming_tokens_type(sh);
-// 		// print_tokenss(sh);
-// 		// printf("before joining--------\n");
+// 		print_tokenss(sh);
+// 		printf("before joining--------\n");
 // 		joining_tokens(sh);
 // 		sh->free_lexer_token_len = sh->token_len;
-// 		// print_tokenss(sh);
+// 		print_tokenss(sh);
 // 	}
 // 	return (ret);
 // }

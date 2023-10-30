@@ -131,12 +131,15 @@ t_ast_node	*parsing(t_minishell *sh, char *line)
 {
 	if (tokenize(sh, line) == LEXER_SUCCESS)
 	{
+		if (!sh->token_len)
+			return (NULL);
 		sh->ast_root = parse_pipeline(sh);
 		if (!sh->ast_root)
 		{
 			free_tokens(sh);
 			free_ast(sh->ast_root);
-			exit (2);
+			return (NULL);
+			// exit (2);
 		}
 		return (sh->ast_root);
 	}
