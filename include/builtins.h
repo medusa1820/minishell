@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/27 21:03:30 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/06 20:55:38 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,13 @@ void			free_before_exit(t_minishell *shell);
 
 void			export_preps(t_pipe *data);
 int				count_nmbr_assignments(t_ast_node *head);
-
-int				export_bltn(t_envp_ll *head, char **cmd);
+int				export_bltn(t_envp_ll *head, char **cmd, t_minishell *shell);
+// int				export_bltn(t_envp_ll *head, char **cmd);
 void			export_no_args(t_envp_ll *var_head); // rewrite
 bool			valid_identifier(char *var); // rewrite
 int				export_var(t_envp_ll *head, char *cmd);
 t_envp_ll		*find_var_node(t_envp_ll *head, char *cmd);
 char			**make_var_value_pair(char *cmd);
-
-
-
-
 
 // unset.c
 
@@ -83,7 +79,11 @@ int				unset_is_valid_identifier(char *cmd);
 t_envp_ll		*get_previous(t_envp_ll *var_head, t_envp_ll *found_node);
 void			free_single_var_node(t_envp_ll *node);
 void			remove_found_node(t_envp_ll *var_head, t_envp_ll *found_node);
-int				unset_bltn(t_envp_ll *var_head, char **cmd);
+// int				unset_bltn(t_envp_ll *var_head, char **cmd);
+int				unset_bltn(t_envp_ll *var_head, char **cmd, t_minishell *shell);
+// void			remove_node(t_envp_ll *var_head, t_envp_ll *found_node);
+void			remove_node(t_envp_ll *head, t_envp_ll *node_to_unset);
+void			free_node(t_envp_ll *node_to_unset);
 
 // builtin_utils.c
 
