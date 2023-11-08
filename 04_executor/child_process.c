@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/12 18:45:04 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/08 10:07:56 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	no_pipe(t_pipe *data, char **envp)
 			dup2_fd_outfile_std_out(data);
 		close_pipe0_fds(data);
 		if (execve(data->cmd_path, data->cmd_split, envp) == -1)
-			exit_error(errno, "Couldn't execute execve() first", data);
+			exit_error(errno, "Couldn't execute execve() no pipe", data);
 	}
 	close_pipe0_fds(data);
 }

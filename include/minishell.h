@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 18:14:36 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/10 17:52:01 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/08 17:41:09 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 extern char			**environ;
 extern volatile int	g_sig_nbr;
+// extern int			g_sig_nbr;
 
 // main.c
 
