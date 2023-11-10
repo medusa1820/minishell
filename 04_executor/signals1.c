@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 13:12:48 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/01 13:15:53 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/10 16:55:16 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,29 @@
 /*
 Handle ctrl+\
 */
+
+
+
+
+/*
 void	handle_sigquit(int signal)
 {
 	(void)signal;
 	rl_on_new_line();
 	rl_redisplay();
 }
+*/
+
+
+
 
 /*
 Handle ctrl+c
 */
+
+
+
+/*
 void	handle_sigint(int signal)
 {
 	(void)signal;
@@ -33,7 +46,12 @@ void	handle_sigint(int signal)
 	rl_on_new_line();
 	rl_redisplay();
 }
+*/
 
+
+
+
+/*
 void	handle_signals(void)
 {
 	struct sigaction	sa_sigquit;
@@ -45,3 +63,4 @@ void	handle_signals(void)
 	sigaction(SIGQUIT, &sa_sigquit, NULL);
 	sigaction(SIGINT, &sa_sigint, NULL);
 }
+*/

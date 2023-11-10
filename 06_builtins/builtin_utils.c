@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 15:01:07 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/22 17:35:34 by musenov          ###   ########.fr       */
+/*   Updated: 2023/10/24 20:28:04 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void	error_printer(char *cmd, char *arg, char *msg)
 
 void	print_error_bltn(char *cmd, char *arg, char *msg)
 {
-	// ft_printf("it was here\n");
 	ft_putstr_fd(cmd, STDERR_FILENO);
 	ft_putchar_fd(' ', STDERR_FILENO);
 	if (arg && *arg)
@@ -234,6 +233,41 @@ char	*ft_strdup_pt(const char *start, char *delimiter)
 //								-//-
 
 ////////////////////////////// cd //////////////////////////////
+
+// char	*get_envp_ll_var_value(t_envp_ll *head, char *var)
+// {
+// 	t_envp_ll	*temp;
+
+// 	temp = head;
+// 	while (temp)
+// 	{
+// 		if (ft_strncmp(temp->var, var, ft_strlen(var) + 1) == 0)
+// 			return (temp->value);
+// 		temp = temp->next;
+// 	}
+// 	return (NULL);
+// }
+
+// int	update_envp_ll_var_value(t_envp_ll *head, char *var, char* value)
+// {
+// 	t_envp_ll	*temp;
+
+// 	temp = head;
+// 	while (temp)
+// 	{
+// 		if (ft_strncmp(temp->var, var, ft_strlen(var) + 1) == 0)
+// 		{
+// 			if (temp->value)
+// 				free(temp->value);
+// 			temp->value = ft_strdup(value);
+// 			if (temp->value == NULL)
+// 				return (EXIT_FAILURE);
+// 			break ;
+// 		}
+// 		temp = temp->next;
+// 	}
+// 	return (EXIT_SUCCESS);
+// }
 
 char	*get_value_for_key(t_envp_ll *var_head, const char *key)
 {

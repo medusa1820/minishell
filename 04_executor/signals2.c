@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 13:37:46 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/08 21:37:19 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/10 18:13:59 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	set_signals_interactive(t_pipe *data)
 	ft_memset(&act, 0, sizeof(act));
 	act.sa_handler = &signal_reset_prompt;
 	sigaction(SIGINT, &act, NULL);
+	// exit_code_signals(data);
 }
 
 void	set_signals_interactive_here_doc(void)
@@ -74,6 +75,7 @@ void	signal_reset_prompt(int signo)
 {
 	// (void)signo;
 	g_sig_nbr = signo;
+	// printf("signal_reset_prompt");
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -95,6 +97,7 @@ void	exit_code_signals(t_pipe *data)
 		if (g_sig_nbr == 3)
 			data->exit_code = 128 + g_sig_nbr;
 	}
+	g_sig_nbr = 0;
 }
 
 void	signal_reset_prompt_here_doc(int signo)
@@ -141,6 +144,7 @@ void	set_signals_noninteractive(t_pipe *data)
 void	signal_print_newline(int signal)
 {
 	g_sig_nbr = signal;
+	// printf("non_interactive_mode\n, g_sig_nbr = %d", g_sig_nbr);
 	write(1, "\n", 1);
 	rl_on_new_line();
 	// exit(1);

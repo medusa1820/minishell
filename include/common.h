@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/18 10:24:27 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/10 20:53:13 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <readline/history.h>
 
 # define BLUE		"\033[38;5;4m"
+# define GREEN		"\033[38;5;2m"  // For a bright green try 10 instead of 2
 # define ORG		"\033[38;5;214m"
 # define RED		"\033[38;5;196m"
 # define RESET		"\033[0m"
