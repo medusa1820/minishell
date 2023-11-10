@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:27:01 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/08 10:43:42 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/10 18:02:17 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void    here_doc_open(t_pipe *data, char *word, int word_type)
 	fd_here_doc = open("here_doc_file", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_here_doc < 0)
 		exit_error(errno, "Error creating temporary here_doc_file", data);
-	set_signals_interactive_here_doc();
+	// set_signals_interactive_here_doc();
 	ms_terminal_settings_change();
 	// ft_putstr_fd("here_doc> ", STDOUT_FILENO);
 	buffer = get_next_line(STDIN_FILENO);

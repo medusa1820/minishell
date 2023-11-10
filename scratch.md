@@ -389,3 +389,10 @@ int	main(int argc, char **argv, char **envp)
 	free_envp_local(shell_data.envp_local);
 	return (exit_code);
 }
+
+
+
+
+
+
+
