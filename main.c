@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/10 18:11:28 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/10 19:34:05 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ int	main(int argc, char **argv)
 		if (line[0] != '\0')
 		{
 			add_history(line);
-			if (ms_line_has_input(line))
-			{
+			// if (ms_line_has_input(line))
+			// {
 				set_signals_noninteractive(&data);
 				shell_data.ast_root = parsing(&shell_data, line);
 				i = 0;
@@ -123,8 +123,8 @@ int	main(int argc, char **argv)
 					}
 					free_ast(shell_data.ast_root);
 				}
-				exit_code_signals(&data);
-			}
+				// exit_code_signals(&data);
+			// }
 			exit_code_signals(&data);
 		}
 		// set_signals_interactive(&data);
