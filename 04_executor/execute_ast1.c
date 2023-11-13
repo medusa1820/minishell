@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:27:01 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/10 18:02:17 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/13 12:10:28 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,12 +132,13 @@ void    here_doc_open(t_pipe *data, char *word, int word_type)
 		}
 		else
 		{
-			// if (word_type == TOKEN_WORD)
-			// {
+			if (word_type == TOKEN_WORD)
+			{
 				// printf("this:%s and the type:%d\n", buffer, word_type);
-				(void)word_type;
-				expand(data->shell_data, &buffer, j, true);
-			// }
+				// (void)word_type;
+				// expand(data->shell_data, &buffer, j, true);
+				expand(data->shell_data, &buffer, j);
+			}
 			ft_putstr_fd(buffer, fd_here_doc);
 		}
 		free(buffer);

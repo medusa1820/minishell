@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/10 19:34:05 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/13 17:49:24 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int	main(int argc, char **argv)
 			// {
 				set_signals_noninteractive(&data);
 				shell_data.ast_root = parsing(&shell_data, line);
+				// print_ast_tree0(shell_data.ast_root, 1);
 				i = 0;
 				if (shell_data.ast_root && shell_data.ast_root->type == AST_NODE_CMD)
 				{
@@ -109,6 +110,7 @@ int	main(int argc, char **argv)
 					if (!forker_no_pipe(&data, shell_data.envp_local, shell_data.ast_root))
 					{
 						free_ast(shell_data.ast_root);
+						// freeing_cmd(data.cmd_split);
 						continue ;
 					}
 					free_ast(shell_data.ast_root);

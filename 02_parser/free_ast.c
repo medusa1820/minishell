@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:27:58 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 15:37:26 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/13 17:25:50 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,25 @@ void	free_content(t_ast_node_content *content)
 		freeing_redirection(content->stdout_redirect);
 	if (content->cmd)
 		freeing_cmd(content->cmd);
-		
 }
 
 void	freeing_cmd(char **cmd)
 {
-	int i;
+	int	i;
 
 	if (cmd == NULL)
 		return ;
 	i = 0;
+	// printf("hi 1\n");
 	while (cmd[i] != NULL)
 	{
+		// printf("hi 2\n");
 		free(cmd[i]);
 		cmd[i] = NULL;
 		i++;
 	}
-	free(cmd);
+	// free(cmd);
+	// printf("hi 3\n");
 	cmd = NULL;
 }
 
@@ -96,7 +98,7 @@ int	free_ast(t_ast_node *node_ptr)
 			if ((*node_ptr).content->assignments)
 				freeing_assignment((*node_ptr).content->assignments);
 		}
-		free((*node_ptr).content); // (*node_ptr)->content = NULL;
+		free((*node_ptr).content);
 	}
 	else if ((*node_ptr).type == AST_NODE_PIPE)
 	{
@@ -107,5 +109,3 @@ int	free_ast(t_ast_node *node_ptr)
 	}
 	return (free(node_ptr), node_ptr = NULL, 0);
 }
-
-

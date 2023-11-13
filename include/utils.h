@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 18:02:13 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/02 12:03:27 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/13 17:15:57 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void				free_all(t_pipe *data);
 void				free_str(t_pipe *data);
 void				free_2d_str(t_pipe *data);
 void				free_2d_str_func(char **str);
+void				free_2d_str_cmd_split(t_pipe *data);
 
 // exit_utils1.c
 

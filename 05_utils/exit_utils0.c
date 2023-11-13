@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 19:37:58 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/14 14:25:04 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/13 18:44:23 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,20 @@ void	free_all(t_pipe *data)
 {
 	free_str(data);
 	free_2d_str(data);
+	// free_2d_str_cmd_split(data);
+}
+
+void	free_2d_str_cmd_split(t_pipe *data)
+{
+	// printf("hiiiiiiiiiiiiii11111\n");
+	if (data->cmd_split != NULL)
+	// if (data->cmd_split)
+	{
+		// printf("hi before free\n");
+		// printf("hi before free, %s\n", data->cmd_split[0]);
+		free_2d_str_func(data->cmd_split);
+		// printf("hi after free\n");
+	}
 }
 
 void	free_str(t_pipe *data)
@@ -60,6 +74,7 @@ void	free_2d_str_func(char **str)
 	while (str[i])
 	{
 		free (str[i]);
+		str[i] = NULL; // HEI YIU
 		i++;
 	}
 	free(str);

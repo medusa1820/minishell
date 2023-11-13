@@ -25,7 +25,8 @@ void			free_tokens(t_minishell *sh);
 
 void			init_token(t_token *token);
 t_lexer_state	feed_tokens_array(t_minishell *sh, t_token *token);
-t_lexer_state	checking_tokenizer(t_token *token, t_minishell *sh, const char **current);
+t_lexer_state	checking_tokenizer(t_token *token, t_minishell *sh, \
+													const	char **current);
 t_lexer_state	tokenize(t_minishell *sh, const char *line);
 
 // tokenization_trimming_utils.c
@@ -40,12 +41,14 @@ void			trimming_tokens_type(t_minishell *sh);
 void			*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 void			check_assignment(t_token **tokens, int token_count);
 t_lexer_state	token_unclosed(const char **current, t_token *token);
+void			back_slash(const char **current, t_token *token);
 
 // tokens_type.c
 
 t_lexer_state	single_quote_handling(const char **current, t_token *token);
 t_lexer_state	double_quote_handling(const char **current, t_token *token);
-t_lexer_state	tokenize_pipe_and_redirector(const char **current, t_token *token);
+t_lexer_state	tokenize_pipe_and_redirector(const char **current, \
+															t_token *token);
 t_lexer_state	tokenize_space(const char **current, t_token *token);
 t_lexer_state	tokenize_word(const char **current, t_token *token);
 

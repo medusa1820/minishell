@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/18 14:34:58 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/13 18:20:40 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ void	export_preps(t_pipe *data)
 			count_cmd_strings = 1 + count_assgnmnts + 1;
 			data->cmd_split = (char **) malloc (sizeof(char *) * \
 								count_cmd_strings);
-			data->cmd_split[0] = data->node->content->cmd[0];
+			data->cmd_split[0] = ft_strdup(data->node->content->cmd[0]);
 			i = 1;
 			assignment_iter = data->node->content->assignments;
 			while (i <= count_assgnmnts)
