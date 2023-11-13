@@ -12,13 +12,13 @@
 
 #include "minishell.h"
 
-void erase_token(t_minishell *sh, int index)
+void	erase_token(t_minishell *sh, int index)
 {
 	int	i;
 
 	i = index;
 	if (index < 0 || index >= sh->token_len)
-		return;
+		return ;
 	free(sh->tokens[index].value);
 	sh->tokens[index].value = NULL;
 	while (i < sh->token_len - 1)
@@ -44,41 +44,52 @@ void	remove_empty_tokens(t_minishell *sh)
 	i = -1;
 	while (++i < sh->token_len)
 	{
+		if (sh->tokens[i].type == TOKEN_WORD && (i + 1 < sh->token_len && \
+			(sh->tokens[i + 1].type == TOKEN_DOUBLE_QUOTE || \
+			sh->tokens[i + 1].type == TOKEN_SINGLE_QUOTE)))
+			sh->tokens[i].flag = sh->tokens[i + 1].flag;
 		if ((sh->tokens[i].value[0] == '\0') && \
 		(sh->tokens[i].type == TOKEN_DOUBLE_QUOTE || \
 		sh->tokens[i].type == TOKEN_SINGLE_QUOTE || \
 		sh->tokens[i].type == TOKEN_WORD))
 		{
-			if (!((i - 1 < 0 || sh->tokens[i - 1].type == TOKEN_SPACE)
-				&& ((i + 1 >= sh->token_len || \
+			if (!((i - 1 < 0 || sh->tokens[i - 1].type == TOKEN_SPACE) && \
+				((i + 1 >= sh->token_len || \
 				sh->tokens[i + 1].type == TOKEN_SPACE))))
 				erase_token(sh, i);
 		}
+		if (sh->tokens[i].type == TOKEN_WORD && \
+			ft_strcmp(sh->tokens[i].value, "~\0"))
+			ft_strlcpy(sh->tokens[i].value, "$HOME", 6);
 	}
 }
+
+// TOKEN_DOUBLE_QUOTE = 2
+// TOKEN_WORD = 5
+// TOKEN_SINGLE_QUOTE = 1
+// TOKEN_ASSIGNMENT = 8
 
 void	joining_tokens(t_minishell *sh)
 {
 	int		i;
-	char	*tmp_token;
+	char	*tmp_tok;
 
 	i = 0;
 	while (i < sh->token_len - 1)
 	{
-		if ((sh->tokens[i].type == TOKEN_WORD || sh->tokens[i].type == \
-		TOKEN_DOUBLE_QUOTE || sh->tokens[i].type == TOKEN_SINGLE_QUOTE || \
-		sh->tokens[i].type == TOKEN_ASSIGNMENT) && (sh->tokens[i + 1].type ==\
-		TOKEN_WORD || sh->tokens[i + 1].type == TOKEN_DOUBLE_QUOTE || \
-		sh->tokens[i + 1].type == TOKEN_SINGLE_QUOTE))
+		if ((sh->tokens[i].type == 5 || sh->tokens[i].type == \
+		2 || sh->tokens[i].type == 1 || \
+		sh->tokens[i].type == TOKEN_ASSIGNMENT) && (sh->tokens[i + 1].type == \
+		5 || sh->tokens[i + 1].type == 2 || sh->tokens[i + 1].type == 1))
 		{
-			tmp_token = ft_strjoin(sh->tokens[i].value, sh->tokens[i + 1].value);
+			tmp_tok = ft_strjoin(sh->tokens[i].value, sh->tokens[i + 1].value);
 			free(sh->tokens[i].value);
-			sh->tokens[i].value = tmp_token;
+			sh->tokens[i].value = tmp_tok;
 			erase_token(sh, i + 1);
 		}
-		else 
+		else
 			i++;
-	}	
+	}
 	i = -1;
 	while (++i < sh->token_len)
 	{
@@ -104,10 +115,14 @@ void	trimming_tokens_type(t_minishell *sh)
 			sh->tokens[i].flag = TOKEN_REDIRECT;
 		if (sh->tokens[i].type == TOKEN_ASSIGNMENT)
 			sh->tokens[i].flag = TOKEN_ASSIGNMENT;
-		if (sh->tokens[i].type == TOKEN_WORD)
+		if (sh->tokens[i].type == TOKEN_WORD && sh->tokens[i].flag == -1)
 			sh->tokens[i].flag = TOKEN_WORD;
 		if ((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) | \
-		(sh->tokens[i].type == TOKEN_SINGLE_QUOTE))
-				sh->tokens[i].type = TOKEN_WORD;
+			(sh->tokens[i].type == TOKEN_SINGLE_QUOTE))
+			sh->tokens[i].type = TOKEN_WORD;
 	}
 }
+		// if (sh->tokens[i].type == TOKEN_WORD && ( i + 1 < sh->token_len &&
+		// 	(sh->tokens[i + 1].type == TOKEN_DOUBLE_QUOTE || 
+		// 	sh->tokens[i + 1].type == TOKEN_SINGLE_QUOTE)))
+		// 		sh->tokens[i].flag = sh->tokens[i + 1].flag;

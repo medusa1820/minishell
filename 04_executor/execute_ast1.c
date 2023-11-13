@@ -136,7 +136,7 @@ void    here_doc_open(t_pipe *data, char *word, int word_type)
 			// {
 				// printf("this:%s and the type:%d\n", buffer, word_type);
 				(void)word_type;
-				expand(data->shell_data, &buffer, j, true);
+				expand(data->shell_data, &buffer, j);
 			// }
 			ft_putstr_fd(buffer, fd_here_doc);
 		}

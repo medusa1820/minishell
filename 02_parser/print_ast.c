@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-
 void	print_cmd(char **cmd, int level)
 {
 	for (int i = 0; i < level; i++)

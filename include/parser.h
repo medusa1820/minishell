@@ -48,6 +48,7 @@ int				free_ast(t_ast_node	*node);
 // parsing.c
 
 void			print_error(char *type, int fd, char *msg);
+void			print_error2(char *type, int fd, char *msg, t_minishell *sh);
 void			finding_segment_head(t_minishell *sh);
 bool			init_shell(t_minishell *shell, t_pipe *data);
 t_ast_node		*parsing(t_minishell *sh, char *line);

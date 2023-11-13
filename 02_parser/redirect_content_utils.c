@@ -25,8 +25,6 @@ t_redirect_type	redirect_type(char *str)
 		type = REDIRECT_STDIN;
 	else if (str[0] == '>' && str[1] == 0)
 		type = REDIRECT_STDOUT;
-	// if (str)
-	// 	free(str);
 	return (type);
 }
 

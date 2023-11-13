@@ -24,12 +24,11 @@ void	free_content(t_ast_node_content *content)
 		freeing_redirection(content->stdout_redirect);
 	if (content->cmd)
 		freeing_cmd(content->cmd);
-		
 }
 
 void	freeing_cmd(char **cmd)
 {
-	int i;
+	int	i;
 
 	if (cmd == NULL)
 		return ;
@@ -96,7 +95,7 @@ int	free_ast(t_ast_node *node_ptr)
 			if ((*node_ptr).content->assignments)
 				freeing_assignment((*node_ptr).content->assignments);
 		}
-		free((*node_ptr).content); // (*node_ptr)->content = NULL;
+		free((*node_ptr).content);
 	}
 	else if ((*node_ptr).type == AST_NODE_PIPE)
 	{
@@ -107,5 +106,3 @@ int	free_ast(t_ast_node *node_ptr)
 	}
 	return (free(node_ptr), node_ptr = NULL, 0);
 }
-
-

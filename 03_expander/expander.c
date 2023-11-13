@@ -21,7 +21,7 @@ int	changing_var_value(char **str, char *value, int start, int len)
 
 	left = ft_substr(*str, 0, start);
 	right = ft_strdup(*str + start + len);
-	if (!left || !right)		
+	if (!left || !right)
 		return (free(left), free(right), start + len - 1);
 	if (!value)
 		value = "";
@@ -36,53 +36,30 @@ int	changing_var_value(char **str, char *value, int start, int len)
 	*str = new;
 	return (free(left), free(right), start + ft_strlen(value) - 1);
 }
-int ft_navid_strcmp(const char *src, const char *dst)
-{
-    char	*tmpsrc;
-    char	*tmpdst;
 
-	tmpsrc = (char *)src;
-	tmpdst = (char *)dst;
-    while (*tmpsrc && *tmpdst && *tmpsrc == *tmpdst)
-	{
-        tmpsrc++;
-		tmpdst++;
-    }
-    return (ft_strlen(tmpdst) + ft_strlen(tmpsrc));
-}
-
-char	*get_env_var(t_minishell *sh, char *var, bool heredoc)
+char	*get_env_var(t_minishell *sh, char *var)
 {
 	t_envp_ll	*tmp;
 
 	if (var == NULL)
 		return (NULL);
 	tmp = sh->envp_ll;
-		// printf("first:%c last:%c\n", var[0], var[ft_strlen(var) - 1]);
 	while (tmp)
 	{
-		if (!heredoc && (var[ft_strlen(var) - 1] == '\'' || \
-		var[ft_strlen(var) - 1] == ' ' || var[ft_strlen(var) - 1] == '$') && \
+		if ((var[ft_strlen(var) - 1] == '\'' || \
+		var[ft_strlen(var) - 1] == ' ' || var[ft_strlen(var) - 1] == '$' || \
+		var[ft_strlen(var) - 1] == '/' || (var[ft_strlen(var) - 1] == '\n' && \
+		!ft_strncmp(tmp->var, var, ft_strlen(var) - 1))) && \
 		!ft_strncmp(tmp->var, var, ft_strlen(tmp->var)))
-				return (ft_strdup(tmp->value)); 
-		// if (!heredoc && !ft_strncmp(tmp->var, var, ft_strlen(var)))
-		// {
-		// 	// printf("not heredoc\n");
-		// 		return (ft_strdup(tmp->value)); 
-		// }
+			return (ft_strdup(tmp->value));
 		if (ft_strcmp(tmp->var, var))
-		{
-			// printf("heredoc\n");
-				return (ft_strdup(tmp->value)); 
-		}
+			return (ft_strdup(tmp->value));
 		tmp = tmp->next;
-			// printf("hd:%d var:%s env_var:%s com:%d\n", heredoc, var, tmp->var, ft_navid_strcmp(tmp->var, var));
 	}
 	return (NULL);
 }
 
-/*
-while characters in token value
+/* while characters in token value
 	if c == '$' && c + 1 == ('?' || '_' || alpha)
 		len = 2
 		while (c + len != (alphanumeric || '_'))
@@ -90,9 +67,11 @@ while characters in token value
 		var = from first char + len
 		get value from var
 		if val == NULL -> val is empty
-		insert val into var location while keeping everything aroung var (copy before var to new, append val, append rest after var - free old save new)
+		insert val into var location while keeping everything aroung var 
+		(copy before var to new, append val, append rest after var - free old save new)
 */
-void expand(t_minishell *sh, char **str, int j, bool heredoc)
+// void expand(t_minishell *sh, char **str, int j, bool heredoc)
+void	expand(t_minishell *sh, char **str, int j)
 {
 	int		i;
 	char	*var;
@@ -101,18 +80,19 @@ void expand(t_minishell *sh, char **str, int j, bool heredoc)
 	i = -1;
 	while ((*str)[++i])
 	{
-		if ((*str)[i] == '$' && ((*str)[i + 1] && (*str)[i + 1] != ' '))
+		if ((*str)[i] == '$' && ((*str)[i + 1] && (*str)[i + 1] != ' ' && \
+			(*str)[i + 1] != '/'))
 		{
 			value = NULL;
 			j = i + 2;
 			if ((*str)[i + 1] == '?')
-				value = ft_itoa(sh->data->exit_code);// put the the correct exit code here
+				value = ft_itoa(sh->data->exit_code);
 			else if ((*str)[i + 1] == '_' || ft_isalpha((*str)[i + 1]))
 			{
 				while ((*str)[j] == '_' || ft_isalnum((*str)[j]))
 					j++;
 				var = ft_substr(*str, i + 1, j - i);
-				value = get_env_var(sh, var, heredoc);
+				value = get_env_var(sh, var);
 				free(var);
 			}
 			i = changing_var_value(str, value, i, j - i);
@@ -136,23 +116,36 @@ void	expander(t_minishell *sh)
 	direct = -1;
 	while (i < sh->token_len)
 	{
-			if(!ft_strncmp(sh->tokens[i].value, "<<\0", 3))
-				direct = i;
-			// printf("size:%ld second char:%c next token type:%d\n", ft_strlen(sh->tokens[i].value), sh->tokens[i].value[1], sh->tokens[i + 1].type);
-			// printf("i:%d len:%d\n", i, sh->token_len);
-		if (((sh->tokens[i].type == TOKEN_DOUBLE_QUOTE) || (sh->tokens[i].type == TOKEN_WORD)) && direct < 0)
-			expand(sh, &sh->tokens[i].value, j, false);
-		// printf("token2:%s\n",sh->tokens[i].value);
+		if (!ft_strncmp(sh->tokens[i].value, "<<\0", 3))
+			direct = i;
+		if (((sh->tokens[i].type == 2) || (sh->tokens[i].type == 5)) && \
+		direct < 0 && !(sh->tokens[i].slash_number % 2))
+			expand(sh, &sh->tokens[i].value, j);
 		if (i + 1 < sh->token_len)
 		{
-			// printf("token2:%s\n",sh->tokens[i].value);
-			if((sh->tokens[i].value[0] == '$' && sh->tokens[i].value[1] == '\0'\
-			&& sh->tokens[i].type == TOKEN_WORD) &&\
+			if ((sh->tokens[i].value[0] == '$' && sh->tokens[i].value[1] == \
+			'\0' && sh->tokens[i].type == TOKEN_WORD) && \
 			(sh->tokens[i + 1].type == TOKEN_SINGLE_QUOTE || \
-			sh->tokens[i + 1].type == TOKEN_DOUBLE_QUOTE)) //&& 
-			// (sh->tokens[i + 1].value[0] != '$' && sh->tokens[i + 1].value[1] != '\0'))
+			sh->tokens[i + 1].type == TOKEN_DOUBLE_QUOTE))
 				erase_token(sh, i);
 		}
 		i++;
 	}
 }
+
+// int ft_navid_strcmp(const char *src, const char *dst)
+// {
+//     char	*tmpsrc;
+//     char	*tmpdst;
+
+// 	tmpsrc = (char *)src;
+// 	tmpdst = (char *)dst;
+//     while (*tmpsrc && *tmpdst && *tmpsrc == *tmpdst)
+// 	{
+//         tmpsrc++;
+// 		tmpdst++;
+//     }
+//     return (ft_strlen(tmpdst) + ft_strlen(tmpsrc));
+// }
+
+// char	*get_env_var(t_minishell *sh, char *var, bool heredoc)

@@ -12,6 +12,17 @@
 
 #include "parser.h"
 
+void	check_and_set_syntax_error_flag(t_minishell *sh, int ret)
+{
+	if (ret)
+	{
+		if (sh->head >= 0 && sh->head <= sh->seg_end && \
+			sh->tokens[sh->head].flag && \
+			sh->tokens[sh->head].flag != TOKEN_WORD)
+			sh->tokens[sh->head].flag = -2;
+	}
+}
+
 t_parser_state	parse_redirection(t_ast_node_content **content, t_minishell *sh)
 {
 	t_redirect		*new_redirection;
@@ -22,10 +33,10 @@ t_parser_state	parse_redirection(t_ast_node_content **content, t_minishell *sh)
 	new_redirection = (t_redirect *)ft_calloc(1, sizeof(t_redirect));
 	if (!new_redirection)
 		return (perror("Memory allocation error"), PARSER_FAILURE);
-	type = redirect_type(sh->tokens[sh->head].value); // Set the type of redirection
+	type = redirect_type(sh->tokens[sh->head].value);
 	new_redirection->type = type;
-	new_redirection->word = ft_strdup(sh->tokens[sh->head + 1].value);// put next head in value of this node
-	new_redirection->word_type = sh->tokens[sh->head + 1].flag; 
+	new_redirection->word = ft_strdup(sh->tokens[sh->head + 1].value);
+	new_redirection->word_type = sh->tokens[sh->head + 1].flag;
 	free(sh->tokens[sh->head + 1].value);
 	sh->tokens[sh->head + 1].value = NULL;
 	new_redirection->next = NULL;
@@ -40,7 +51,7 @@ t_parser_state	parse_redirection(t_ast_node_content **content, t_minishell *sh)
 	return (PARSER_SUCCESS);
 }
 
-t_parser_state parse_assignment(t_ast_node_content **content, t_minishell *sh)
+t_parser_state	parse_assignment(t_ast_node_content **content, t_minishell *sh)
 {
 	t_assignment	*new_assignment;
 	t_assignment	*last_assignment;
@@ -51,8 +62,6 @@ t_parser_state parse_assignment(t_ast_node_content **content, t_minishell *sh)
 	new_assignment->word = ft_strdup(sh->tokens[sh->head].value);
 	if (!new_assignment->word)
 		return (PARSER_FAILURE);
-	free(sh->tokens[sh->head].value);
-	sh->tokens[sh->head].value = NULL;
 	new_assignment->next = NULL;
 	if ((*content)->assignments == NULL)
 		(*content)->assignments = new_assignment;
@@ -72,21 +81,16 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 {
 	t_parser_state	ret;
 
-	// while (sh->space_flag && (sh->tokens[sh->head].value = '\0'))
-	// {
-	// 	sh->head++;
-	// 	sh->token_len--;	
-	// }
 	sh->cmd_count = sh->head - 1;
 	ret = PARSER_FAILURE;
 	if (sh->head < sh->seg_end && sh->tokens[sh->head].type != TOKEN_WORD)
+	{
+		check_and_set_syntax_error_flag(sh, ret);
 		return (ret);
+	}
 	while (++sh->cmd_count < sh->seg_end && \
 			sh->tokens[sh->cmd_count].type == TOKEN_WORD)
-	{
-		// if ((sh->tokens[sh->head].value = '\0'))
 		sh->index++;
-	}
 	if (sh->index)
 	{
 		(*content)->cmd = ft_realloc_strings((*content)->cmd, \
@@ -105,6 +109,7 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 		}
 	}
 	sh->index = 0;
+	check_and_set_syntax_error_flag(sh, ret);
 	return (ret);
 }
 
@@ -119,13 +124,13 @@ t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
 		sh->tokens[sh->head].type && \
 		sh->tokens[sh->head].type == TOKEN_REDIRECT && \
 		(sh->tokens[sh->head + 1].type == TOKEN_ASSIGNMENT || \
-		sh->tokens[sh->head + 1].type == TOKEN_WORD )) //later check variable of token,would better assign to the EOF and PIP
+		sh->tokens[sh->head + 1].type == TOKEN_WORD))
 		{
 			ret = parse_redirection(content, sh);
 			continue ;
 		}
-		else if (sh->head <= sh->token_len && (sh->tokens[sh->head].type == TOKEN_ASSIGNMENT || \
-		sh->tokens[sh->head].type == TOKEN_WORD))
+		else if (sh->head <= sh->token_len && (sh->tokens[sh->head].type == \
+				TOKEN_ASSIGNMENT || sh->tokens[sh->head].type == TOKEN_WORD))
 		{
 			ret = feed_remained_cmd_tokens(content, sh);
 			continue ;
@@ -133,6 +138,7 @@ t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
 		else
 			break ;
 	}
+	check_and_set_syntax_error_flag(sh, ret);
 	return (ret);
 }
 
@@ -147,7 +153,7 @@ t_parser_state	parse_prefix_cmd(t_ast_node_content **content, t_minishell *sh)
 		sh->tokens[sh->head].type && \
 		sh->tokens[sh->head].type == TOKEN_REDIRECT && \
 		(sh->tokens[sh->head + 1].type == TOKEN_ASSIGNMENT || \
-		sh->tokens[sh->head + 1].type == TOKEN_WORD )) //later check variable of token,would better assign to the EOF and PIP
+		sh->tokens[sh->head + 1].type == TOKEN_WORD))
 		{
 			ret = parse_redirection(content, sh);
 			continue ;
@@ -161,5 +167,6 @@ t_parser_state	parse_prefix_cmd(t_ast_node_content **content, t_minishell *sh)
 		else
 			break ;
 	}
+	check_and_set_syntax_error_flag(sh, ret);
 	return (ret);
 }
