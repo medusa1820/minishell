@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 19:37:58 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/13 18:44:23 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/14 20:35:24 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,22 @@ void	error_do_next_iter(int exit_code, char *error_msg, t_pipe *data)
 
 void	free_all(t_pipe *data)
 {
+	// printf("free str\n");
 	free_str(data);
+	// printf("free 2d str\n");
 	free_2d_str(data);
-	// free_2d_str_cmd_split(data);
+	// printf("free 2d str cmd split\n");
+	free_2d_str_cmd_split(data);
 }
 
 void	free_2d_str_cmd_split(t_pipe *data)
 {
-	// printf("hiiiiiiiiiiiiii11111\n");
+	// printf("cmd_split !=NULL\n");
 	if (data->cmd_split != NULL)
-	// if (data->cmd_split)
 	{
 		// printf("hi before free\n");
 		// printf("hi before free, %s\n", data->cmd_split[0]);
+		// printf("hi before free, %s\n", data->cmd_split[1]);
 		free_2d_str_func(data->cmd_split);
 		// printf("hi after free\n");
 	}
@@ -56,8 +59,10 @@ void	free_2d_str_cmd_split(t_pipe *data)
 void	free_str(t_pipe *data)
 {
 	if (data->cmd_path != NULL)
+	{
 		free(data->cmd_path);
-	data->cmd_path = NULL;
+		data->cmd_path = NULL;
+	}
 }
 
 void	free_2d_str(t_pipe *data)

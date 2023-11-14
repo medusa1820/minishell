@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/13 20:00:00 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/14 17:00:01 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,13 @@ int	main(int argc, char **argv)
 					piper(&data, &i);
 					if (!forker_no_pipe(&data, shell_data.envp_local, shell_data.ast_root))
 					{
+						free_tokens(&shell_data);
 						free_ast(shell_data.ast_root);
 						// freeing_cmd(data.cmd_split);
+						free_2d_str_cmd_split(&data);
 						continue ;
 					}
+					free_tokens(&shell_data);
 					free_ast(shell_data.ast_root);
 					free_2d_str_cmd_split(&data);
 				}
@@ -121,9 +124,11 @@ int	main(int argc, char **argv)
 					data.nr_of_cmd_nodes = 0;
 					if (!execute_cmds(shell_data.ast_root, &i, &data, shell_data.envp_local))
 					{
+						free_tokens(&shell_data);
 						free_ast(shell_data.ast_root);
 						continue ;
 					}
+					free_tokens(&shell_data);
 					free_ast(shell_data.ast_root);
 				}
 				// exit_code_signals(&data);
