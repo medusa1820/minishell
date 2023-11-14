@@ -162,11 +162,12 @@ void	export_preps(t_pipe *data)
 			assignment_iter = data->node->content->assignments;
 			while (i <= count_assgnmnts)
 			{
-				data->cmd_split[i] = ft_strdup(assignment_iter->word);
+				// data->cmd_split[i] = ft_strdup(assignment_iter->word);
+				(*data).cmd_split[i] = assignment_iter->word;
 				assignment_iter = assignment_iter->next;
 				i++;
 			}
-			data->cmd_split[i] = NULL;
+			(*data).cmd_split[i] = NULL;
 		}
 	}
 	else

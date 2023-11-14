@@ -35,6 +35,7 @@ void	freeing_cmd(char **cmd)
 	i = 0;
 	while (cmd[i] != NULL)
 	{
+		printf("cmd[%d]:%s\n",i, cmd[i]);
 		free(cmd[i]);
 		cmd[i] = NULL;
 		i++;

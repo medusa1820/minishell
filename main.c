@@ -108,9 +108,14 @@ int	main(int argc, char **argv)
 					piper(&data, &i);
 					if (!forker_no_pipe(&data, shell_data.envp_local, shell_data.ast_root))
 					{
+						// free(data.cmd_split);
+						for(int i = 0; data.cmd_split[i]; i++)
+							printf("cmd[%d]:%s\n", i, data.cmd_split[i]);
 						free_ast(shell_data.ast_root);
 						continue ;
 					}
+					// if (data.cmd_split)
+					// 	free(data.cmd_split);
 					free_ast(shell_data.ast_root);
 				}
 				else

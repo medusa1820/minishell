@@ -88,7 +88,7 @@ t_ast_node	*parse_command(t_minishell *sh)
 		exit(1);
 	}
 	content->stdin_redirect = NULL;
-	content->stdin_redirect = NULL;
+	content->stdout_redirect = NULL;
 	content->assignments = NULL;
 	content->cmd = NULL;
 	ret = parse_command_content(&content, sh);

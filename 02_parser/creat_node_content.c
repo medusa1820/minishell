@@ -16,7 +16,7 @@ void	check_and_set_syntax_error_flag(t_minishell *sh, int ret)
 {
 	if (ret)
 	{
-		if (sh->head >= 0 && sh->head <= sh->seg_end && \
+		if (sh->head >= 0 && sh->head < sh->seg_end && \
 			sh->tokens[sh->head].flag && \
 			sh->tokens[sh->head].flag != TOKEN_WORD)
 			sh->tokens[sh->head].flag = -2;
