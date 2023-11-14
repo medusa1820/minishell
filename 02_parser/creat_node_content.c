@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:31:59 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/13 17:01:34 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/14 14:52:59 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,40 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 
 	sh->cmd_count = sh->head - 1;
 	ret = PARSER_FAILURE;
+	sh->index = 0; //testing
+	if (sh->head < sh->seg_end && sh->tokens[sh->head].type != TOKEN_WORD)
+	{
+		check_and_set_syntax_error_flag(sh, ret);
+		return (ret);
+	}
+	while (++sh->cmd_count < sh->seg_end && \
+			sh->tokens[sh->cmd_count].type == TOKEN_WORD)
+		sh->index++;
+	if (sh->index)
+	{
+		(*content)->cmd = ft_realloc_strings((*content)->cmd, \
+				count_strings((*content)->cmd), sh->index);
+		sh->index = count_strings((*content)->cmd);
+		while (sh->head < sh->seg_end && sh->tokens[sh->head].type == TOKEN_WORD)
+		{
+			(*content)->cmd[sh->index++] = ft_strdup(sh->tokens[sh->head].value);
+			free(sh->tokens[sh->head].value);
+			sh->tokens[sh->head++].value = NULL;
+			sh->token_len--;
+			ret = PARSER_SUCCESS;
+		}
+		(*content)->cmd[sh->index] = 0;
+	}
+	check_and_set_syntax_error_flag(sh, ret);
+	return (ret);
+}
+
+/* t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
+{
+	t_parser_state	ret;
+
+	sh->cmd_count = sh->head - 1;
+	ret = PARSER_FAILURE;
 	if (sh->head < sh->seg_end && sh->tokens[sh->head].type != TOKEN_WORD)
 	{
 		check_and_set_syntax_error_flag(sh, ret);
@@ -111,7 +145,7 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 	sh->index = 0;
 	check_and_set_syntax_error_flag(sh, ret);
 	return (ret);
-}
+} */
 
 t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
 {

@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:27:58 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/13 17:25:50 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/14 12:17:23 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	freeing_cmd(char **cmd)
 		cmd[i] = NULL;
 		i++;
 	}
-	// free(cmd);
+	free(cmd);
 	// printf("hi 3\n");
 	cmd = NULL;
 }

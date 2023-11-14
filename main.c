@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/13 20:00:00 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/14 13:15:26 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,8 @@ int	main(int argc, char **argv)
 						// freeing_cmd(data.cmd_split);
 						continue ;
 					}
-					free_ast(shell_data.ast_root);
 					free_2d_str_cmd_split(&data);
+					free_ast(shell_data.ast_root);
 				}
 				else
 				{

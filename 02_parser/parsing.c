@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:39:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/14 18:38:24 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/14 14:41:35 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,11 +136,11 @@ t_ast_node	*parsing(t_minishell *sh, char *line)
 		sh->ast_root = parse_pipeline(sh);
 		if (!sh->ast_root)
 		{
-			free_tokens(sh);
 			free_ast(sh->ast_root);
 			return (NULL);
 			// exit (2);
 		}
+		free_tokens(sh);
 		return (sh->ast_root);
 	}
 	else
