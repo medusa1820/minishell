@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/13 18:20:40 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/15 11:30:42 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *node)
 	}
 }
 
-void	export_preps(t_pipe *data)
+/* void	export_preps(t_pipe *data)
 {
 	int				count_assgnmnts;
 	int				count_cmd_strings;
@@ -172,6 +172,39 @@ void	export_preps(t_pipe *data)
 	else
 		data->cmd_split = data->node->content->cmd;
 	// print_ast_tree0(data->shell_data->ast_root, 1);
+} */
+
+void	export_preps(t_pipe *data)
+{
+	int				count_assgnmnts;
+	int				i;
+	t_assignment	*assignment_iter;
+
+	count_assgnmnts = 0;
+	count_assgnmnts = count_nmbr_assignments(data->node);
+	if (data->node->content->cmd && \
+		ft_strncmp(data->node->content->cmd[0], "export", 7) == 0 && \
+		count_assgnmnts > 0)
+	{
+		data->cmd_split = (char **) malloc (1 + count_assgnmnts + 1);
+		data->cmd_split[0] = ft_strdup(data->node->content->cmd[0]);
+		i = 1;
+		assignment_iter = data->node->content->assignments;
+		while (i <= count_assgnmnts)
+		{
+			data->cmd_split[i] = ft_strdup(assignment_iter->word);
+			assignment_iter = assignment_iter->next;
+			i++;
+		}
+		data->cmd_split[i] = NULL;
+	}
+	else
+		data->cmd_split = ft_array_dup(data->node->content->cmd);
+}
+
+char	**ft_array_dup(char **str)
+{
+	
 }
 
 int	count_nmbr_assignments(t_ast_node *head)
