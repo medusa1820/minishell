@@ -150,6 +150,7 @@ void	export_preps(t_pipe *data)
 		count_assgnmnts = count_nmbr_assignments(data->node);
 		if (count_assgnmnts == 0)
 		{
+			data->cmd_splited = false;
 			data->cmd_split = data->node->content->cmd;
 		}
 		else
@@ -167,10 +168,14 @@ void	export_preps(t_pipe *data)
 				i++;
 			}
 			data->cmd_split[i] = NULL;
+			data->cmd_splited = true;
 		}
 	}
 	else
+	{
+		data->cmd_splited = false;
 		data->cmd_split = data->node->content->cmd;
+	}
 	// print_ast_tree0(data->shell_data->ast_root, 1);
 }
 

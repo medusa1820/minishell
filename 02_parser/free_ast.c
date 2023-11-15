@@ -33,15 +33,15 @@ void	freeing_cmd(char **cmd)
 	if (cmd == NULL)
 		return ;
 	i = 0;
-	// printf("hi 1\n");
+	// printf("hi 1 i:%d\n", i);
 	while (cmd[i] != NULL)
 	{
-		// printf("hi 2\n");
+		// printf("hi 2 i:%d\n", i);
 		free(cmd[i]);
 		cmd[i] = NULL;
 		i++;
 	}
-	// free(cmd);
+	free(cmd);
 	// printf("hi 3\n");
 	cmd = NULL;
 }

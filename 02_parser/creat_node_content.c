@@ -77,41 +77,74 @@ t_parser_state	parse_assignment(t_ast_node_content **content, t_minishell *sh)
 	return (PARSER_SUCCESS);
 }
 
-t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
+t_parser_state  parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 {
-	t_parser_state	ret;
-
-	sh->cmd_count = sh->head - 1;
-	ret = PARSER_FAILURE;
-	if (sh->head < sh->seg_end && sh->tokens[sh->head].type != TOKEN_WORD)
-	{
-		check_and_set_syntax_error_flag(sh, ret);
-		return (ret);
-	}
-	while (++sh->cmd_count < sh->seg_end && \
-			sh->tokens[sh->cmd_count].type == TOKEN_WORD)
-		sh->index++;
-	if (sh->index)
-	{
-		(*content)->cmd = ft_realloc_strings((*content)->cmd, \
-				count_strings((*content)->cmd), sh->index);
-		sh->index = count_strings((*content)->cmd);
-		while (sh->head < sh->seg_end && sh->tokens[sh->head].type == TOKEN_WORD)
-		{
-			(*content)->cmd[sh->index] = ft_strdup(sh->tokens[sh->head].value);
-			(*content)->cmd[sh->index + 1] = NULL;
-			if (!(*content)->cmd[sh->index++])
-				return (PARSER_FAILURE);
-			free(sh->tokens[sh->head].value);
-			sh->tokens[sh->head++].value = NULL;
-			sh->token_len--;
-			ret = PARSER_SUCCESS;
-		}
-	}
-	sh->index = 0;
-	check_and_set_syntax_error_flag(sh, ret);
-	return (ret);
+    t_parser_state  ret;
+    sh->cmd_count = sh->head - 1;
+    ret = PARSER_FAILURE;
+    sh->index = 0; //testing
+    if (sh->head < sh->seg_end && sh->tokens[sh->head].type != TOKEN_WORD)
+    {
+        check_and_set_syntax_error_flag(sh, ret);
+        return (ret);
+    }
+    while (++sh->cmd_count < sh->seg_end && \
+            sh->tokens[sh->cmd_count].type == TOKEN_WORD)
+        sh->index++;
+    if (sh->index)
+    {
+        (*content)->cmd = ft_realloc_strings((*content)->cmd, \
+                count_strings((*content)->cmd), sh->index);
+        sh->index = count_strings((*content)->cmd);
+        while (sh->head < sh->seg_end && sh->tokens[sh->head].type == TOKEN_WORD)
+        {
+            (*content)->cmd[sh->index++] = ft_strdup(sh->tokens[sh->head].value);
+            free(sh->tokens[sh->head].value);
+            sh->tokens[sh->head++].value = NULL;
+            sh->token_len--;
+            ret = PARSER_SUCCESS;
+        }
+        (*content)->cmd[sh->index] = 0;
+    }
+    check_and_set_syntax_error_flag(sh, ret);
+    return (ret);
 }
+
+// t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
+// {
+// 	t_parser_state	ret;
+
+// 	sh->cmd_count = sh->head - 1;
+// 	ret = PARSER_FAILURE;
+// 	if (sh->head < sh->seg_end && sh->tokens[sh->head].type != TOKEN_WORD)
+// 	{
+// 		check_and_set_syntax_error_flag(sh, ret);
+// 		return (ret);
+// 	}
+// 	while (++sh->cmd_count < sh->seg_end && 
+// 			sh->tokens[sh->cmd_count].type == TOKEN_WORD)
+// 		sh->index++;
+// 	if (sh->index)
+// 	{
+// 		(*content)->cmd = ft_realloc_strings((*content)->cmd, 
+// 				count_strings((*content)->cmd), sh->index);
+// 		sh->index = count_strings((*content)->cmd);
+// 		while (sh->head < sh->seg_end && sh->tokens[sh->head].type == TOKEN_WORD)
+// 		{
+// 			(*content)->cmd[sh->index] = ft_strdup(sh->tokens[sh->head].value);
+// 			(*content)->cmd[sh->index + 1] = NULL;
+// 			if (!(*content)->cmd[sh->index++])
+// 				return (PARSER_FAILURE);
+// 			free(sh->tokens[sh->head].value);
+// 			sh->tokens[sh->head++].value = NULL;
+// 			sh->token_len--;
+// 			ret = PARSER_SUCCESS;
+// 		}
+// 	}
+// 	sh->index = 0;
+// 	check_and_set_syntax_error_flag(sh, ret);
+// 	return (ret);
+// }
 
 t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
 {

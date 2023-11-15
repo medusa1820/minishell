@@ -188,6 +188,7 @@ typedef struct s_pipe
 	char			**paths;
 	char			*cmd_path;
 	char			**cmd_split;
+	bool			cmd_splited;//navid
 	int				fd_infile;
 	int				fd_outfile;
 	bool			here_doc;

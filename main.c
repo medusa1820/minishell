@@ -114,7 +114,8 @@ int	main(int argc, char **argv)
 						continue ;
 					}
 					free_ast(shell_data.ast_root);
-					free_2d_str_cmd_split(&data);
+					if (data.cmd_splited)
+						free_2d_str_cmd_split(&data);
 				}
 				else
 				{
@@ -132,6 +133,7 @@ int	main(int argc, char **argv)
 		}
 		// set_signals_interactive(&data);
 		ft_waiting(&data);
+		
 		free(line);
 	}
 	ms_terminal_settings_restore();

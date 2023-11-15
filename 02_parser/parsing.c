@@ -139,8 +139,8 @@ t_ast_node	*parsing(t_minishell *sh, char *line)
 			free_tokens(sh);
 			free_ast(sh->ast_root);
 			return (NULL);
-			// exit (2);
 		}
+		free_tokens(sh);
 		return (sh->ast_root);
 	}
 	else

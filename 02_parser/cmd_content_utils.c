@@ -83,7 +83,7 @@ size_t	count_strings(char *strings[])
 	return (count);
 }
 
-char	**ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
+char    **ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
 {
 	char	**new_ptr;
 	size_t	copy_count;
@@ -91,23 +91,51 @@ char	**ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
 
 	if (!ptr)
 	{
-		new_ptr = (char **) ft_calloc(new_count + 2, sizeof(char *));
+		new_ptr = (char **) ft_calloc(new_count + 1, sizeof(char *));
 		if (!new_ptr)
 			return (freeing_cmd(new_ptr), NULL);
 		return (new_ptr);
 	}
-	new_ptr = ft_calloc(old_count + new_count + 2, sizeof(char *));
+	new_ptr = ft_calloc(old_count + new_count + 1, sizeof(char *));
 	if (new_ptr == NULL)
 		return (freeing_cmd(ptr), NULL);
 	copy_count = old_count;
-	i = 0;
-	while (i < copy_count)
+	i = -1;
+	while (++i < copy_count)
 	{
 		new_ptr[i] = ft_strdup(ptr[i]);
 		if (new_ptr[i] == NULL)
 			return (freeing_cmd(new_ptr), NULL);
-		i++;
 	}
 	freeing_cmd(ptr);
 	return (new_ptr);
 }
+
+// char	**ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
+// {
+// 	char	**new_ptr;
+// 	size_t	copy_count;
+// 	size_t	i;
+
+// 	if (!ptr)
+// 	{
+// 		new_ptr = (char **) ft_calloc(new_count + 2, sizeof(char *));
+// 		if (!new_ptr)
+// 			return (freeing_cmd(new_ptr), NULL);
+// 		return (new_ptr);
+// 	}
+// 	new_ptr = ft_calloc(old_count + new_count + 2, sizeof(char *));
+// 	if (new_ptr == NULL)
+// 		return (freeing_cmd(ptr), NULL);
+// 	copy_count = old_count;
+// 	i = 0;
+// 	while (i < copy_count)
+// 	{
+// 		new_ptr[i] = ft_strdup(ptr[i]);
+// 		if (new_ptr[i] == NULL)
+// 			return (freeing_cmd(new_ptr), NULL);
+// 		i++;
+// 	}
+// 	freeing_cmd(ptr);
+// 	return (new_ptr);
+// }
