@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/13 20:00:00 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/15 13:15:20 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,16 @@ int	main(int argc, char **argv)
 		return (0);
 	init_pipe_data(&data, &shell_data);
 	init_shell(&shell_data, &data);
-	ms_terminal_settings_change();
 	while (1)
 	{
+		ms_terminal_settings_change();
 		// g_sig_nbr = 0;
 		exit_code_signals(&data);
 		set_signals_interactive(&data);
 		if (isatty(fileno(stdin)))
-			line = readline(GREEN "minishell> " RESET);
+			// line = readline(GREEN "minishell> " RESET);
+			// line = readline("\033[0;32mminishell> \033[0m");
+			line = readline("minishell> ");
 		else
 		{
 			line_bla = get_next_line(fileno(stdin));
@@ -135,8 +137,8 @@ int	main(int argc, char **argv)
 		ft_waiting(&data);
 		
 		free(line);
+		ms_terminal_settings_restore();
 	}
-	ms_terminal_settings_restore();
 	free_envp_ll(shell_data.envp_ll);
 	free_envp_local(shell_data.envp_local);
 	return (data.exit_code);
@@ -144,3 +146,5 @@ int	main(int argc, char **argv)
 
 // print_ast_tree0(shell_data.ast_root, 1);
 // print_ast_node(shell_data.ast_root, 1,'X');
+
+//  echo "cat lol.c | cat > lol.c"

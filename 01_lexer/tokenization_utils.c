@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 10:39:28 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 12:51:28 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/15 15:35:13 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	back_slash(const char **current, t_token *token)
 	else
 		count = (i - 1) / 2;
 	i -= count;
-	while (i--)
+	while (i-- && *(*current + 1) != '\0')
 		(*current)++;
 }
 
