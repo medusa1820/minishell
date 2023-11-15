@@ -99,7 +99,7 @@ void	back_slash(const char **current, t_token *token)
 	else
 		count = (i - 1) / 2;
 	i -= count;
-	while (i--)
+	while (i-- && *(*current + 1) != '\0')
 		(*current)++;
 }
 
