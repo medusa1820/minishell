@@ -73,7 +73,7 @@ ALL_SRCS			:=	$(MINISHELL_SRCS) \
 
 HEADERS				:=	-I ./include
 # HEADERS				+=	-I ./05_utils
-HEADERS				+=	-I $(shell brew --prefix readline)/include # comment this for use in Debian
+# HEADERS				+=	-I $(shell brew --prefix readline)/include # comment this for use in Debian
 # HEADERS				+=	-I ../LeakSanitizer
 
 LDFLAGS				+=	-L ./lib/ft_printf -lft_ft_printf

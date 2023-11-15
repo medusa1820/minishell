@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/15 13:15:20 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/15 16:53:33 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,9 @@ int	main(int argc, char **argv)
 		return (0);
 	init_pipe_data(&data, &shell_data);
 	init_shell(&shell_data, &data);
+	ms_terminal_settings_change();
 	while (1)
 	{
-		ms_terminal_settings_change();
 		// g_sig_nbr = 0;
 		exit_code_signals(&data);
 		set_signals_interactive(&data);
@@ -137,8 +137,8 @@ int	main(int argc, char **argv)
 		ft_waiting(&data);
 		
 		free(line);
-		ms_terminal_settings_restore();
 	}
+	ms_terminal_settings_restore();
 	free_envp_ll(shell_data.envp_ll);
 	free_envp_local(shell_data.envp_local);
 	return (data.exit_code);
