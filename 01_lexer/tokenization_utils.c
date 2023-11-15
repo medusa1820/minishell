@@ -99,8 +99,8 @@ void	back_slash(const char **current, t_token *token)
 	else
 		count = (i - 1) / 2;
 	i -= count;
-	while (i--)
-		(*current)++;
+	while (i-- && *(*current + 1) != '\0')
+			(*current)++;
 }
 
 // void	check_assignment(t_token **tokens, int token_count)
