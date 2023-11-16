@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/16 17:00:47 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/16 20:26:33 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ int	main(int argc, char **argv)
 		}
 		// set_signals_interactive(&data);
 		ft_waiting(&data);
-		
 		free(line);
 	}
 	ms_terminal_settings_restore();

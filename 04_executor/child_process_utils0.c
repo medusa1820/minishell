@@ -6,13 +6,13 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/16 15:10:46 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/16 21:38:26 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	find_cmd_path(t_pipe *data, char **envp)
+/* void	find_cmd_path(t_pipe *data, char **envp)
 {
 	if (data->cmd_split && \
 		(ft_strnstr(data->cmd_split[0], "/", ft_strlen(data->cmd_split[0]))))
@@ -23,6 +23,29 @@ void	find_cmd_path(t_pipe *data, char **envp)
 		{
 			prepare_paths(data, envp);
 			prepare_cmd_path(data);
+		}
+	}
+} */
+
+void	find_cmd_path(t_pipe *data, char **envp)
+{
+	if (data->cmd_split && \
+		(ft_strnstr(data->cmd_split[0], "/", ft_strlen(data->cmd_split[0]))))
+		prepare_cmd_path_slash(data);
+	else
+	{
+		if (data->cmd_split)
+		{
+			if (ft_isalpha(data->cmd_split[0][0]) == 0 && \
+				data->cmd_split[0][0] != '_')
+			{
+				exit_error_cmd_notfound(127, "Command not found: ", data);
+			}
+			else
+			{
+				prepare_paths(data, envp);
+				prepare_cmd_path(data);
+			}
 		}
 	}
 }
@@ -65,6 +88,7 @@ void	prepare_cmd_path(t_pipe *data)
 	int		i;
 
 	temp = ft_strjoin("./", data->cmd_split[0]);
+	// if (access(temp, X_OK) != -1 && (ft_strncmp(temp, "./", 3) != 0))
 	if (access(temp, X_OK) != -1)
 	{
 		data->cmd_path = temp;
