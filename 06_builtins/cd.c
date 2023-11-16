@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 19:00:12 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/07 15:37:05 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/16 12:13:09 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*check_cd_types(t_envp_ll *envp_ll, char **cmd, bool *dash_flag)
 		return (get_envp_ll_var_value(envp_ll, "OLDPWD"));
 	}
 	else
-		return (cmd[1]);
+		return (ft_strdup(cmd[1]));
 }
 
 /*
@@ -126,6 +126,35 @@ these strings through the pointers would result in undefined behavior.
 
 */
 
+/* int	check_vars_in_envp_ll(t_envp_ll *head)
+{
+	char		*env_var_list[2];
+	t_envp_ll	*temp;
+	int			i;
+
+	env_var_list[0] = "PWD";
+	env_var_list[1] = "OLDPWD";
+	i = 0;
+	while (i < 2)
+	{
+		temp = head;
+		while (temp)
+		{
+			if (ft_strncmp(temp->var, env_var_list[i], \
+							ft_strlen(env_var_list[i]) + 1) == 0)
+				break ;
+			temp = temp->next;
+		}
+		if (!temp)
+		{
+			if (add_to_var_list(head, env_var_list[i], 0) != 0)
+				return (EXIT_FAILURE);
+		}
+		i++;
+	}
+	return (EXIT_SUCCESS);
+} */
+
 int	check_vars_in_envp_ll(t_envp_ll *head)
 {
 	char		*env_var_list[2];
@@ -155,16 +184,20 @@ int	check_vars_in_envp_ll(t_envp_ll *head)
 	return (EXIT_SUCCESS);
 }
 
-int	cd_bltn(t_envp_ll *head, char **cmd)
+int	cd_bltn(t_envp_ll *head, char **cmd, t_minishell *shell)
 {
 	char	*dir_path;
 	bool	dash_flag;
 
+	(void)shell;
+	dir_path = NULL;
 	dash_flag = false;
-	if (check_vars_in_envp_ll(head))
-		return (EXIT_FAILURE);
+	// if (check_vars_in_envp_ll(head))
+	// 	return (EXIT_FAILURE);
 	dir_path = check_cd_types(head, cmd, &dash_flag);
-	if (cd_do(dir_path, head, dash_flag))
+	if (dir_path == NULL)
 		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	if (cd_do(dir_path, head, dash_flag))
+		return (free(dir_path), EXIT_FAILURE);
+	return (free(dir_path), EXIT_SUCCESS);
 }

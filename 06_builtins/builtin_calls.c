@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:37:13 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/06 20:57:02 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/16 11:59:51 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	execute_bltn(t_minishell *shell, char **cmd)
 	if (ft_strncmp(cmd[0], "echo", 5) == 0)
 		return (echo_bltn(cmd));
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
-		return (cd_bltn(shell->envp_ll, cmd));
+		return (cd_bltn(shell->envp_ll, cmd, shell));
 	if (ft_strncmp(cmd[0], "pwd", 4) == 0)
 		return (pwd_bltn());
 	if (ft_strncmp(cmd[0], "export", 7) == 0)

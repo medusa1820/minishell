@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/06 20:55:38 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/16 12:00:44 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int				pwd_bltn(void);
 
 // cd.c
 
-int				cd_bltn(t_envp_ll *var_head, char **cmd);
+int				cd_bltn(t_envp_ll *var_head, char **cmd, t_minishell *shell);
 int				check_vars_in_envp_ll(t_envp_ll *head);
 char			*check_cd_types(t_envp_ll *envp_ll, char **cmd, \
 								bool *dash_flag);
