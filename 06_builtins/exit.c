@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 11:51:09 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/26 10:10:05 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/16 14:10:12 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	exit_bltn(t_minishell *shell, char **cmd)
 		exit_code_local = shell->data->exit_code;
 	if (exit_code_local < 0 || exit_code_local > 255)
 		exit_code_local = exit_code_local % 256;
+	// ft_putendl_fd("exit", 1);
 	free_before_exit(shell);
 	exit (exit_code_local);
 }

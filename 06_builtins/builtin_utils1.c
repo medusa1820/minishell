@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 11:56:48 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/16 12:39:15 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/16 14:07:35 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	update_envp_ll_var_value(t_envp_ll *head, char *var, char *value)
 	}
 	if (!temp)
 	{
-		if (add_to_var_list(head, var, 0))
+		if (add_to_var_list(head, var, 1))
 			return (EXIT_FAILURE);
 		// temp->value = ft_strdup(value);
 		update_envp_ll_var_value(head, var, value);
