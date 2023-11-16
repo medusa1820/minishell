@@ -1,0 +1,1 @@
+bash: line 2:  5168 Segmentation fault: 11  env -i ./minishell

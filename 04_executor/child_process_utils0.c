@@ -6,24 +6,28 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/16 13:13:54 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/16 15:10:46 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
 void	find_cmd_path(t_pipe *data, char **envp)
 {
-	prepare_paths(data, envp);
-	if (ft_strnstr(data->cmd_split[0], "/", ft_strlen(data->cmd_split[0])))
+	if (data->cmd_split && \
+		(ft_strnstr(data->cmd_split[0], "/", ft_strlen(data->cmd_split[0]))))
 		prepare_cmd_path_slash(data);
 	else
-		prepare_cmd_path(data);
+	{
+		if (data->cmd_split)
+		{
+			prepare_paths(data, envp);
+			prepare_cmd_path(data);
+		}
+	}
 }
-*/
 
-void	find_cmd_path(t_pipe *data, char **envp)
+/* void	find_cmd_path(t_pipe *data, char **envp)
 {
 	if (ft_strnstr(data->cmd_split[0], "/", ft_strlen(data->cmd_split[0])))
 		prepare_cmd_path_slash(data);
@@ -33,7 +37,7 @@ void	find_cmd_path(t_pipe *data, char **envp)
 		// (void)envp;
 		prepare_cmd_path(data);
 	}
-}
+} */
 
 void	prepare_paths(t_pipe *data, char **envp)
 {

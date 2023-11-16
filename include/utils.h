@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 18:02:13 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/13 17:15:57 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/16 15:28:45 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void				create_node_pipe(t_ast_node **new_node_head, \
 // exit_utils0.c
 
 void				exit_error(int exit_code, char *error_msg, t_pipe *data);
+void				exit_zero_exit_code(int exit_code, t_pipe *data);
 void				free_all(t_pipe *data);
 void				free_str(t_pipe *data);
 void				free_2d_str(t_pipe *data);
