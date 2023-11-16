@@ -20,13 +20,15 @@ t_lexer_state	single_quote_handling(const char **current, t_token *token)
 	token->type = TOKEN_SINGLE_QUOTE;
 	if ((*current)[1] == '\0')
 		return (token_unclosed(current, token), 1);
-	token->value = ft_strdup("\0");
+	// token->value = ft_strdup("\0");
+	token->value = ft_calloc(1,1);
 	(*current)++;
 	while (**current != '\'' && **current != '\0')
 	{
-		len++;
-		token->value = ft_realloc(token->value, len - 1, len + 1);
-		token->value[len - 1] = **current;
+		// len++;
+		// token->value = ft_realloc(token->value, len - 1, len + 1);
+		token->value = ft_realloc(token->value, len, len + 2);
+		token->value[len++] = **current;
 		token->value[len] = '\0';
 		(*current)++;
 	}

@@ -1,0 +1,3 @@
+						./01_lexer/free_print_tokens.c \
+						./02_parser/free_ast.c \
+						./05_utils/free_ast.c \

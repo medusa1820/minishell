@@ -69,6 +69,7 @@ void	free_tokens(t_minishell *sh)
 	i = -1;
 	while (++i < (*sh).free_lexer_token_len)
 	{
+		// printf("token[%d]:%s\n", i, (*sh).tokens[i].value);
 		free((*sh).tokens[i].value);
 		(*sh).tokens[i].value = NULL;
 	}

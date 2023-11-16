@@ -79,6 +79,11 @@ t_lexer_state	token_unclosed(const char **current, t_token *token)
 		write(2, "`\'\'\n", 4);
 	token->type = TOKEN_UNCLOSED_Q;
 	(*current)++;
+	// printf("current char:%c\n", **current);
+		// printf("remained token:%s\n", token->value);
+	free(token->value);
+	token->value = NULL;
+	token = NULL;
 	return (ret);
 }
 

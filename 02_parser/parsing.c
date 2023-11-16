@@ -150,3 +150,6 @@ t_ast_node	*parsing(t_minishell *sh, char *line)
 	}
 	return (NULL);
 }
+
+//#0 0x7f879a008b40 in __interceptor_malloc (/usr/lib/x86_64-linux-gnu/libasan.so.4+0xdeb40)
+//#1 0x7f8799d18738 in xmalloc (/lib/x86_64-linux-gnu/libreadline.so.7+0x37738)
