@@ -145,6 +145,7 @@ t_ast_node	*parsing(t_minishell *sh, char *line)
 	}
 	else
 	{
+		printf("hi\n");
 		sh->data->exit_code = 2;
 		free_tokens(sh);
 	}

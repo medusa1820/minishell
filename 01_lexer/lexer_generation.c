@@ -38,17 +38,17 @@ t_lexer_state	checking_tokenizer(t_token *token, t_minishell *sh,
 	int			ret;
 
 	ret = LEXER_SUCCESS;
-	if (**current == '\'' && ret == LEXER_SUCCESS)
+	if (ret == LEXER_SUCCESS && **current == '\'')
 		ret = single_quote_handling(current, token);
-	else if (**current == '"' && ret == LEXER_SUCCESS)
+	else if (ret == LEXER_SUCCESS && **current == '"')
 		ret = double_quote_handling(current, token);
-	else if (ft_strchr(OPERAND, **current) && ret == LEXER_SUCCESS)
+	else if (ret == LEXER_SUCCESS && ft_strchr(OPERAND, **current))
 		ret = tokenize_pipe_and_redirector(current, token);
-	else if (ft_strchr(WHITESPACE, **current) && ret == LEXER_SUCCESS)
+	else if (ret == LEXER_SUCCESS && ft_strchr(WHITESPACE, **current))
 		ret = tokenize_space(current, token);
 	else if (ret == LEXER_SUCCESS)
 		ret = tokenize_word(current, token);
-	if (ret == LEXER_SUCCESS)
+	if (ret == LEXER_SUCCESS || ret == UNCLOSED_QUOTE)
 		ret = feed_tokens_array(sh, token);
 	return (ret);
 }
@@ -61,12 +61,14 @@ t_lexer_state	tokenize(t_minishell *sh, const char *line)
 
 	ret = LEXER_SUCCESS;
 	current = line;
-	while (*current != '\0' && ret == LEXER_SUCCESS)
+	while (ret == LEXER_SUCCESS && *current != '\0')
 	{
 		init_token(&token);
 		ret = checking_tokenizer(&token, sh, &current);
 	}
 	sh->free_lexer_token_len = sh->token_len;
+	if (ret == UNCLOSED_QUOTE)
+		return(UNCLOSED_QUOTE);
 	if (ret == LEXER_SUCCESS)
 	{
 		remove_empty_tokens(sh);
