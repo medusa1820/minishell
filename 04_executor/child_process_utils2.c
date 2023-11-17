@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 17:18:51 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/25 18:13:12 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/17 22:28:05 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,29 @@ void	middle_pipe_in_out(t_pipe *data, int *i)
 			dup2(data->pipe1_fd[1], STDOUT_FILENO);
 	}
 }
+
+/* void	last_pipe_in_out(t_pipe *data, int *i)
+{
+	if (*i % 2 == 0)
+	{
+		if (data_has_infile(data))
+			dup2_fd_infile_std_in(data);
+		else
+			dup2(data->pipe1_fd[0], STDIN_FILENO);
+		if (data_has_outfile(data))
+			dup2_fd_outfile_std_out(data);
+	}
+	else
+	{
+		if (data_has_infile(data))
+			dup2_fd_infile_std_in(data);
+		else
+			dup2(data->pipe0_fd[0], STDIN_FILENO);
+		if (data_has_outfile(data))
+			dup2_fd_outfile_std_out(data);
+	}
+}
+ */
 
 void	last_pipe_in_out(t_pipe *data, int *i)
 {

@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/13 18:20:40 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/17 22:41:17 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,12 @@ bool	execute_cmds(t_ast_node *head, int *i, t_pipe *data, char **envp)
 			return (false);
 	*/
 		execute_cmds(head->left, i, data, envp);
-		return (piper(data, i) && forker(data, i, envp, head->right));
+		// return (piper(data, i) && forker(data, i, envp, head->right));
+		return (forker(data, i, envp, head->right));
 	}
 	else
 		return (piper(data, i) && forker(data, i, envp, head));
+		// return (forker(data, i, envp, head));
 }
 
 bool	piper(t_pipe *data, int *i)
