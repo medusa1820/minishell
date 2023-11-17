@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 17:41:18 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/06 20:57:23 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/17 14:06:00 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ int	unset_bltn(t_envp_ll *head, char **cmd, t_minishell *shell)
 	}
 	while (cmd[i])
 	{
-		if (valid_identifier(cmd[i]))
+		if (valid_identifier_unset(cmd[i]))
 		{
 			// if (ft_strchr(cmd[i], '='))
 			// 	export_var(head, cmd[i]);

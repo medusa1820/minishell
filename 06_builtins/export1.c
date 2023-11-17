@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 11:12:11 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/06 20:54:52 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/17 20:41:17 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,24 @@ bool	valid_identifier(char *var)
 		return (false);
 	i++;
 	while (var[i] && var[i] != '=')
+	{
+		if (ft_isalnum(var[i]) == 0 && var[i] != '_')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+bool	valid_identifier_unset(char *var)
+{
+	int	i;
+
+	i = 0;
+	if (ft_isalpha(var[i]) == 0 && var[i] != '_')
+		return (false);
+	i++;
+	while (var[i])
+	// while (var[i] && var[i] != '=')
 	{
 		if (ft_isalnum(var[i]) == 0 && var[i] != '_')
 			return (false);
@@ -143,8 +161,16 @@ int	export_bltn(t_envp_ll *head, char **cmd, t_minishell *shell)
 		}
 		else
 		{
-			print_error_bltn("export", cmd[i], "not a valid identifier");
-			return_value = 1;
+			if (cmd[1][0] == '-')
+			{
+				print_error_bltn("export", cmd[i], "options are not required");
+				return_value = 2;
+			}
+			else
+			{
+				print_error_bltn("export", cmd[i], "not a valid identifier");
+				return_value = 1;
+			}
 		}
 		i++;
 	}

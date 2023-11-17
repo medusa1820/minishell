@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:27:01 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/13 12:10:28 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/17 19:07:49 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	here_doc_open(t_pipe *data, char *word, int	word_type)
 
 
 
-void    here_doc_open(t_pipe *data, char *word, int word_type)
+void	here_doc_open(t_pipe *data, char *word, int word_type)
 {
 	char	*buffer;
 	int		fd_here_doc;

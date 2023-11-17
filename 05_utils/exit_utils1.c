@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 18:25:32 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/14 14:29:10 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/17 19:17:06 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,9 @@ void	exit_error_cmd_notfound(int exit_code, char *error_msg, t_pipe *data)
 	free_all(data);
 	free_envp_ll(data->shell_data->envp_ll);
 	free_envp_local(data->shell_data->envp_local);
+	if (errno == 2)
+		exit_code = 127;
+	if (errno == 13)
+		exit_code = 126;
 	exit(exit_code);
 }
