@@ -9,7 +9,7 @@
 /*   Updated: 2023/10/09 13:19:49 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+# define SP_CHR " !\"#$%&\'()*+,-./="
 #include "minishell.h"
 
 int	changing_var_value(char **str, char *value, int start, int len)
@@ -37,6 +37,17 @@ int	changing_var_value(char **str, char *value, int start, int len)
 	return (free(left), free(right), start + ft_strlen(value) - 1);
 }
 
+int ft_chrcmp(char *str)
+{
+    int i = 0;
+    while (str[i] != '\0')
+    {
+        if (strchr(SP_CHR, str[i]) != NULL)
+            return (1);
+        i++;
+    }
+	return (0);
+}
 char	*get_env_var(t_minishell *sh, char *var)
 {
 	t_envp_ll	*tmp;
@@ -46,10 +57,9 @@ char	*get_env_var(t_minishell *sh, char *var)
 	tmp = sh->envp_ll;
 	while (tmp)
 	{
-		if ((var[ft_strlen(var) - 1] == '\'' || 
+		if ((ft_chrcmp(var)/* || var[ft_strlen(var) - 1] == '\'' || 
 		var[ft_strlen(var) - 1] == ' ' || var[ft_strlen(var) - 1] == '$' || 
-		// var[ft_strlen(var) - 1] == '/' || (var[ft_strlen(var) - 1] == '\n' && 
-		var[ft_strlen(var) - 1] == '/' || !ft_isalpha(var[ft_strlen(var) - 1]) || (var[ft_strlen(var) - 1] == '\n' && 
+		var[ft_strlen(var) - 1] == '/'*/ || (var[ft_strlen(var) - 1] == '\n' && 
 		!ft_strncmp(tmp->var, var, ft_strlen(var) - 1))) && 
 		!ft_strncmp(tmp->var, var, ft_strlen(tmp->var)))
 			return (ft_strdup(tmp->value));
