@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/16 16:59:19 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/18 19:33:40 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	first_pipe(t_pipe *data, char **envp)
 			else
 				find_cmd_path(data, envp);
 			close_pipe0_fds(data);
+			// printf("hi first pipe\n");
 			if (execve(data->cmd_path, data->cmd_split, envp) == -1)
 				exit_error(errno, "Couldn't execute execve() first", data);
 		}
@@ -75,6 +76,7 @@ void	middle_pipe(t_pipe *data, char **envp, int *i)
 				find_cmd_path(data, envp);
 			close_pipe0_fds(data);
 			close_pipe1_fds(data);
+			// printf("hi middle pipe\n");
 			if (execve(data->cmd_path, data->cmd_split, envp) == -1)
 				exit_error(errno, "Couldn't execute execve() middle", data);
 		}
@@ -121,23 +123,23 @@ void	last_pipe(t_pipe *data, char **envp, int *i)
 			if (data->cmd_split && is_builtin(data->cmd_split[0]))
 			{
 				data->exit_code = execute_bltn(data->shell_data, data->cmd_split);
-				close_pipe0_fds(data);
+				// close_pipe0_fds(data);
 				close_pipe1_fds(data);
 				exit_zero_exit_code(data->exit_code, data);
 			}
 			else
 				find_cmd_path(data, envp);
-			close_pipe0_fds(data);
+			// close_pipe0_fds(data);
 			close_pipe1_fds(data);
-			// free_envp_ll(data->shell_data->envp_ll);
+			// printf("hi last pipe\n");
 			if (execve(data->cmd_path, data->cmd_split, envp) == -1)
 				exit_error(errno, "Couldn't execute execve() last", data);
 		}
-		close_pipe0_fds(data);
+		// close_pipe0_fds(data);
 		close_pipe1_fds(data);
 		exit_zero_exit_code(0, data);
 	}
-	close_pipe0_fds(data);
+	// close_pipe0_fds(data);
 	close_pipe1_fds(data);
 }
 

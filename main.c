@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 16:30:44 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/17 20:12:54 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/18 19:42:48 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ int	main(int argc, char **argv)
 		// set_signals_interactive(&data);
 		ft_waiting(&data);
 		free(line);
+		// ft_waiting(&data);
 	}
 	ms_terminal_settings_restore();
 	free_envp_ll(shell_data.envp_ll);

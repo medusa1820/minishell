@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 19:25:57 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/10 17:46:33 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/18 19:42:16 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_waiting(t_pipe *data)
 			{
 				data->exit_code = WEXITSTATUS(status);
 				g_sig_nbr = 0;
-				return ;
+				// return ;
 			}
 		}
 	}
