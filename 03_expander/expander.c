@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 22:09:29 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/09 13:19:49 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/18 13:16:19 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ char	*get_env_var(t_minishell *sh, char *var)
 	{
 		if ((var[ft_strlen(var) - 1] == '\'' || \
 		var[ft_strlen(var) - 1] == ' ' || var[ft_strlen(var) - 1] == '$' || \
-		var[ft_strlen(var) - 1] == '/' || (var[ft_strlen(var) - 1] == '\n' && \
+		var[ft_strlen(var) - 1] == '/'|| \
+		(var[ft_strlen(var) - 1] == '\n' && \
 		!ft_strncmp(tmp->var, var, ft_strlen(var) - 1))) && \
 		!ft_strncmp(tmp->var, var, ft_strlen(tmp->var)))
 			return (ft_strdup(tmp->value));
@@ -58,6 +59,9 @@ char	*get_env_var(t_minishell *sh, char *var)
 	}
 	return (NULL);
 }
+// !ft_isalpha(var[ft_strlen(var) - 1]) ||
+
+
 
 /* while characters in token value
 	if c == '$' && c + 1 == ('?' || '_' || alpha)

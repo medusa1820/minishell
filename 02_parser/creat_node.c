@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 15:41:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/13 17:02:00 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/18 12:54:48 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,11 @@ t_ast_node	*parse_pipeline(t_minishell *sh)
 		sh->token_len--;
 		left = parse_pipeline(sh);
 		if (left == NULL)
+		{
+			if (right)
+				free_ast(right);
 			return (NULL);
+		}
 		return (create_pipe_node(left, right));
 	}
 	else if (right == NULL)
