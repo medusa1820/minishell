@@ -117,7 +117,9 @@ t_ast_node	*parse_pipeline(t_minishell *sh)
 		sh->token_len--;
 		left = parse_pipeline(sh);
 		if (left == NULL)
+		{
 			return (NULL);
+		}
 		return (create_pipe_node(left, right));
 	}
 	else if (right == NULL)
