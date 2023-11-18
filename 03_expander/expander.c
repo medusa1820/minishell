@@ -46,10 +46,11 @@ char	*get_env_var(t_minishell *sh, char *var)
 	tmp = sh->envp_ll;
 	while (tmp)
 	{
-		if ((var[ft_strlen(var) - 1] == '\'' || \
-		var[ft_strlen(var) - 1] == ' ' || var[ft_strlen(var) - 1] == '$' || \
-		var[ft_strlen(var) - 1] == '/' || (var[ft_strlen(var) - 1] == '\n' && \
-		!ft_strncmp(tmp->var, var, ft_strlen(var) - 1))) && \
+		if ((var[ft_strlen(var) - 1] == '\'' || 
+		var[ft_strlen(var) - 1] == ' ' || var[ft_strlen(var) - 1] == '$' || 
+		// var[ft_strlen(var) - 1] == '/' || (var[ft_strlen(var) - 1] == '\n' && 
+		var[ft_strlen(var) - 1] == '/' || !ft_isalpha(var[ft_strlen(var) - 1]) || (var[ft_strlen(var) - 1] == '\n' && 
+		!ft_strncmp(tmp->var, var, ft_strlen(var) - 1))) && 
 		!ft_strncmp(tmp->var, var, ft_strlen(tmp->var)))
 			return (ft_strdup(tmp->value));
 		if (ft_strcmp(tmp->var, var))

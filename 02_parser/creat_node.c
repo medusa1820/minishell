@@ -118,8 +118,8 @@ t_ast_node	*parse_pipeline(t_minishell *sh)
 		left = parse_pipeline(sh);
 		if (left == NULL)
 		{
-			if (right) //test
-				free_ast(right); // test
+			if (right)
+				free_ast(right);
 			return (NULL);
 		}
 		return (create_pipe_node(left, right));
