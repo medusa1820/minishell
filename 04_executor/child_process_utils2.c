@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 17:18:51 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/25 18:13:12 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/19 14:02:09 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	first_pipe_in_out(t_pipe *data)
 	if (data_has_outfile(data))
 		dup2_fd_outfile_std_out(data);
 	else
-		dup2(data->pipe0_fd[1], STDOUT_FILENO);
+		dup2(data->pipe0_fd[1], STDOUT_FILENO); // 4, out
 }
 
 void	dup2_fd_infile_std_in(t_pipe *data)
@@ -41,22 +41,22 @@ void	middle_pipe_in_out(t_pipe *data, int *i)
 		if (data_has_infile(data))
 			dup2_fd_infile_std_in(data);
 		else
-			dup2(data->pipe1_fd[0], STDIN_FILENO);
+			dup2(data->pipe1_fd[0], STDIN_FILENO); // 5, in
 		if (data_has_outfile(data))
 			dup2_fd_outfile_std_out(data);
 		else
-			dup2(data->pipe0_fd[1], STDOUT_FILENO);
+			dup2(data->pipe0_fd[1], STDOUT_FILENO); // 4, out
 	}
 	else
 	{
 		if (data_has_infile(data))
 			dup2_fd_infile_std_in(data);
 		else
-			dup2(data->pipe0_fd[0], STDIN_FILENO);
+			dup2(data->pipe0_fd[0], STDIN_FILENO); // 3, in
 		if (data_has_outfile(data))
 			dup2_fd_outfile_std_out(data);
 		else
-			dup2(data->pipe1_fd[1], STDOUT_FILENO);
+			dup2(data->pipe1_fd[1], STDOUT_FILENO); // 6, out
 	}
 }
 
@@ -67,7 +67,7 @@ void	last_pipe_in_out(t_pipe *data, int *i)
 		if (data_has_infile(data))
 			dup2_fd_infile_std_in(data);
 		else
-			dup2(data->pipe1_fd[0], STDIN_FILENO);
+			dup2(data->pipe1_fd[0], STDIN_FILENO); // 5, in
 		if (data_has_outfile(data))
 			dup2_fd_outfile_std_out(data);
 	}
@@ -76,7 +76,7 @@ void	last_pipe_in_out(t_pipe *data, int *i)
 		if (data_has_infile(data))
 			dup2_fd_infile_std_in(data);
 		else
-			dup2(data->pipe0_fd[0], STDIN_FILENO);
+			dup2(data->pipe0_fd[0], STDIN_FILENO); // 3, in
 		if (data_has_outfile(data))
 			dup2_fd_outfile_std_out(data);
 	}

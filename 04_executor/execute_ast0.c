@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/18 19:05:45 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/19 14:21:22 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *node)
 		if (*i == 0)
 			first_pipe(data, envp);
 		// else if (*i == data->nr_of_cmd_nodes - 1)
-		else if (*i == data->nr_of_cmd_nodes - 2)
+		else if (*i == data->nr_of_cmd_nodes - 1)
 			last_pipe(data, envp, i);
 		else
 			middle_pipe(data, envp, i);
