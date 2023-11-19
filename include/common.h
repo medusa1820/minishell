@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/13 12:07:58 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/19 15:58:39 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 
 # define WHITESPACE	" \t\v\f\r"
 # define OPERAND	"<>|\"\'"
+# define SP_CHR		" !\"#$%&\'()*+,-./="
 
 /////////////////// data_init.h
 
