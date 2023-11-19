@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 22:09:29 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/18 13:16:19 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/19 16:07:51 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,21 @@ int	changing_var_value(char **str, char *value, int start, int len)
 	return (free(left), free(right), start + ft_strlen(value) - 1);
 }
 
+/// new func
+/* int	ft_chrcmp(char *str)
+{
+	int		i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (strchr(SP_CHR, str[i]) != NULL)
+			return (1);
+		i++;
+	}
+	return (0);
+} */
+
 char	*get_env_var(t_minishell *sh, char *var)
 {
 	t_envp_ll	*tmp;
@@ -61,6 +76,25 @@ char	*get_env_var(t_minishell *sh, char *var)
 }
 // !ft_isalpha(var[ft_strlen(var) - 1]) ||
 
+/* char	*get_env_var(t_minishell *sh, char *var)
+{
+	t_envp_ll	*tmp;
+
+	if (var == NULL)
+		return (NULL);
+	tmp = sh->envp_ll;
+	while (tmp)
+	{
+		if ((ft_chrcmp(var) || (var[ft_strlen(var) - 1] == '\n' && \
+		!ft_strncmp(tmp->var, var, ft_strlen(var) - 1))) && \
+		!ft_strncmp(tmp->var, var, ft_strlen(tmp->var)))
+			return (ft_strdup(tmp->value));
+		if (ft_strcmp(tmp->var, var))
+			return (ft_strdup(tmp->value));
+		tmp = tmp->next;
+	}
+	return (NULL);
+} */
 
 
 /* while characters in token value
