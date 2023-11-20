@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization_trimming_utils.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
+/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:36:51 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 12:51:23 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/20 12:28:33 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,10 @@ void	remove_empty_tokens(t_minishell *sh)
 		}
 		if (sh->tokens[i].type == TOKEN_WORD && \
 			ft_strcmp(sh->tokens[i].value, "~\0"))
-			ft_strlcpy(sh->tokens[i].value, "$HOME", 6);
+		{
+			free(sh->tokens[i].value);
+			sh->tokens[i].value = ft_strdup("$HOME");
+		}
 	}
 }
 
