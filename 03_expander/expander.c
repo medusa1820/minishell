@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 22:09:29 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/20 19:00:15 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/20 19:06:33 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	ft_chrcmp(char *str)
 	int	i;
 
 	i = 0;
-
 	while (str[i] != '\0')
 	{
 		if (strchr(SP_CHR, str[i]) != NULL)
