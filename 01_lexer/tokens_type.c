@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 10:48:59 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 12:51:36 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/20 14:03:26 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,10 @@ t_lexer_state	single_quote_handling(const char **current, t_token *token)
 	token->type = TOKEN_SINGLE_QUOTE;
 	if ((*current)[1] == '\0')
 		return (token_unclosed(current, token), 1);
-	// token->value = ft_strdup("\0");
-	token->value = ft_calloc(1,1);
+	token->value = ft_calloc(1, 1);
 	(*current)++;
 	while (**current != '\'' && **current != '\0')
 	{
-		// len++;
-		// token->value = ft_realloc(token->value, len - 1, len + 1);
 		token->value = ft_realloc(token->value, len, len + 2);
 		token->value[len++] = **current;
 		token->value[len] = '\0';
@@ -64,7 +61,7 @@ t_lexer_state	double_quote_handling(const char **current, t_token *token)
 	else
 		return (token_unclosed(current, token));
 	if (token->value[0] == '\0')
-		token->type = TOKEN_DOUBLE_QUOTE;
+		token->flag = TOKEN_DOUBLE_QUOTE;
 	return (LEXER_SUCCESS);
 }
 

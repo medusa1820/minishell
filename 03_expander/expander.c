@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 22:09:29 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/20 10:47:35 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/20 14:44:07 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,31 +52,6 @@ int	ft_chrcmp(char *str)
 	return (0);
 }
 
-/* char	*get_env_var(t_minishell *sh, char *var)
-{
-	t_envp_ll	*tmp;
-
-	if (var == NULL)
-		return (NULL);
-	tmp = sh->envp_ll;
-	while (tmp)
-	{
-		if ((var[ft_strlen(var) - 1] == '\'' || \
-		var[ft_strlen(var) - 1] == ' ' || var[ft_strlen(var) - 1] == '$' || \
-		var[ft_strlen(var) - 1] == '/'|| \
-		(var[ft_strlen(var) - 1] == '\n' && \
-		!ft_strncmp(tmp->var, var, ft_strlen(var) - 1))) && \
-		!ft_strncmp(tmp->var, var, ft_strlen(tmp->var)))
-			return (ft_strdup(tmp->value));
-		if (ft_strcmp(tmp->var, var))
-			return (ft_strdup(tmp->value));
-		tmp = tmp->next;
-	}
-	return (NULL);
-} */
-// !ft_isalpha(var[ft_strlen(var) - 1]) ||
-
-// new get_env_var
 
 char	*get_env_var(t_minishell *sh, char *var)
 {
@@ -129,7 +104,7 @@ void	expand(t_minishell *sh, char **str, int j)
 				value = ft_itoa(sh->data->exit_code);
 			else if ((*str)[i + 1] == '_' || ft_isalpha((*str)[i + 1]))
 			{
-				while ((*str)[j] == '_' || ft_isalnum((*str)[j]))
+				while ((*str)[j] == '_' || ft_isalnum((*str)[j++]))
 					j++;
 				var = ft_substr(*str, i + 1, j - i);
 				value = get_env_var(sh, var);
@@ -172,20 +147,3 @@ void	expander(t_minishell *sh)
 		i++;
 	}
 }
-
-// int ft_navid_strcmp(const char *src, const char *dst)
-// {
-//     char	*tmpsrc;
-//     char	*tmpdst;
-
-// 	tmpsrc = (char *)src;
-// 	tmpdst = (char *)dst;
-//     while (*tmpsrc && *tmpdst && *tmpsrc == *tmpdst)
-// 	{
-//         tmpsrc++;
-// 		tmpdst++;
-//     }
-//     return (ft_strlen(tmpdst) + ft_strlen(tmpsrc));
-// }
-
-// char	*get_env_var(t_minishell *sh, char *var, bool heredoc)

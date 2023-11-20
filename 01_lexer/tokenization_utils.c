@@ -79,8 +79,6 @@ t_lexer_state	token_unclosed(const char **current, t_token *token)
 		write(2, "`\'\'\n", 4);
 	token->type = TOKEN_UNCLOSED_Q;
 	(*current)++;
-	// printf("current char:%c\n", **current);
-		// printf("remained token:%s\n", token->value);
 	free(token->value);
 	token->value = NULL;
 	token = NULL;
@@ -107,33 +105,3 @@ void	back_slash(const char **current, t_token *token)
 	while (i-- && *(*current + 1) != '\0')
 		(*current)++;
 }
-
-// void	check_assignment(t_token **tokens, int token_count)
-// {
-// 	int			i;
-// 	int			j;
-// 	const char	*word;
-
-// 	i = -1;
-// 	while (++i < token_count)
-// 	{
-// 		if ((*tokens)[i].type == TOKEN_WORD || 
-// 			(*tokens)[i].type == TOKEN_SINGLE_QUOTE
-// 			|| (*tokens)[i].type == TOKEN_DOUBLE_QUOTE)
-// 		{
-// 			word = (*tokens)[i].value;
-// 			if (!ft_isalpha(*word) && *word != '_' && *word != '=' &&
-// 				ft_strchr(word, '=') && ft_strchr(word, '=') != word)
-// 				continue ;
-// 			j = -1;
-// 			printf("hiiiiiiii\n");
-// 			while (word[++j] != '=')
-// 			{
-// 				if (!ft_isalnum(word[j]) && word[j] != '_')
-// 					break ;
-// 			}
-// 			if (word[j] == '=' && (*tokens)[i].type != TOKEN_ASSIGNMENT)
-// 				(*tokens)[i].type = TOKEN_ASSIGNMENT;
-// 		}
-// 	}
-// }

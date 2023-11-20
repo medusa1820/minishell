@@ -3,25 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   creat_node_content.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:31:59 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/13 17:01:34 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/20 14:47:21 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-void	check_and_set_syntax_error_flag(t_minishell *sh, int ret)
-{
-	if (ret)
-	{
-		if (sh->head >= 0 && sh->head < sh->seg_end && \
-			sh->tokens[sh->head].flag && \
-			sh->tokens[sh->head].flag != TOKEN_WORD)
-			sh->tokens[sh->head].flag = -2;
-	}
-}
 
 t_parser_state	parse_redirection(t_ast_node_content **content, t_minishell *sh)
 {
@@ -77,74 +66,24 @@ t_parser_state	parse_assignment(t_ast_node_content **content, t_minishell *sh)
 	return (PARSER_SUCCESS);
 }
 
-t_parser_state  parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
+t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 {
-    t_parser_state  ret;
-    sh->cmd_count = sh->head - 1;
-    ret = PARSER_FAILURE;
-    sh->index = 0; //testing
-    if (sh->head < sh->seg_end && sh->tokens[sh->head].type != TOKEN_WORD)
-    {
-        check_and_set_syntax_error_flag(sh, ret);
-        return (ret);
-    }
-    while (++sh->cmd_count < sh->seg_end && \
-            sh->tokens[sh->cmd_count].type == TOKEN_WORD)
-        sh->index++;
-    if (sh->index)
-    {
-        (*content)->cmd = ft_realloc_strings((*content)->cmd, \
-                count_strings((*content)->cmd), sh->index);
-        sh->index = count_strings((*content)->cmd);
-        while (sh->head < sh->seg_end && sh->tokens[sh->head].type == TOKEN_WORD)
-        {
-            (*content)->cmd[sh->index++] = ft_strdup(sh->tokens[sh->head].value);
-            free(sh->tokens[sh->head].value);
-            sh->tokens[sh->head++].value = NULL;
-            sh->token_len--;
-            ret = PARSER_SUCCESS;
-        }
-        (*content)->cmd[sh->index] = 0;
-    }
-    check_and_set_syntax_error_flag(sh, ret);
-    return (ret);
+	t_parser_state	ret;
+
+	sh->cmd_count = sh->head - 1;
+	ret = PARSER_FAILURE;
+	sh->index = 0;
+	if (sh->head < sh->seg_end && sh->tokens[sh->head].type != TOKEN_WORD)
+		return (check_and_set_syntax_error_flag(sh, ret));
+	while (++sh->cmd_count < sh->seg_end && \
+			sh->tokens[sh->cmd_count].type == TOKEN_WORD)
+		sh->index++;
+	if (sh->index)
+	{
+		ret = feed_cmd_tokens(content, sh);
+	}
+	return (check_and_set_syntax_error_flag(sh, ret));
 }
-
-// t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
-// {
-// 	t_parser_state	ret;
-
-// 	sh->cmd_count = sh->head - 1;
-// 	ret = PARSER_FAILURE;
-// 	if (sh->head < sh->seg_end && sh->tokens[sh->head].type != TOKEN_WORD)
-// 	{
-// 		check_and_set_syntax_error_flag(sh, ret);
-// 		return (ret);
-// 	}
-// 	while (++sh->cmd_count < sh->seg_end && 
-// 			sh->tokens[sh->cmd_count].type == TOKEN_WORD)
-// 		sh->index++;
-// 	if (sh->index)
-// 	{
-// 		(*content)->cmd = ft_realloc_strings((*content)->cmd, 
-// 				count_strings((*content)->cmd), sh->index);
-// 		sh->index = count_strings((*content)->cmd);
-// 		while (sh->head < sh->seg_end && sh->tokens[sh->head].type == TOKEN_WORD)
-// 		{
-// 			(*content)->cmd[sh->index] = ft_strdup(sh->tokens[sh->head].value);
-// 			(*content)->cmd[sh->index + 1] = NULL;
-// 			if (!(*content)->cmd[sh->index++])
-// 				return (PARSER_FAILURE);
-// 			free(sh->tokens[sh->head].value);
-// 			sh->tokens[sh->head++].value = NULL;
-// 			sh->token_len--;
-// 			ret = PARSER_SUCCESS;
-// 		}
-// 	}
-// 	sh->index = 0;
-// 	check_and_set_syntax_error_flag(sh, ret);
-// 	return (ret);
-// }
 
 t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
 {

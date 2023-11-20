@@ -37,6 +37,8 @@ void	erase_token(t_minishell *sh, int index)
 // 		else
 // 			remove empty WORD
 // remove all space tokens
+
+// line: 59-> 6 = TOKEN_SPACE
 void	remove_empty_tokens(t_minishell *sh)
 {
 	int	i;
@@ -54,8 +56,7 @@ void	remove_empty_tokens(t_minishell *sh)
 		sh->tokens[i].type == TOKEN_WORD))
 		{
 			if (!((i - 1 < 0 || sh->tokens[i - 1].type == TOKEN_SPACE) && \
-				((i + 1 >= sh->token_len || \
-				sh->tokens[i + 1].type == TOKEN_SPACE))))
+			((i + 1 >= sh->token_len || sh->tokens[i + 1].type == 6))))
 				erase_token(sh, i);
 		}
 		if (sh->tokens[i].type == TOKEN_WORD && \
@@ -125,7 +126,3 @@ void	trimming_tokens_type(t_minishell *sh)
 			sh->tokens[i].type = TOKEN_WORD;
 	}
 }
-		// if (sh->tokens[i].type == TOKEN_WORD && ( i + 1 < sh->token_len &&
-		// 	(sh->tokens[i + 1].type == TOKEN_DOUBLE_QUOTE || 
-		// 	sh->tokens[i + 1].type == TOKEN_SINGLE_QUOTE)))
-		// 		sh->tokens[i].flag = sh->tokens[i + 1].flag;
