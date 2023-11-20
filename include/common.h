@@ -32,6 +32,7 @@
 
 # define WHITESPACE	" \t\v\f\r"
 # define OPERAND	"<>|\"\'"
+# define SP_CHR 	" !\"#$%&\'()*+,-./="
 
 /////////////////// data_init.h
 

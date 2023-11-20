@@ -9,7 +9,6 @@
 /*   Updated: 2023/10/09 13:19:49 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-# define SP_CHR " !\"#$%&\'()*+,-./="
 #include "minishell.h"
 
 int	changing_var_value(char **str, char *value, int start, int len)

@@ -24,5 +24,6 @@ int	pwd_bltn(void)
 	}
 	print_error_bltn("pwd", NULL, strerror(errno));
 	free(cwd);
+	cwd = NULL;
 	return (EXIT_FAILURE);
 }
