@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/19 16:05:49 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/20 16:35:33 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 
 # define WHITESPACE	" \t\v\f\r"
 # define OPERAND	"<>|\"\'"
-# define SP_CHR		" !\"#$%&\'()*+,-./="
+# define SP_CHR		" !\"#%&\'()*+,-./="
 
 /////////////////// data_init.h
 
