@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 22:09:29 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/19 16:07:51 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/20 10:47:35 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	changing_var_value(char **str, char *value, int start, int len)
 }
 
 /// new func
-/* int	ft_chrcmp(char *str)
+int	ft_chrcmp(char *str)
 {
 	int		i;
 
@@ -50,9 +50,9 @@ int	changing_var_value(char **str, char *value, int start, int len)
 		i++;
 	}
 	return (0);
-} */
+}
 
-char	*get_env_var(t_minishell *sh, char *var)
+/* char	*get_env_var(t_minishell *sh, char *var)
 {
 	t_envp_ll	*tmp;
 
@@ -73,10 +73,12 @@ char	*get_env_var(t_minishell *sh, char *var)
 		tmp = tmp->next;
 	}
 	return (NULL);
-}
+} */
 // !ft_isalpha(var[ft_strlen(var) - 1]) ||
 
-/* char	*get_env_var(t_minishell *sh, char *var)
+// new get_env_var
+
+char	*get_env_var(t_minishell *sh, char *var)
 {
 	t_envp_ll	*tmp;
 
@@ -94,7 +96,7 @@ char	*get_env_var(t_minishell *sh, char *var)
 		tmp = tmp->next;
 	}
 	return (NULL);
-} */
+}
 
 
 /* while characters in token value

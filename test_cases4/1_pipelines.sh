@@ -65,21 +65,21 @@
 # daswd
 # stop1
 
-ls | cat << stop | ls -la | cat << stop1 | ls | cat << stop2 | ls -la | cat << stop3
-$USER
-ad
-as $HOME
-stop
-awd
-wf$PWDdqwdwqd
-stop1
-das
-das
-stop2
-dsq
-wd
-wf$PWDdqwdwqd
-stop3
+# ls | cat << stop | ls -la | cat << stop1 | ls | cat << stop2 | ls -la | cat << stop3
+# $USER
+# ad
+# as $HOME
+# stop
+# awd
+# wf$PWDdqwdwqd
+# stop1
+# das
+# das
+# stop2
+# dsq
+# wd
+# wf$PWDdqwdwqd
+# stop3
 
 # ls | cat << stop | ls -la | cat << stop1 | ls | cat << stop2 | ls -la > out | cat << 'stop3'
 # $USER
@@ -93,19 +93,19 @@ stop3
 # stop3
 # /bin/rm -f out
 
-# ls | cat << stop | ls -la | cat << stop1 | ls | cat << stop2 | ls -la > > out | cat << stop3
-# fe
-# wf
-# fwe
-# f
-# stop
-# dw
-# stop1
-# dwasd
-# stop2
-# cat Makefile | ls > out
-# cat out
-# /bin/rm -f out
+ls | cat << stop | ls -la | cat << stop1 | ls | cat << stop2 | ls -la > > out | cat << stop3
+fe
+wf
+fwe
+f
+stop
+dw
+stop1
+dwasd
+stop2
+cat Makefile | ls > out
+cat out
+/bin/rm -f out
 
 # ls | cat << stop | ls -la > out0| cat << stop1 | ls | cat << stop2 | ls -la >> out | cat << stop3
 # fe
