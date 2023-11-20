@@ -6,26 +6,11 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/17 19:13:54 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/20 14:45:48 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/* void	find_cmd_path(t_pipe *data, char **envp)
-{
-	if (data->cmd_split && \
-		(ft_strnstr(data->cmd_split[0], "/", ft_strlen(data->cmd_split[0]))))
-		prepare_cmd_path_slash(data);
-	else
-	{
-		if (data->cmd_split)
-		{
-			prepare_paths(data, envp);
-			prepare_cmd_path(data);
-		}
-	}
-} */
 
 void	find_cmd_path(t_pipe *data, char **envp)
 {
@@ -50,24 +35,11 @@ void	find_cmd_path(t_pipe *data, char **envp)
 	}
 }
 
-/* void	find_cmd_path(t_pipe *data, char **envp)
-{
-	if (ft_strnstr(data->cmd_split[0], "/", ft_strlen(data->cmd_split[0])))
-		prepare_cmd_path_slash(data);
-	else
-	{
-		prepare_paths(data, envp);
-		// (void)envp;
-		prepare_cmd_path(data);
-	}
-} */
-
 void	prepare_paths(t_pipe *data, char **envp)
 {
 	int	i;
 
 	i = 0;
-	// while (ft_strnstr(envp[i], "PATH=", 5) == 0)
 	while (envp[i] != NULL && (ft_strnstr(envp[i], "PATH=", 5) == 0))
 		i++;
 	if (envp[i] == NULL)
@@ -88,7 +60,6 @@ void	prepare_cmd_path(t_pipe *data)
 	int		i;
 
 	temp = ft_strjoin("./", data->cmd_split[0]);
-	// if (access(temp, X_OK) != -1 && (ft_strncmp(temp, "./", 3) != 0))
 	if (access(temp, X_OK) != -1)
 	{
 		data->cmd_path = temp;
