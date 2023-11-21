@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 17:42:55 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/10 17:43:41 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/21 21:04:45 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void				no_pipe(t_pipe *data, char **envp);
 void				first_pipe(t_pipe *data, char **envp);
 void				middle_pipe(t_pipe *data, char **envp, int *i);
 void				last_pipe(t_pipe *data, char **envp, int *i);
+void				close_pipe_0_and_1_fds(t_pipe *data);
+void				close_pipe_0_and_1_fds_for_last_pipe(t_pipe *data, int *i);
 
 // child_process_utils0.c
 
@@ -73,6 +75,7 @@ void				find_cmd_path(t_pipe *data, char **envp);
 void				prepare_paths(t_pipe *data, char **envp);
 void				prepare_cmd_path(t_pipe *data);
 void				prepare_cmd_path_slash(t_pipe *data);
+void				ft_exit_cmd_not_found(t_pipe *data, int i);
 
 // child_process_utils1.c
 
