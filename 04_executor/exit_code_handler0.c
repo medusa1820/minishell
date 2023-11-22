@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 19:25:57 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/20 12:45:24 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/22 15:59:35 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,32 +27,7 @@ void	ft_waiting(t_pipe *data)
 			{
 				data->exit_code = WEXITSTATUS(status);
 				g_sig_nbr = 0;
-				// return ;
 			}
 		}
 	}
 }
-
-/*
-int	ft_waiting(int *pids, int nr_of_forks)
-{
-	t_wait	s_wait;
-	int		pid_index;
-
-	pid_index = 0;
-	while (pid_index < nr_of_forks)
-	{
-		if (pid_index == nr_of_forks - 1)
-			waitpid(pids[pid_index], &s_wait.wstatus, 0);
-		else
-			waitpid(pids[pid_index], NULL, 0);
-		pid_index++;
-	}
-	if (WIFEXITED(s_wait.wstatus))
-	{
-		s_wait.status_code = 0;
-		s_wait.status_code = WEXITSTATUS(s_wait.wstatus);
-		g_exit_code = s_wait.status_code;
-	}
-}
-*/

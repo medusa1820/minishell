@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 17:42:55 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/21 21:04:45 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/22 15:30:59 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,13 @@ bool				forker(t_pipe *data, int *i, char **envp, t_ast_node *head);
 bool				piper(t_pipe *data, int *i);
 bool				handle_in_redirections(t_pipe *data, t_ast_node *node);
 bool				handle_out_redirections(t_pipe *data, t_ast_node *node);
+bool				handle_redirections(t_pipe *data, t_ast_node *node, int *i);
 
 // execute_ast1.c
 
 bool				forker_no_pipe(t_pipe *data, char **envp, t_ast_node *head);
 void				here_doc_open(t_pipe *data, char *word, int wrod_type);
+bool				handle_redirections_no_pipe(t_pipe *data, t_ast_node *node);
 
 // child_process.c
 

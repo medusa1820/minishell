@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/21 20:53:52 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/21 21:06:13 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,6 @@ void	prepare_cmd_path(t_pipe *data)
 	}
 	ft_exit_cmd_not_found(data, i);
 }
-
-	// i++;
-	// if (data->paths == NULL || data->paths[i] == NULL)
-	// 	exit_error_cmd_notfound(127, "Command not found: ", data);
 
 void	ft_exit_cmd_not_found(t_pipe *data, int i)
 {

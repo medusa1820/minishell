@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 21:32:42 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/19 16:05:49 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/22 15:16:05 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ typedef struct s_pipe
 	char			**paths;
 	char			*cmd_path;
 	char			**cmd_split;
-	bool			cmd_splited;//navid
+	bool			cmd_splited;
 	int				fd_infile;
 	int				fd_outfile;
 	bool			here_doc;
