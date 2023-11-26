@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 20:11:03 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/22 15:26:27 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/26 21:05:34 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,63 +96,6 @@ bool	forker(t_pipe *data, int *i, char **envp, t_ast_node *node)
 	}
 }
 
-bool	handle_redirections(t_pipe *data, t_ast_node *node, int *i)
-{
-	if (!handle_in_redirections(data, node))
-	{
-		(*i)++;
-		return (false);
-	}
-	if (!handle_out_redirections(data, node))
-	{
-		(*i)++;
-		return (false);
-	}
-	return (true);
-}
-
-/* void	export_preps(t_pipe *data)
-{
-	int				count_assgnmnts;
-	int				count_cmd_strings;
-	int				i;
-	t_assignment	*assignment_iter;
-
-	if (data->node->content->cmd && \
-		ft_strncmp(data->node->content->cmd[0], "export", 7) == 0)
-	{
-		count_assgnmnts = 0;
-		count_assgnmnts = count_nmbr_assignments(data->node);
-		if (count_assgnmnts == 0)
-		{
-			data->cmd_splited = false;
-			data->cmd_split = data->node->content->cmd;
-		}
-		else
-		{
-			count_cmd_strings = 1 + count_assgnmnts + 1;
-			data->cmd_split = (char **) malloc (sizeof(char *) * \
-								count_cmd_strings);
-			data->cmd_split[0] = ft_strdup(data->node->content->cmd[0]);
-			i = 1;
-			assignment_iter = data->node->content->assignments;
-			while (i <= count_assgnmnts)
-			{
-				data->cmd_split[i] = ft_strdup(assignment_iter->word);
-				assignment_iter = assignment_iter->next;
-				i++;
-			}
-			data->cmd_split[i] = NULL;
-			data->cmd_splited = true;
-		}
-	}
-	else
-	{
-		data->cmd_splited = false;
-		data->cmd_split = data->node->content->cmd;
-	}
-} */
-
 void	export_preps(t_pipe *data)
 {
 	int				count_assgnmnts;
@@ -195,59 +138,4 @@ int	count_nmbr_assignments(t_ast_node *head)
 		count_assignments++;
 	}
 	return (count_assignments);
-}
-
-bool	handle_in_redirections(t_pipe *data, t_ast_node *node)
-{
-	t_redirect	*redirect;
-
-	redirect = node->content->stdin_redirect;
-	data->fd_infile = STDIN_FILENO;
-	while (redirect)
-	{
-		if (data->fd_infile != STDIN_FILENO)
-			close(data->fd_infile);
-		if (redirect->type == REDIRECT_STDIN)
-			data->fd_infile = open(redirect->word, O_RDONLY);
-		else if (redirect->type == REDIRECT_HERE_DOC)
-		{
-			here_doc_open(data, redirect->word, redirect->word_type);
-			data->fd_infile = open("here_doc_file", O_RDONLY);
-			if (unlink("here_doc_file") == -1)
-				exit_error(errno, "Error deleting here_doc temp file", data);
-		}
-		if (data->fd_infile < 0)
-		{
-			error_do_next_iter(errno, "Error openning file", data);
-			return (false);
-		}
-		redirect = redirect->next;
-	}
-	return (true);
-}
-
-bool	handle_out_redirections(t_pipe *data, t_ast_node *node)
-{
-	t_redirect	*redirect;
-
-	redirect = node->content->stdout_redirect;
-	data->fd_outfile = STDOUT_FILENO;
-	while (redirect)
-	{
-		if (data->fd_outfile != STDOUT_FILENO)
-			close(data->fd_outfile);
-		if (redirect->type == REDIRECT_STDOUT)
-			data->fd_outfile = open(redirect->word, O_CREAT | O_RDWR | \
-													O_TRUNC, 0644);
-		else if (redirect->type == REDIRECT_STDOUT_APPEND)
-			data->fd_outfile = open(redirect->word, O_CREAT | O_RDWR | \
-													O_APPEND, 0644);
-		if (data->fd_outfile < 0)
-		{
-			error_do_next_iter(errno, "Error openning file", data);
-			return (false);
-		}
-		redirect = redirect->next;
-	}
-	return (true);
 }

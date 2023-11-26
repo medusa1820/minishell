@@ -6,13 +6,18 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 12:33:16 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/07 21:20:07 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/26 19:30:22 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Main function to transform linked list to 2D array
+/*
+
+Function to transform linked list to 2D array
+
+*/
+
 void	envp_ll_to_envp_local(t_minishell *shell)
 {
 	int			count;
@@ -31,9 +36,6 @@ void	envp_ll_to_envp_local(t_minishell *shell)
 		array[i] = allocate_and_set_entry(head);
 		if (!array[i])
 		{
-			// while (i--)
-			// 	free(array[i]);
-			// free(array);
 			free_envp_local(array);
 			return ;
 		}

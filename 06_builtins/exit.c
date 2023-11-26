@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 11:51:09 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/16 14:10:12 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/26 19:20:49 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	exit_bltn(t_minishell *shell, char **cmd)
 		exit_code_local = shell->data->exit_code;
 	if (exit_code_local < 0 || exit_code_local > 255)
 		exit_code_local = exit_code_local % 256;
-	// ft_putendl_fd("exit", 1);
 	free_before_exit(shell);
 	exit (exit_code_local);
 }
@@ -112,7 +111,12 @@ bool	ft_atoi_ll_int(const char *str, long long int *result)
 	return (false);
 }
 
-// Checks if the number goes over LONG_MAX or LONG_MIN
+/*
+
+Checks if the number goes over LONG_MAX or LONG_MIN
+
+*/
+
 bool	arg_out_of_range(int neg, unsigned long long num)
 {
 	return ((neg == 1 && num > LONG_MAX) || \
@@ -127,35 +131,3 @@ void	free_before_exit(t_minishell *shell)
 	free_ast(shell->ast_root);
 	rl_clear_history();
 }
-
-/*
-
-int	exit_bltn(t_minishell *shell, char **cmd)
-{
-	long long int	exit_local;
-	int				arg_count;
-
-	arg_count = get_arg_count(cmd);
-	if (arg_count == 1)
-		exit_local = shell->data->exit_code;
-	if (arg_count > 1)
-	{
-		if (cmd[1][0] == '\0' || ft_atoi_secure(cmd[1], &exit_local) != 0)
-		{
-			print_error_bltn("exit", cmd[1], ": enter numeric argument");
-			exit_local = 255;
-		}
-	}
-	if (arg_count > 2 && exit_local != 255)
-	{
-		print_error_bltn("exit", NULL, ": enter no more than 1 argument");
-		return (1);
-	}
-	if (exit_local < 0 || exit_local > 255)
-		exit_local = exit_local % 256;
-	free_before_exit(shell);
-	// g_exit_code = exit_local;
-	exit (exit_local);
-}
-
-*/

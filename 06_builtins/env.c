@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 18:20:24 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/22 13:43:38 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/26 19:17:06 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	env_bltn(t_envp_ll *var_list, char **cmd)
 			"Arguments and options are not supported");
 		return (EXIT_SUCCESS);
 	}
-	// return (print_error_bltn(*cmd, *(cmd + 1), "Arguments and options are not supported"), 0);
 	while (current != NULL)
 	{
 		if (current->env_var == 1)
@@ -41,49 +40,3 @@ int	env_bltn(t_envp_ll *var_list, char **cmd)
 	}
 	return (0);
 }
-
-/* meder
-
-int	env_bltn(char **envp_local, char **cmd)
-{
-	int	i;
-
-	if (cmd[1])
-	{
-		print_error_bltn(cmd[0], cmd[1], "enter cmd w/o options/arguments");
-		return (EXIT_SUCCESS);
-	}
-	i = 0;
-	if (!envp_local)
-		return (EXIT_FAILURE);
-	while (envp_local[i])
-		ft_putendl_fd(envp_local[i++], STDOUT_FILENO);
-	return (EXIT_SUCCESS);
-}
-
-*/
-
-
-
-/* env_builtin:
-*	Executes the builtin env command: Prints the environment variables.
-*/
-
-/* mccombeaou
-
-int	env_builtin(t_data *data, char **args)
-{
-	int	i;
-
-	if (args && args[1])
-		return (errmsg_cmd("env", NULL, "too many arguments", 2));
-	i = 0;
-	if (!data->env)
-		return (EXIT_FAILURE);
-	while (data->env[i])
-		ft_putendl_fd(data->env[i++], STDOUT_FILENO);
-	return (EXIT_SUCCESS);
-}
-
-*/
-

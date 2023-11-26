@@ -5,34 +5,50 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/01 13:12:48 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/22 16:01:11 by musenov          ###   ########.fr       */
+/*   Created: 2023/09/29 21:17:00 by musenov           #+#    #+#             */
+/*   Updated: 2023/11/26 20:20:34 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-1. **Ctrl-C (`^C`)**:
-    - **Signal**: `SIGINT` (Interrupt)
-    - **Description**: This is one of the most commonly used keystrokes in 
-	the terminal. When you press `Ctrl-C`, it sends an interrupt signal to 
-	the current foreground process running in the terminal. This signal 
-	typically causes the process to terminate, allowing the user to 
-	interrupt a running command. However, processes can choose to handle 
-	this signal and act differently, or even ignore it.
-2. **Ctrl-D (`^D`)**:
-    - **Signal**: N/A
-    - This keystroke does not correspond to a signal like 
-	`Ctrl-C` or `Ctrl-\`. Instead, it's an EOF (End-of-File) character. 
-	When you're inputting text into a terminal-based program and you press 
-	`Ctrl-D`, you're signaling that you've finished your input. 
-	For instance, if you're using the terminal itself and you press
-	`Ctrl-D`, it typically means you're done inputting commands and you'd 
-	like to close the terminal session (assuming there's no running 
-	foreground process). In the context of reading from standard input 
-	(like with the `cat` command without any arguments), `Ctrl-D`tells the 
-	program you're done providing input.
-3. Ctrl-\ (`^\`):
-    - **Signal**: `SIGQUIT`
-*/
+int	ms_terminal_settings_change(void)
+{
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		return (EXIT_FAILURE);
+	term.c_lflag &= ~ECHOCTL;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
+
+int	ms_terminal_settings_restore(void)
+{
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		return (EXIT_FAILURE);
+	term.c_lflag |= ECHOCTL;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
+
+void	exit_code_signals(t_pipe *data)
+{
+	if (data->interactive_mode)
+	{
+		if (g_sig_nbr == 2)
+			data->exit_code = 1;
+	}
+	else
+	{
+		if (g_sig_nbr == 2)
+			data->exit_code = 128 + g_sig_nbr;
+		if (g_sig_nbr == 3)
+			data->exit_code = 128 + g_sig_nbr;
+	}
+	g_sig_nbr = 0;
+}

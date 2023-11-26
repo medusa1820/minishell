@@ -6,18 +6,12 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 11:12:11 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/17 20:41:17 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/26 19:24:57 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* is_valid_env_var_key:
-*	Checks if the key is a valid name for an evironment
-*	variable.
-*	Returns true if the key contains only alphanumeric chars
-*	or '_', or false if not.
-*/
 bool	valid_identifier(char *var)
 {
 	int	i;
@@ -44,7 +38,6 @@ bool	valid_identifier_unset(char *var)
 		return (false);
 	i++;
 	while (var[i])
-	// while (var[i] && var[i] != '=')
 	{
 		if (ft_isalnum(var[i]) == 0 && var[i] != '_')
 			return (false);
@@ -135,11 +128,6 @@ void	export_no_args(t_envp_ll *var_head)
 	return ;
 }
 
-/* export_builtin:
-*	Adds the given variables to the environment variables.
-*	Returns 0 if all args were successfully added to env,
-*	or 1 if one or more args were not added to env.
-*/
 int	export_bltn(t_envp_ll *head, char **cmd, t_minishell *shell)
 {
 	int		i;

@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 19:00:12 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/16 12:13:09 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/26 19:14:40 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,6 @@ int	cd_do(char *dir_path, t_envp_ll *envp_ll, bool dash_flag)
 
 char	*check_cd_types(t_envp_ll *envp_ll, char **cmd, bool *dash_flag)
 {
-	// char	*dir_path;
-
-	// dir_path = NULL;
 	if (!cmd[1] || ft_strncmp(cmd[1], "--", 3) == 0 || \
 					ft_strncmp(cmd[1], "~", 2) == 0)
 	{

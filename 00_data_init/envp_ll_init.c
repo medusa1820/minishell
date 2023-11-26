@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 19:17:58 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/11 18:21:41 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/26 19:29:49 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,6 @@ void	init_envp_linked_list(t_minishell *shell)
 	}
 	shell->envp_ll = head;
 }
-
-/*
-	*equal_pos = '\0'; // Temporarily terminate the string at the equals sign
-	*equal_pos = '='; // Restore the equals sign
-*/
 
 void	parse_env_string(char *str, char **var, char **value)
 {

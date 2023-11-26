@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:37:13 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/16 11:59:51 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/26 19:02:33 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ bool	is_builtin(char *cmd)
 
 int	execute_bltn(t_minishell *shell, char **cmd)
 {
-	// (void)shell;
 	if (ft_strncmp(cmd[0], "echo", 5) == 0)
 		return (echo_bltn(cmd));
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
@@ -42,19 +41,14 @@ int	execute_bltn(t_minishell *shell, char **cmd)
 		return (pwd_bltn());
 	if (ft_strncmp(cmd[0], "export", 7) == 0)
 	{
-		// free_envp_local(shell->envp_local);
-		// envp_ll_to_envp_local(shell);
 		return (export_bltn(shell->envp_ll, cmd, shell));
 	}
 	if (ft_strncmp(cmd[0], "unset", 6) == 0)
 	{
-		// free_envp_local(shell->envp_local);
-		// envp_ll_to_envp_local(shell);
 		return (unset_bltn(shell->envp_ll, cmd, shell));
 	}
 	if (ft_strncmp(cmd[0], "env", 4) == 0)
 		return (env_bltn(shell->envp_ll, cmd));
-		// return (env_bltn(shell->envp_local, cmd));
 	if (ft_strncmp(cmd[0], "exit", 5) == 0)
 		return (exit_bltn(shell, cmd));
 	return (0);

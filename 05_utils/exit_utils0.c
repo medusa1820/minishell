@@ -6,59 +6,23 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 19:37:58 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/16 15:28:08 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/26 19:52:28 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exit_error(int exit_code, char *error_msg, t_pipe *data)
-{
-	perror(error_msg);
-	free_all(data);
-	free_envp_ll(data->shell_data->envp_ll);
-	free_envp_local(data->shell_data->envp_local);
-	// free_ast(&data->shell_data->ast_root);
-	free_ast(data->shell_data->ast_root);
-	exit(exit_code);
-}
-
-void	exit_zero_exit_code(int exit_code, t_pipe *data)
-{
-	free_all(data);
-	free_envp_ll(data->shell_data->envp_ll);
-	free_envp_local(data->shell_data->envp_local);
-	free_ast(data->shell_data->ast_root);
-	exit(exit_code);
-}
-
-void	error_do_next_iter(int exit_code, char *error_msg, t_pipe *data)
-{
-	perror(error_msg);
-	// perror(exit_code);
-	(void)exit_code;
-	// free_all(data);
-	// free_ast(&data->shell_data->ast_root);
-	data->exit_code = 1;
-}
-
 void	free_all(t_pipe *data)
 {
 	free_str(data);
 	free_2d_str(data);
-	// free_2d_str_cmd_split(data);
 }
 
 void	free_2d_str_cmd_split(t_pipe *data)
 {
-	// printf("hiiiiiiiiiiiiii11111\n");
 	if (data->cmd_split != NULL)
-	// if (data->cmd_split)
 	{
-		// printf("hi before free\n");
-		// printf("hi before free, %s\n", data->cmd_split[0]);
 		free_2d_str_func(data->cmd_split);
-		// printf("hi after free\n");
 	}
 }
 
@@ -83,7 +47,7 @@ void	free_2d_str_func(char **str)
 	while (str[i])
 	{
 		free (str[i]);
-		str[i] = NULL; // HEI YIU
+		str[i] = NULL;
 		i++;
 	}
 	free(str);

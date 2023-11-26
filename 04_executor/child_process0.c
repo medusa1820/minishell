@@ -1,37 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   child_process.c                                    :+:      :+:    :+:   */
+/*   child_process0.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/21 21:04:28 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/26 21:13:07 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	no_pipe(t_pipe *data, char **envp)
-{
-	if (data->pid == 0)
-	{
-		if (data->cmd_split)
-		{
-			find_cmd_path(data, envp);
-			if (data_has_infile(data))
-				dup2_fd_infile_std_in(data);
-			if (data_has_outfile(data))
-				dup2_fd_outfile_std_out(data);
-			close_pipe0_fds(data);
-			if (execve(data->cmd_path, data->cmd_split, envp) == -1)
-				exit_error(errno, "Couldn't execute execve() no pipe", data);
-		}
-		close_pipe0_fds(data);
-		exit_zero_exit_code(0, data);
-	}
-	close_pipe0_fds(data);
-}
 
 void	first_pipe(t_pipe *data, char **envp)
 {
@@ -86,12 +65,6 @@ void	middle_pipe(t_pipe *data, char **envp, int *i)
 		close_pipe0_fds(data);
 }
 
-void	close_pipe_0_and_1_fds(t_pipe *data)
-{
-	close_pipe0_fds(data);
-	close_pipe1_fds(data);
-}
-
 void	last_pipe(t_pipe *data, char **envp, int *i)
 {
 	if (data->pid == 0)
@@ -116,6 +89,12 @@ void	last_pipe(t_pipe *data, char **envp, int *i)
 		exit_zero_exit_code(0, data);
 	}
 	close_pipe_0_and_1_fds_for_last_pipe(data, i);
+}
+
+void	close_pipe_0_and_1_fds(t_pipe *data)
+{
+	close_pipe0_fds(data);
+	close_pipe1_fds(data);
 }
 
 void	close_pipe_0_and_1_fds_for_last_pipe(t_pipe *data, int *i)

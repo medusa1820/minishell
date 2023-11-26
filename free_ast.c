@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 15:11:00 by musenov           #+#    #+#             */
-/*   Updated: 2023/08/18 00:22:12 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/26 18:49:44 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	free_ast_meder(t_ast_node *node)
 			free(current_redirect);
 			current_redirect = next_redirect;
 		}
-
 		current_redirect = node->content->stdout_redirect;
 		while (current_redirect)
 		{
@@ -68,18 +67,3 @@ void	free_ast_meder(t_ast_node *node)
 	// Finally, free the node itself
 	free(node);
 }
-
-
-
-
-
-/*
-
-void	exit_error(int exit_code, char *error_msg, t_pipe *data)
-{
-	perror(error_msg);
-	free_ast(head);
-	exit(exit_code);
-}
-
-*/

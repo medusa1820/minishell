@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 15:01:07 by musenov           #+#    #+#             */
-/*   Updated: 2023/10/24 20:28:04 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/26 19:09:35 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,6 @@ int	get_arg_count(char **cmd)
 		arg_count++;
 	return (arg_count);
 }
-
-/*
-void	error_printer(char *cmd, char *arg, char *msg)
-{
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(cmd, STDERR_FILENO);
-	ft_putstr_fd(": ", STDERR_FILENO);
-	if (arg)
-	{
-		ft_putstr_fd(arg, STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-	}
-	ft_putendl_fd(msg, STDERR_FILENO);
-}
-*/
 
 void	print_error_bltn(char *cmd, char *arg, char *msg)
 {
@@ -145,7 +130,6 @@ int	add_to_var_list(t_envp_ll *var_list, char *str, int flag)
 	return (0);
 }
 
-// static int	ft_sub_len(char const *start, char c)
 int	ft_sub_len(char const *start, char c)
 {
 	int	len;
@@ -156,7 +140,6 @@ int	ft_sub_len(char const *start, char c)
 	return (len);
 }
 
-// static int	full_assign(t_envp_ll *new, char *word, char *delim_pt)
 int	full_assign(t_envp_ll *new, char *word, char *delim_pt)
 {
 	new->var = ft_strdup_pt(word, delim_pt);
@@ -386,12 +369,3 @@ int	ft_atoi_secure(const char *str, long long int *data)
 	*data = (int)(intvalue * neg_pos);
 	return (EXIT_SUCCESS);
 }
-
-// void	restore_redirect(int stdin_save, int stdout_save)
-// {
-// 	dup2(stdin_save, STDIN_FILENO);
-// 	close(stdin_save);
-// 	dup2(stdout_save, STDOUT_FILENO);
-// 	close(stdout_save);
-// 	return ;
-// }
