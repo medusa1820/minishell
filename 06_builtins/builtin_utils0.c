@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 15:01:07 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/27 18:01:06 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/27 18:07:46 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,6 @@ int	update_envp_ll_var_value(t_envp_ll *head, char *var, char *value)
 	}
 	if (!temp)
 	{
-		// if (add_to_var_list(head, var, 1))
-		// 	return (EXIT_FAILURE);
-		// update_envp_ll_var_value(head, var, value);
 		add_to_list(&head, var, value);
 	}
 	return (EXIT_SUCCESS);

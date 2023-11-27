@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 11:51:09 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/27 11:23:18 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/27 18:47:44 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,14 @@ int	exit_bltn(t_minishell *shell, char **cmd)
 	nbr_args = count_nbr_args(cmd);
 	if (nbr_args >= 2)
 	{
-		if (has_non_numeric_args(cmd[1]))
-		{
-			print_error_bltn("exit", cmd[1], ": enter numeric argument");
+		if (exit_bltn_nbr_args_goe_2(cmd[1]) == 255)
 			exit_code_local = 255;
-		}
 		else
-		{
-			print_error_bltn("exit", NULL, ": enter no more than 1 argument");
 			return (1);
-		}
 	}
 	else if (nbr_args == 1)
 	{
-		if (has_non_numeric_args(cmd[1]) || \
-			ft_atoi_ll_int(cmd[1], &exit_code_local))
-		{
-			print_error_bltn("exit", cmd[1], ": enter numeric argument");
-			exit_code_local = 255;
-		}
+		exit_bltn_nbr_args_e_1(cmd[1], &exit_code_local);
 	}
 	else
 		exit_code_local = shell->data->exit_code;
@@ -46,6 +35,30 @@ int	exit_bltn(t_minishell *shell, char **cmd)
 		exit_code_local = exit_code_local % 256;
 	free_before_exit(shell);
 	exit (exit_code_local);
+}
+
+int	exit_bltn_nbr_args_goe_2(char *str)
+{
+	if (has_non_numeric_args(str))
+	{
+		print_error_bltn("exit", str, ": enter numeric argument");
+		return (255);
+	}
+	else
+	{
+		print_error_bltn("exit", NULL, ": enter no more than 1 argument");
+		return (1);
+	}
+}
+
+void	exit_bltn_nbr_args_e_1(char *str, long long int *exit_code_local)
+{
+	if (has_non_numeric_args(str) || \
+		ft_atoi_ll_int(str, exit_code_local))
+	{
+		print_error_bltn("exit", str, ": enter numeric argument");
+		*exit_code_local = 255;
+	}
 }
 
 int	count_nbr_args(char **cmd)
@@ -77,36 +90,5 @@ bool	has_non_numeric_args(char *cmd)
 			return (true);
 		i++;
 	}
-	return (false);
-}
-
-bool	white_space(int c)
-{
-	return ((c >= 9 && c <= 13) || c == ' ');
-}
-
-bool	ft_atoi_ll_int(const char *str, long long int *result)
-{
-	unsigned long long	output;
-	int					sign;
-	int					i;
-
-	sign = 1;
-	i = 0;
-	while (str[i] && white_space(str[i]))
-		i++;
-	if (*(str + i) == '-')
-		sign = -1;
-	if (*(str + i) == '-' || *(str + i) == '+')
-		i++;
-	output = 0;
-	while (str[i] && ft_isdigit(str[i]))
-	{
-		output = output * 10 + (str[i] - '0');
-		if (arg_out_of_range(sign, output))
-			return (true);
-		i++;
-	}
-	*result = output * sign;
 	return (false);
 }
