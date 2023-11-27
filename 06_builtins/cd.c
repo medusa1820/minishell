@@ -6,13 +6,13 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 19:00:12 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/26 19:14:40 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/27 11:15:28 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* 
+/*
 
 Use of chdir():
 
@@ -123,7 +123,9 @@ these strings through the pointers would result in undefined behavior.
 
 */
 
-/* int	check_vars_in_envp_ll(t_envp_ll *head)
+/*
+
+int	check_vars_in_envp_ll(t_envp_ll *head)
 {
 	char		*env_var_list[2];
 	t_envp_ll	*temp;
@@ -150,7 +152,9 @@ these strings through the pointers would result in undefined behavior.
 		i++;
 	}
 	return (EXIT_SUCCESS);
-} */
+}
+
+*/
 
 int	check_vars_in_envp_ll(t_envp_ll *head)
 {
@@ -189,6 +193,24 @@ int	cd_bltn(t_envp_ll *head, char **cmd, t_minishell *shell)
 	(void)shell;
 	dir_path = NULL;
 	dash_flag = false;
+	dir_path = check_cd_types(head, cmd, &dash_flag);
+	if (dir_path == NULL)
+		return (EXIT_FAILURE);
+	if (cd_do(dir_path, head, dash_flag))
+		return (free(dir_path), EXIT_FAILURE);
+	return (free(dir_path), EXIT_SUCCESS);
+}
+
+/*
+
+int	cd_bltn(t_envp_ll *head, char **cmd, t_minishell *shell)
+{
+	char	*dir_path;
+	bool	dash_flag;
+
+	(void)shell;
+	dir_path = NULL;
+	dash_flag = false;
 	// if (check_vars_in_envp_ll(head))
 	// 	return (EXIT_FAILURE);
 	dir_path = check_cd_types(head, cmd, &dash_flag);
@@ -198,3 +220,5 @@ int	cd_bltn(t_envp_ll *head, char **cmd, t_minishell *shell)
 		return (free(dir_path), EXIT_FAILURE);
 	return (free(dir_path), EXIT_SUCCESS);
 }
+
+*/

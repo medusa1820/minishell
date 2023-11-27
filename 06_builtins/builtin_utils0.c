@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_utils.c                                    :+:      :+:    :+:   */
+/*   builtin_utils0.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 15:01:07 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/26 21:37:06 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/27 11:52:15 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	update_envp_ll_var_value(t_envp_ll *head, char *var, char *value)
 	return (EXIT_SUCCESS);
 }
 
-char	*get_value_for_key(t_envp_ll *var_head, const char *key)
+/* char	*get_value_for_key(t_envp_ll *var_head, const char *key)
 {
 	t_envp_ll	*tmp;
 	char		*value;
@@ -73,9 +73,9 @@ char	*get_value_for_key(t_envp_ll *var_head, const char *key)
 		tmp = tmp->next;
 	}
 	return (value);
-}
+} */
 
-int	change_value_for_key(t_envp_ll *var_head, char *key, char *new_value)
+/* int	change_value_for_key(t_envp_ll *var_head, char *key, char *new_value)
 {
 	t_envp_ll	*tmp;
 	char		*value;
@@ -95,9 +95,9 @@ int	change_value_for_key(t_envp_ll *var_head, char *key, char *new_value)
 		tmp = tmp->next;
 	}
 	return (EXIT_SUCCESS);
-}
+} */
 
-bool	check_if_in_var_list(t_envp_ll *var_head, char *key)
+/* bool	check_if_in_var_list(t_envp_ll *var_head, char *key)
 {
 	t_envp_ll	*tmp;
 
@@ -109,7 +109,7 @@ bool	check_if_in_var_list(t_envp_ll *var_head, char *key)
 		tmp = tmp->next;
 	}
 	return (false);
-}
+} */
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
@@ -152,63 +152,4 @@ void	free_p(char	*p)
 {
 	if (p)
 		free(p);
-}
-
-void	internal_error_printer(char *msg)
-{
-	ft_putstr_fd("minishell: internal error: ", STDERR_FILENO);
-	ft_putendl_fd(msg, STDERR_FILENO);
-}
-
-////////////////////////////// env //////////////////////////////
-
-//								-//-
-
-////////////////////////////// exit //////////////////////////////
-
-int	atoi_negative(char *c)
-{
-	if (*c == '-')
-		return (-1);
-	else
-		return (1);
-}
-
-int	is_int_min(long long int neg_pos, \
-		long long int intvalue, char c, long long int *data)
-{
-	if (neg_pos == -1 && intvalue * -10 - (c - '0') == LLONG_MIN)
-	{
-		*data = INT_MIN;
-		return (1);
-	}
-	return (0);
-}
-
-int	ft_atoi_secure(const char *str, long long int *data)
-{
-	long long int		intvalue;
-	long long int		neg_pos;
-	char				*chr;
-
-	intvalue = 0;
-	neg_pos = 1;
-	chr = (char *)str;
-	while (chr && (*chr == ' ' || *chr == '\t'))
-		chr++;
-	if (chr && (*chr == '-' || *chr == '+') && *(chr + 1) != '\0')
-		neg_pos = atoi_negative(chr++);
-	while (chr && *chr != '\0')
-	{
-		if (!(*chr >= '0' && *chr <= '9'))
-			return (EXIT_FAILURE);
-		if (is_int_min(neg_pos, intvalue, *chr, data))
-			return (EXIT_SUCCESS);
-		if (intvalue > (LLONG_MAX - (*chr - '0')) / 10)
-			return (EXIT_FAILURE);
-		intvalue = intvalue * 10 + (*chr - '0');
-		chr++;
-	}
-	*data = (int)(intvalue * neg_pos);
-	return (EXIT_SUCCESS);
 }

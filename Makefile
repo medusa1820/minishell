@@ -44,25 +44,24 @@ EXECUTOR_SRCS		=	./04_executor/execute_ast0.c \
 						./04_executor/exit_code_handler0.c \
 						./04_executor/signals0.c \
 						./04_executor/signals1.c \
-						# ./04_executor/signals1.c \
 
 UTILS_SRCS			=	./05_utils/exit_utils0.c \
 						./05_utils/exit_utils1.c \
 						./05_utils/get_next_line.c \
-						# ./05_utils/create_ast.c \
-						# ./05_utils/free_ast.c \
-						# ./05_utils/print_ast.c \
 
 BUILTINS_SRCS		=	./06_builtins/builtin_calls.c \
-						./06_builtins/echo.c \
-						./06_builtins/export1.c \
-						./06_builtins/unset1.c \
-						./06_builtins/env.c \
-						./06_builtins/pwd.c \
-						./06_builtins/cd.c \
-						./06_builtins/exit.c \
 						./06_builtins/builtin_utils0.c \
 						./06_builtins/builtin_utils1.c \
+						./06_builtins/builtin_utils2.c \
+						./06_builtins/cd.c \
+						./06_builtins/echo.c \
+						./06_builtins/env.c \
+						./06_builtins/exit0.c \
+						./06_builtins/exit1.c \
+						./06_builtins/export0.c \
+						./06_builtins/export1.c \
+						./06_builtins/pwd.c \
+						./06_builtins/unset.c \
 
 ALL_SRCS			:=	$(MINISHELL_SRCS) \
 						$(DATA_INIT_SRCS) \

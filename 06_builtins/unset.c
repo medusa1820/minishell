@@ -6,11 +6,28 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 17:41:18 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/26 19:26:19 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/27 11:33:39 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+bool	valid_identifier_unset(char *var)
+{
+	int	i;
+
+	i = 0;
+	if (ft_isalpha(var[i]) == 0 && var[i] != '_')
+		return (false);
+	i++;
+	while (var[i])
+	{
+		if (ft_isalnum(var[i]) == 0 && var[i] != '_')
+			return (false);
+		i++;
+	}
+	return (true);
+}
 
 int	unset_bltn(t_envp_ll *head, char **cmd, t_minishell *shell)
 {
@@ -42,18 +59,6 @@ int	unset_bltn(t_envp_ll *head, char **cmd, t_minishell *shell)
 	return (return_value);
 }
 
-/* void	remove_node(t_envp_ll *var_head, t_envp_ll *found_node)
-{
-	t_envp_ll	*previous_node;
-
-	previous_node = get_previous(var_head, found_node);
-	if (previous_node == NULL)
-		var_head = var_head->next;
-	else
-		previous_node->next = found_node->next;
-	free_single_var_node(found_node);
-} */
-
 void	remove_node(t_envp_ll *head, t_envp_ll *node_to_unset)
 {
 	t_envp_ll	*current;
@@ -79,20 +84,3 @@ void	free_node(t_envp_ll *node_to_unset)
 	free(node_to_unset->value);
 	free(node_to_unset);
 }
-
-/*
-t_envp_ll	*get_previous(t_envp_ll *head, t_envp_ll *node_to_unset)
-{
-	t_envp_ll	*current;
-	t_envp_ll	*previous;
-
-	current = head;
-	previous = NULL;
-	while (current != node_to_unset)
-	{
-		previous = current;
-		current = current->next;
-	}
-	return (previous);
-}
-*/
