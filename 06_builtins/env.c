@@ -6,11 +6,30 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 18:20:24 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/26 19:17:06 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/27 17:00:48 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	env_bltn(char **envp_local, char **cmd)
+{
+	int	i;
+
+	if (cmd[1])
+	{
+		print_error_bltn(cmd[0], cmd[1], "enter cmd w/o options/arguments");
+		return (EXIT_SUCCESS);
+	}
+	i = 0;
+	if (!envp_local)
+		return (EXIT_FAILURE);
+	while (envp_local[i])
+		ft_putendl_fd(envp_local[i++], STDOUT_FILENO);
+	return (EXIT_SUCCESS);
+}
+
+/*
 
 int	env_bltn(t_envp_ll *var_list, char **cmd)
 {
@@ -40,3 +59,15 @@ int	env_bltn(t_envp_ll *var_list, char **cmd)
 	}
 	return (0);
 }
+
+int	get_arg_count(char **cmd)
+{
+	int	arg_count;
+
+	arg_count = 0;
+	while (cmd && *(cmd + arg_count) != NULL)
+		arg_count++;
+	return (arg_count);
+}
+
+*/

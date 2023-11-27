@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/27 12:11:02 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/27 17:03:25 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int				echo_bltn(char **cmd);
 
 // env.c
 
-int				env_bltn(t_envp_ll *var_list, char **cmd);
+// int				env_bltn(t_envp_ll *var_list, char **cmd);
+int					env_bltn(char **envp_local, char **cmd);
 
 // exit0.c
 
@@ -86,50 +87,33 @@ int				ft_strcmp(const char *s1, const char *s2);
 
 // echo
 
-char			*ft_strjoin_sym(const char *s1, const char *s2, char c);
-void			free_p(char	*p);
-
-//////////////////			builtin_utils1.c
-
-// echo
-
-void			internal_error_printer(char *msg);
+// void			internal_error_printer(char *msg);
+void			print_internal_error(char *msg);
 
 // env
 
-////				-//-
+int				get_arg_count(char **cmd);
 
 // exit
 
-int				atoi_negative(char *c);
-int				is_int_min(long long int neg_pos, long long int intvalue, \
-							char c, long long int *data);
-int				ft_atoi_secure(const char *str, long long int *data);
-// void			restore_redirect(int stdin_save, int stdout_save);
+////			-//-
 
-// export
-
-int				get_arg_count(char **cmd);
-
-//////////////////			builtin_utils2.c
+// builtin_utils1.c
 
 // export
 
 void			print_error_bltn(char *cmd, char *arg, char *msg);
-// t_envp_ll		*get_var_list_node(t_envp_ll *var_head, char *str);
-// int				modify_var_list_node(t_envp_ll *matching_node, char *cmd);
 int				add_to_var_list(t_envp_ll *var_list, char *str, int flag);
-// int				ft_sub_len(char const *start, char c);
 int				full_assign(t_envp_ll *new, char *word, char *delim_pt);
 void			ft_lstadd_back_ms(t_envp_ll **var_list, t_envp_ll *new);
 char			*ft_strdup_pt(const char *start, char *delimiter);
 
-////////////////////////////// pwd //////////////////////////////
+// pwd
 
-//								-//-
+////			-//-
 
-////////////////////////////// unset //////////////////////////////
+// unset
 
-//								-//-
+////			-//-
 
 #endif
