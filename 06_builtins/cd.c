@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 19:00:12 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/27 11:15:28 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/27 17:36:39 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ int	check_vars_in_envp_ll(t_envp_ll *head)
 
 */
 
-int	check_vars_in_envp_ll(t_envp_ll *head)
+/* int	check_vars_in_envp_ll(t_envp_ll *head)
 {
 	char		*env_var_list[2];
 	t_envp_ll	*temp;
@@ -183,7 +183,7 @@ int	check_vars_in_envp_ll(t_envp_ll *head)
 		i++;
 	}
 	return (EXIT_SUCCESS);
-}
+} */
 
 int	cd_bltn(t_envp_ll *head, char **cmd, t_minishell *shell)
 {

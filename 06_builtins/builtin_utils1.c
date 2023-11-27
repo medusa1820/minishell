@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 11:56:48 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/27 17:04:36 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/27 17:25:52 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,25 @@ void	ft_lstadd_back_ms(t_envp_ll **var_list, t_envp_ll *new)
 	last->next = new;
 	return ;
 }
+
+/* void	add_to_list(t_envp_ll **head, char *var, char *value)
+{
+	t_envp_ll	*new_node;
+	t_envp_ll	*temp;
+
+	new_node = create_new_node(var, value);
+	if (!new_node)
+		return ;
+	if (!*head)
+	{
+		*head = new_node;
+		return ;
+	}
+	temp = *head;
+	while (temp->next)
+		temp = temp->next;
+	temp->next = new_node;
+} */
 
 /*
 	char	*ft_strndup_pt(const char *start, char *delimiter)
