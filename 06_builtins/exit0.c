@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 11:51:09 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/27 18:47:44 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/28 14:36:50 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	exit_bltn(t_minishell *shell, char **cmd)
 	free_before_exit(shell);
 	exit (exit_code_local);
 }
+
+// ft_putendl_fd("exit", 1);
 
 int	exit_bltn_nbr_args_goe_2(char *str)
 {
