@@ -18,8 +18,8 @@ DATA_INIT_SRCS		=	./00_data_init/envp_ll_init.c \
 						./00_data_init/envp_local_utils.c \
 						./00_data_init/pipe_data.c
 
-LEXER_SRCS			=	./01_lexer/lexer_generation.c \
-						./01_lexer/free_print_tokens.c \
+LEXER_SRCS			=	./01_lexer/free_print_tokens.c \
+						./01_lexer/lexer_generation.c \
 						./01_lexer/tokenization_trimming_utils.c \
 						./01_lexer/tokenization_utils.c \
 						./01_lexer/tokens_type.c
@@ -30,7 +30,8 @@ PARSER_SRCS			=	./02_parser/cmd_content_utils.c \
 						./02_parser/free_ast.c \
 						./02_parser/parsing.c \
 						./02_parser/print_ast.c \
-						./02_parser/redirect_content_utils.c 
+						./02_parser/redirect_content_utils.c \
+						./02_parser/syntax_error_handler.c
 
 EXPANDER_SRCS		=	./03_expander/expander.c
 

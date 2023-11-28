@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 15:38:45 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 13:05:27 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/27 14:50:22 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void			back_slash(const char **current, t_token *token);
 
 t_lexer_state	single_quote_handling(const char **current, t_token *token);
 t_lexer_state	double_quote_handling(const char **current, t_token *token);
-t_lexer_state	tokenize_pipe_and_redirector(const char **current, \
+t_lexer_state	tokenize_pipe_and_redirects(const char **current, \
 															t_token *token);
 t_lexer_state	tokenize_space(const char **current, t_token *token);
 t_lexer_state	tokenize_word(const char **current, t_token *token);

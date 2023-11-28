@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:34 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/10/09 13:20:25 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/27 14:50:22 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@ void	init_token(t_token *token)
 	token->slash_number = 0;
 }
 
+/* This function feed created tokens to the token list, and each time it 
+increases the tokens array memory allocation.*/
+
 t_lexer_state	feed_tokens_array(t_minishell *sh, t_token *token)
 {
 	sh->token_len++;
@@ -32,6 +35,9 @@ t_lexer_state	feed_tokens_array(t_minishell *sh, t_token *token)
 	return (LEXER_SUCCESS);
 }
 
+/* THis function check the received char of tokenize func, and pass them
+ to different funcs to create a token of that type.*/
+
 t_lexer_state	checking_tokenizer(t_token *token, t_minishell *sh,
 												const char **current)
 {
@@ -43,7 +49,7 @@ t_lexer_state	checking_tokenizer(t_token *token, t_minishell *sh,
 	else if (ret == LEXER_SUCCESS && **current == '"')
 		ret = double_quote_handling(current, token);
 	else if (ret == LEXER_SUCCESS && ft_strchr(OPERAND, **current))
-		ret = tokenize_pipe_and_redirector(current, token);
+		ret = tokenize_pipe_and_redirects(current, token);
 	else if (ret == LEXER_SUCCESS && ft_strchr(WHITESPACE, **current))
 		ret = tokenize_space(current, token);
 	else if (ret == LEXER_SUCCESS)
@@ -52,6 +58,9 @@ t_lexer_state	checking_tokenizer(t_token *token, t_minishell *sh,
 		ret = feed_tokens_array(sh, token);
 	return (ret);
 }
+
+/* This function pass the line char by char to a checking_tokenizer to create
+tokens, and call some functions to work on created token list.*/
 
 t_lexer_state	tokenize(t_minishell *sh, const char *line)
 {
