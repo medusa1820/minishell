@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:36:51 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/27 15:19:05 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/28 12:51:04 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,8 @@ void	joining_tokens(t_minishell *sh)
 	}
 }
 
-/* Here the flag variable is valued same as the type of token, to be used in remove
-empty tokens.*/
+/* Here the flag variable is valued same as the type of token, to be used in
+ remove empty tokens.*/
 
 void	trimming_tokens_type(t_minishell *sh)
 {

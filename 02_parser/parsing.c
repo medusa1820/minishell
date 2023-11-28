@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:39:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/27 15:49:19 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/28 12:51:26 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	print_error2(char *type, char *msg, t_minishell *sh)
 	ft_putstr_fd(msg, 2);
 	finding_syntax_error_flag(sh);
 }
-
 
 /* This function finds the fist content in each segment. */
 

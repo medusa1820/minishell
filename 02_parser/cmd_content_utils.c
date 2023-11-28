@@ -6,12 +6,11 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:43:01 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/27 15:42:35 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/28 12:51:16 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 /* This function reallocate the last cmd array, and add a new cmd to it. */
 
