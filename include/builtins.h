@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/28 11:13:21 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/28 11:35:53 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,13 @@ char			**make_var_value_pair(char *cmd);
 int				export_var(t_envp_ll *head, char *cmd);
 int				export_var_if_var_node(t_envp_ll *var_node, \
 										char **var_value_pair);
-void			export_no_args(t_envp_ll *var_head); // rewrite
 
 // export1.c
 
+void			export_no_args(t_envp_ll *var_head); // rewrite
 int				export_bltn(t_envp_ll *head, char **cmd, t_minishell *shell);
+void			export_bltn_if_not_valid_identifier(char c, char *str, \
+													int *return_value);
 
 // pwd.c
 

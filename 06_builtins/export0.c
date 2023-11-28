@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 11:12:11 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/28 11:18:03 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/28 11:19:34 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,28 +92,4 @@ int	export_var_if_var_node(t_envp_ll *var_node, char **var_value_pair)
 	var_node->env_var = true;
 	free_2d_str_func(var_value_pair);
 	return (EXIT_SUCCESS);
-}
-
-void	export_no_args(t_envp_ll *var_head)
-{
-	t_envp_ll	*current;
-
-	current = var_head;
-	while (current != NULL)
-	{
-		if (current->env_var == true)
-		{
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
-			ft_putstr_fd(current->var, STDOUT_FILENO);
-			if (current->value != NULL)
-			{
-				ft_putstr_fd("=\"", STDOUT_FILENO);
-				ft_putstr_fd(current->value, STDOUT_FILENO);
-				ft_putchar_fd('\"', STDOUT_FILENO);
-			}
-			ft_putchar_fd('\n', STDERR_FILENO);
-		}
-		current = current->next;
-	}
-	return ;
 }
