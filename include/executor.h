@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 17:42:55 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/26 21:13:48 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/28 18:39:47 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,13 @@ extern volatile int	g_sig_nbr;
 void				find_cmd_path(t_pipe *data, char **envp);
 void				prepare_paths(t_pipe *data, char **envp);
 void				prepare_cmd_path(t_pipe *data);
+void				free_temp_and_cmd_path_func(char *temp, \
+												char *cmd_path_func);
 void				prepare_cmd_path_slash(t_pipe *data);
-void				ft_exit_cmd_not_found(t_pipe *data, int i);
 
 // child_process_utils1.c
 
+void				ft_exit_cmd_not_found(t_pipe *data, int i);
 void				close_pipe0_fds(t_pipe *data);
 void				close_pipe1_fds(t_pipe *data);
 bool				data_has_infile(t_pipe *data);

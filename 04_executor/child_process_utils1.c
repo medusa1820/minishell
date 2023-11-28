@@ -6,11 +6,17 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 13:21:08 by musenov           #+#    #+#             */
-/*   Updated: 2023/09/20 19:23:41 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/28 18:41:01 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_exit_cmd_not_found(t_pipe *data, int i)
+{
+	if (data->paths == NULL || data->paths[i] == NULL)
+		exit_error_cmd_notfound(127, "Command not found: ", data);
+}
 
 void	close_pipe0_fds(t_pipe *data)
 {
