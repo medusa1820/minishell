@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/28 11:35:53 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/28 11:54:05 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ int				pwd_bltn(void);
 
 bool			valid_identifier_unset(char *var);
 int				unset_bltn(t_envp_ll *var_head, char **cmd, t_minishell *shell);
+void			unset_bltn_if_not_valid_identifier(char *str, \
+													int *return_value);
 void			remove_node(t_envp_ll *head, t_envp_ll *node_to_unset);
 void			free_node(t_envp_ll *node_to_unset);
 
@@ -103,8 +105,6 @@ void			print_internal_error(char *msg);
 //											exit
 
 ////			-//-
-
-// builtin_utils1.c
 
 //											export
 

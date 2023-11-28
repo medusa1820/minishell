@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 15:01:07 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/27 18:07:46 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/28 11:52:56 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,27 @@ void	print_internal_error(char *msg)
 //								-//-
 
 ////////////////////////////// exit //////////////////////////////
+
+//								-//-
+
+////////////////////////////// export //////////////////////////////
+
+void	print_error_bltn(char *cmd, char *arg, char *msg)
+{
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putchar_fd(' ', STDERR_FILENO);
+	if (arg && *arg)
+	{
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+	}
+	ft_putendl_fd(msg, STDERR_FILENO);
+}
+
+////////////////////////////// pwd //////////////////////////////
+
+//								-//-
+
+////////////////////////////// unset //////////////////////////////
 
 //								-//-

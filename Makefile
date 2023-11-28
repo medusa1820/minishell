@@ -50,8 +50,7 @@ UTILS_SRCS			=	./05_utils/exit_utils0.c \
 						./05_utils/get_next_line.c \
 
 BUILTINS_SRCS		=	./06_builtins/builtin_calls.c \
-						./06_builtins/builtin_utils0.c \
-						./06_builtins/builtin_utils1.c \
+						./06_builtins/builtin_utils.c \
 						./06_builtins/cd.c \
 						./06_builtins/echo.c \
 						./06_builtins/env.c \

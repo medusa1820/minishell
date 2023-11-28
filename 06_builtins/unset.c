@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset1.c                                           :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 17:41:18 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/27 11:33:39 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/28 11:50:11 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,18 @@ int	unset_bltn(t_envp_ll *head, char **cmd, t_minishell *shell)
 				remove_node(head, node_to_unset);
 		}
 		else
-		{
-			print_error_bltn("unset", cmd[i], "not a valid identifier");
-			return_value = 1;
-		}
+			unset_bltn_if_not_valid_identifier(cmd[i], &return_value);
 		i++;
 	}
 	free_envp_local(shell->envp_local);
 	envp_ll_to_envp_local(shell);
 	return (return_value);
+}
+
+void	unset_bltn_if_not_valid_identifier(char *str, int *return_value)
+{
+	print_error_bltn("unset", str, "not a valid identifier");
+	*return_value = 1;
 }
 
 void	remove_node(t_envp_ll *head, t_envp_ll *node_to_unset)
