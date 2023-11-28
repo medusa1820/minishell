@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 10:39:28 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/15 15:35:13 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/27 15:32:50 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/* This function reallocate the ptr form its old size to new one. */
 
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 {
@@ -37,6 +39,11 @@ void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 	ptr = NULL;
 	return (new_ptr);
 }
+
+/* This fuction check each token whether should be assumed as assignment
+or not. It check them according to their token type, and existence of one
+equal sign but not in edges. If this token is started with an alphabetic char,
+and is not started with underscore, it change its token type to assignment. */
 
 void	check_assignment(t_token **tokens, int token_count)
 {
@@ -66,6 +73,8 @@ void	check_assignment(t_token **tokens, int token_count)
 	}
 }
 
+/* This function write the error of unclosed single/double quote. */
+
 t_lexer_state	token_unclosed(const char **current, t_token *token)
 {
 	int	ret;
@@ -84,6 +93,9 @@ t_lexer_state	token_unclosed(const char **current, t_token *token)
 	token = NULL;
 	return (ret);
 }
+
+/* This function move forward according to the amount of back slash
+that are exist in line.*/
 
 void	back_slash(const char **current, t_token *token)
 {

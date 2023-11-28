@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:31:59 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/20 14:47:21 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/27 15:42:57 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh)
 	return (check_and_set_syntax_error_flag(sh, ret));
 }
 
-t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh)
+t_parser_state	parse_suffix_cmd(t_ast_node_content **content, t_minishell *sh)
 {
 	t_parser_state	ret;
 

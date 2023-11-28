@@ -6,11 +6,14 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:33:19 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/20 14:27:43 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/27 16:02:34 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/* This function checks in case of occurrence of the syntax error, assigns
+ -2 to the flag variable of that token.*/
 
 t_parser_state	check_and_set_syntax_error_flag(t_minishell *sh, int ret)
 {
@@ -24,6 +27,9 @@ t_parser_state	check_and_set_syntax_error_flag(t_minishell *sh, int ret)
 	return (ret);
 }
 
+/* This function is belong to the printing_syntax_error to handle
+heredoc, and <.*/
+
 void	unexpected_token_heredoc(char *syntax, int syx_pos, t_minishell *sh)
 {
 	if (syx_pos + 2 < sh->seg_end && \
@@ -35,6 +41,9 @@ void	unexpected_token_heredoc(char *syntax, int syx_pos, t_minishell *sh)
 	write(2, "<'\n", 3);
 	return ;
 }
+
+/* This function write the syntax error according to the both token that the
+error comes form, and its adjacent tokens. */
 
 void	printing_syntax_error(char *syntax, int syx_pos, char *nx_syx, \
 															t_minishell	*sh)
@@ -61,6 +70,8 @@ void	printing_syntax_error(char *syntax, int syx_pos, char *nx_syx, \
 		ft_putstr_fd("|", 2);
 	write(2, "'\n", 2);
 }
+
+/* This function finds the tokens that its flag assigned to syntax error. */
 
 void	finding_syntax_error_flag(t_minishell *sh)
 {

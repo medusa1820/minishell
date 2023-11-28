@@ -6,11 +6,13 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/30 22:09:29 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/20 19:06:33 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/27 14:40:49 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/* This function concatenate a changed value to its ‌adjacent before of after.*/
 
 int	changing_var_value(char **str, char *value, int start, int len)
 {
@@ -36,6 +38,9 @@ int	changing_var_value(char **str, char *value, int start, int len)
 	*str = new;
 	return (free(left), free(right), start + ft_strlen(value) - 1);
 }
+
+/* This function check if any specific character is exist inside the string 
+that is received or not.*/
 
 int	ft_chrcmp(char *str)
 {
@@ -87,6 +92,10 @@ char	*get_env_var(t_minishell *sh, char *var)
 			// printf("\nvar=%s\ntmp_var: %s\ntmp_value:%s\nthe value is:%d\n\n"
 //,var ,tmp->var, tmp->value, ft_strncmp(tmp->var, var, ft_strlen(tmp->var)));
 
+/* This function according to the char inside, and at the end of each
+variable that received, decides to use of strncmp or strcmp to compare that
+variable with the variable inside the env.*/
+
 char	*get_env_var(t_minishell *sh, char *var)
 {
 	t_envp_ll	*tmp;
@@ -121,10 +130,14 @@ char	*get_env_var(t_minishell *sh, char *var)
 		var = from first char + len
 		get value from var
 		if val == NULL -> val is empty
-		insert val into var location while keeping everything aroung var 
+		insert val into var location while keeping everything around var 
 		(copy before var to new, append val, append rest after var - free old save new)
 */
-// void expand(t_minishell *sh, char **str, int j, bool heredoc)
+/* This function according to the type of variable that should be expanded,
+(if ? should be assigned by the exit code, if it exists inside the environment
+ variables, should be assigned by its value there) create a sub string of 
+ variable, and pull the value of it from env, and assigned it to that itself.*/
+
 void	expand(t_minishell *sh, char **str, int j)
 {
 	int		i;
@@ -154,10 +167,16 @@ void	expand(t_minishell *sh, char **str, int j)
 	}
 }
 
-//ls -la |  < main.c << E < make cat >> out | $USER
+/* This function first marking the heredoc token, and then go through the whole
+tokens with a while loop, and pass them to expand function. At the end erases the
+unexpanded tokens. 
+*/
+/*According to the norm rules, to make shorter the function, the value of tokens
+name is used inside the function due to below names:*/
 // TOKEN_DOUBLE_QUOTE = 2
 // TOKEN_WORD = 5
 // TOKEN_SINGLE_QUOTE = 1
+
 void	expander(t_minishell *sh)
 {
 	int	i;

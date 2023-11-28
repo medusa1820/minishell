@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 15:48:07 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/20 14:37:09 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/27 15:42:57 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_parser_state	parse_redirection(t_ast_node_content **content, \
 															t_minishell *sh);
 t_parser_state	parse_assignment(t_ast_node_content **content, t_minishell *sh);
 t_parser_state	parse_cmd_word(t_ast_node_content **content, t_minishell *sh);
-t_parser_state	parse_sufix_cmd(t_ast_node_content **content, t_minishell *sh);
+t_parser_state	parse_suffix_cmd(t_ast_node_content **content, t_minishell *sh);
 t_parser_state	parse_prefix_cmd(t_ast_node_content **content, t_minishell *sh);
 
 // creat_node.c

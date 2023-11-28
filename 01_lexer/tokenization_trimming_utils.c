@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization_trimming_utils.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:36:51 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/20 12:28:33 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/27 15:19:05 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ void	erase_token(t_minishell *sh, int index)
 // remove all space tokens
 
 // line: 59-> 6 = TOKEN_SPACE
+/* This function removes the empty tokens and spaces according to the above
+rule. There is a flag as a variable of the tokens to do two special actions.
+Once in tokenization process to mark the tokens that should be concatenated
+to their adjacent tokens, and the other in parsing process to mark syntax 
+error near unexpected token.*/
+
 void	remove_empty_tokens(t_minishell *sh)
 {
 	int	i;
@@ -73,6 +79,9 @@ void	remove_empty_tokens(t_minishell *sh)
 // TOKEN_SINGLE_QUOTE = 1
 // TOKEN_ASSIGNMENT = 8
 
+/* This function join  two adjacent tokens of type above. to short the func
+lines according to the norm rules, the value of token names are used instead*/
+
 void	joining_tokens(t_minishell *sh)
 {
 	int		i;
@@ -81,10 +90,10 @@ void	joining_tokens(t_minishell *sh)
 	i = 0;
 	while (i < sh->token_len - 1)
 	{
-		if ((sh->tokens[i].type == 5 || sh->tokens[i].type == \
-		2 || sh->tokens[i].type == 1 || \
-		sh->tokens[i].type == TOKEN_ASSIGNMENT) && (sh->tokens[i + 1].type == \
-		5 || sh->tokens[i + 1].type == 2 || sh->tokens[i + 1].type == 1))
+		if ((sh->tokens[i].type == 5 || sh->tokens[i].type == 2 || \
+		sh->tokens[i].type == 1 || sh->tokens[i].type == TOKEN_ASSIGNMENT) && \
+		(sh->tokens[i + 1].type == 5 || sh->tokens[i + 1].type == 2 || \
+		sh->tokens[i + 1].type == 1))
 		{
 			tmp_tok = ft_strjoin(sh->tokens[i].value, sh->tokens[i + 1].value);
 			free(sh->tokens[i].value);
@@ -101,6 +110,9 @@ void	joining_tokens(t_minishell *sh)
 			erase_token(sh, i);
 	}
 }
+
+/* Here the flag variable is valued same as the type of token, to be used in remove
+empty tokens.*/
 
 void	trimming_tokens_type(t_minishell *sh)
 {

@@ -6,11 +6,14 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:43:01 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/20 14:36:27 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/27 15:42:35 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+/* This function reallocate the last cmd array, and add a new cmd to it. */
 
 t_parser_state	feed_cmd_tokens(t_ast_node_content **content, t_minishell *sh)
 {
@@ -27,6 +30,11 @@ t_parser_state	feed_cmd_tokens(t_ast_node_content **content, t_minishell *sh)
 	(*content)->cmd[sh->index] = 0;
 	return (PARSER_SUCCESS);
 }
+
+/* In the suffix function at the end of processing a segment according to the 
+content type that are included in, the remain content treats in this function, 
+thus first it is checked if they are assignment type, the they push to the 
+assignment list, and cmd array, otherwise only cmd array will be feed. */
 
 t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, \
 																t_minishell *sh)
@@ -57,6 +65,8 @@ t_parser_state	feed_remained_cmd_tokens(t_ast_node_content **content, \
 	return (ret);
 }
 
+/* This function counts amount of the elements in an array of string. */
+
 size_t	count_strings(char *strings[])
 {
 	size_t	count;
@@ -69,6 +79,9 @@ size_t	count_strings(char *strings[])
 	}
 	return (count);
 }
+
+/* This function reallocate an array of string from its old size to its
+ new size.*/
 
 char	**ft_realloc_strings(char **ptr, size_t old_count, size_t new_count)
 {

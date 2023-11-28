@@ -6,7 +6,7 @@
 /*   By: nnavidd <nnavidd@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:39:26 by nnavidd           #+#    #+#             */
-/*   Updated: 2023/11/20 14:40:50 by nnavidd          ###   ########.fr       */
+/*   Updated: 2023/11/27 15:49:19 by nnavidd          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,8 @@ void	print_error2(char *type, char *msg, t_minishell *sh)
 	finding_syntax_error_flag(sh);
 }
 
-// void	print_error(char *type, int fd, char *msg)
-// {
-// 	ft_putstr_fd("minishell: ", fd);
-// 	if (type)
-// 	{
-// 		ft_putstr_fd(type, fd);
-// 		ft_putstr_fd(": ", fd);
-// 	}
-// 	ft_putstr_fd(msg, fd);
-// }
+
+/* This function finds the fist content in each segment. */
 
 void	finding_segment_head(t_minishell *sh)
 {
@@ -69,6 +61,10 @@ bool	init_shell(t_minishell *shell, t_pipe *data)
 	envp_ll_to_envp_local(shell);
 	return (true);
 }
+
+/* This function first tokenize the line, in case of success, it parses the
+tokens, and assigns what is returned from the parse function to 
+the ast variable.*/
 
 t_ast_node	*parsing(t_minishell *sh, char *line)
 {
