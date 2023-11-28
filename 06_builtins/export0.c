@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 11:12:11 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/27 11:32:20 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/28 11:18:03 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,24 +65,31 @@ int	export_var(t_envp_ll *head, char *cmd)
 	var_node = find_var_node(head, var_value_pair[0]);
 	if (var_node)
 	{
-		free(var_node->value);
-		if (var_value_pair[1])
-		{
-			var_node->value = ft_strdup(var_value_pair[1]);
-			if (!var_node->value)
-			{
-				free_2d_str_func(var_value_pair);
-				return (EXIT_FAILURE);
-			}
-		}
-		else
-			var_node->value = ft_strdup("");
-		var_node->env_var = true;
+		return (export_var_if_var_node(var_node, var_value_pair));
 	}
 	else if (var_value_pair[1])
 		add_to_list(&head, var_value_pair[0], var_value_pair[1]);
 	else
 		add_to_list(&head, var_value_pair[0], "");
+	free_2d_str_func(var_value_pair);
+	return (EXIT_SUCCESS);
+}
+
+int	export_var_if_var_node(t_envp_ll *var_node, char **var_value_pair)
+{
+	free(var_node->value);
+	if (var_value_pair[1])
+	{
+		var_node->value = ft_strdup(var_value_pair[1]);
+		if (!var_node->value)
+		{
+			free_2d_str_func(var_value_pair);
+			return (EXIT_FAILURE);
+		}
+	}
+	else
+		var_node->value = ft_strdup("");
+	var_node->env_var = true;
 	free_2d_str_func(var_value_pair);
 	return (EXIT_SUCCESS);
 }
