@@ -6,7 +6,7 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 14:38:02 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/28 11:54:05 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/28 12:12:19 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void			free_before_exit(t_minishell *shell);
 
 // export0.c
 
-bool			valid_identifier(char *var); // rewrite
+bool			valid_identifier(char *var);
 t_envp_ll		*find_var_node(t_envp_ll *head, char *cmd);
 char			**make_var_value_pair(char *cmd);
 int				export_var(t_envp_ll *head, char *cmd);
@@ -66,7 +66,7 @@ int				export_var_if_var_node(t_envp_ll *var_node, \
 
 // export1.c
 
-void			export_no_args(t_envp_ll *var_head); // rewrite
+void			export_without_args(t_envp_ll *head);
 int				export_bltn(t_envp_ll *head, char **cmd, t_minishell *shell);
 void			export_bltn_if_not_valid_identifier(char c, char *str, \
 													int *return_value);
@@ -74,7 +74,6 @@ void			export_bltn_if_not_valid_identifier(char c, char *str, \
 // pwd.c
 
 int				pwd_bltn(void);
-
 
 // unset.c
 
@@ -85,7 +84,7 @@ void			unset_bltn_if_not_valid_identifier(char *str, \
 void			remove_node(t_envp_ll *head, t_envp_ll *node_to_unset);
 void			free_node(t_envp_ll *node_to_unset);
 
-// builtin_utils0.c
+// builtin_utils.c
 
 //											cd
 

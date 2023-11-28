@@ -6,34 +6,33 @@
 /*   By: musenov <musenov@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 11:12:11 by musenov           #+#    #+#             */
-/*   Updated: 2023/11/28 11:39:15 by musenov          ###   ########.fr       */
+/*   Updated: 2023/11/28 12:11:25 by musenov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	export_no_args(t_envp_ll *var_head)
+void	export_without_args(t_envp_ll *head)
 {
 	t_envp_ll	*current;
 
-	current = var_head;
+	current = head;
 	while (current != NULL)
 	{
 		if (current->env_var == true)
 		{
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
-			ft_putstr_fd(current->var, STDOUT_FILENO);
+			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd(current->var, 1);
 			if (current->value != NULL)
 			{
-				ft_putstr_fd("=\"", STDOUT_FILENO);
-				ft_putstr_fd(current->value, STDOUT_FILENO);
-				ft_putchar_fd('\"', STDOUT_FILENO);
+				ft_putstr_fd("=\"", 1);
+				ft_putstr_fd(current->value, 1);
+				ft_putchar_fd('\"', 1);
 			}
-			ft_putchar_fd('\n', STDERR_FILENO);
+			ft_putchar_fd('\n', 2);
 		}
 		current = current->next;
 	}
-	return ;
 }
 
 int	export_bltn(t_envp_ll *head, char **cmd, t_minishell *shell)
@@ -45,7 +44,7 @@ int	export_bltn(t_envp_ll *head, char **cmd, t_minishell *shell)
 	i = 1;
 	if (!cmd[i])
 	{
-		export_no_args(head);
+		export_without_args(head);
 		return (return_value);
 	}
 	while (cmd[i])
