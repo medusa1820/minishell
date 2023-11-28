@@ -9,7 +9,8 @@ CFLAGS				+=	-g
 LDFLAGS				:=	-g
 # LDFLAGS				+=	-fsanitize=address
 
-MINISHELL_SRCS		=	./main.c \
+MINISHELL_SRCS		=	./main0.c \
+						./main1.c \
 
 DATA_INIT_SRCS		=	./00_data_init/envp_ll_init.c \
 						./00_data_init/envp_ll_utils.c \
